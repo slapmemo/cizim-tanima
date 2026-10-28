@@ -44,7 +44,8 @@ Plan: [plan.md](plan.md). Rapor taslağı: [rapor/rapor.md](rapor/rapor.md).
 - **Karar (kullanıcı):** site Vercel'de (GitHub deposundan), çizimler arkadaşın cihazında dosya olarak oluşur, arkadaş dosyayı kullanıcıya gönderir. Veritabanı yok.
 - **Ne:** `demo/topla.html` + `src/topla.ts`: takma ad + onay → 50 nesne kişi başı rastgele sırada, tahmin gizli, "Atla", ilerleme `localStorage`'da (yenilemede sürer), "Bitir ve gönder" her an; sonda modelin bildiği sayı + bilemedikleri, "Gönder" (Web Share, telefonda) ve "Dosyayı indir" (`cizimler-<ad>-<n>.json`). Vite çok sayfalı derleme, `vercel.json` `cleanUrls` (link `/topla`). Yayımlanan ana sayfada yerel kayıt arayüzü gizli (`import.meta.env.DEV`). `gercek_degerlendir.py` toplu dosyaları okuyor (aynı oturumdan en çok çizimli dosya), kişiye ve aygıta göre ayırıyor.
 - **Doğrulama:** `npm run build` temiz. Playwright (390×844, derlenmiş site `vite preview`): onaysız Başla kapalı; 2 çizim + atla → 4/50; yenileme sonrası 4/50 ve 2 çizim; çizerken tahmin yok; bitir → "3 çiziminden 3", indirilen dosyada 3 kayıt, 1 atlanan, etiketler doğru, aygıt ve süre var; ana sayfada kayıt arayüzü gizli; konsol hatası yok. Görüntülerle bakıldı.
-- **Yapılmayan:** "Gönder" (Web Share) gerçek telefonda denenmedi (headless'ta yok, düğme gizleniyor). Vercel'e yüklenmedi; git deposu yok.
+- **Yapılmayan:** "Gönder" (Web Share) gerçek telefonda denenmedi (headless'ta yok, düğme gizleniyor). Vercel'e yüklenmedi.
+- **Git:** depo `cizim-tanima/`, uzak `origin` = https://github.com/slapmemo/cizim-tanima.git, ilk commit `f0e3d8b` (71 dosya, 24,5 MB; veri, `.venv`, `kayitlar/`, `.pt` dışarıda). Commit mesajına imza/Co-Authored-By yok.
 
 ## Sıradaki
 
