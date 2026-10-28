@@ -17,23 +17,25 @@ import matplotlib.pyplot as plt  # noqa: E402
 
 sys.path.insert(0, str(Path(__file__).parent))
 from onisleme import ciz, kismi  # noqa: E402
-from siniflar import ADLAR  # noqa: E402
+from siniflar import ADLAR, ISLENMIS_AD, ON_EK, SINIF_SETI  # noqa: E402
 
 KOK = Path(__file__).resolve().parent.parent
-SINIF_BASI = 200
+SINIF_BASI = 50 if SINIF_SETI == "345" else 200
+# degerlendir.py'nin erken tanıma ölçümünde kullandığı ilk çizimlerden sonrakiler
+ATLA = 200 if SINIF_SETI == "345" else 1000
+SON_EK = "345" if SINIF_SETI == "345" else ""
 ADIMLAR = [i / 10 for i in range(1, 11)]
 ESIK = 0.5
 
 
 def main():
-    adlar = sys.argv[1:] or ["m3", "m3_kismi"]
+    adlar = sys.argv[1:] or [ON_EK + "m3", ON_EK + "m3_kismi"]
     X = np.zeros((len(ADIMLAR), len(ADLAR) * SINIF_BASI, 1, 28, 28), np.float32)
     y = np.repeat(np.arange(len(ADLAR)), SINIF_BASI)
     i = 0
     for ad in ADLAR:
-        with open(KOK / "veri" / "islenmis" / "test_vuruslar" / f"{ad}.ndjson", encoding="utf-8") as f:
-            # kısmi ölçümde kullanılan ilk 1000'den sonrakiler
-            satirlar = f.read().splitlines()[1000:1000 + SINIF_BASI]
+        with open(KOK / "veri" / ISLENMIS_AD / "test_vuruslar" / f"{ad}.ndjson", encoding="utf-8") as f:
+            satirlar = f.read().splitlines()[ATLA:ATLA + SINIF_BASI]
         for s in satirlar:
             v = json.loads(s)
             for j, oran in enumerate(ADIMLAR):
@@ -61,8 +63,8 @@ def main():
               f"medyan %{np.median(ilk[taninan]) * 100:.0f}")
     ax.set_xlabel("Çizimin tamamlanan kısmı (%)"); ax.set_ylabel("O ana kadar tanınmış çizim oranı")
     ax.set_title("Oyun kuralıyla tanınma (ilk tahmin ve olasılık ≥ 0,5)"); ax.grid(alpha=.3); ax.legend()
-    fig.tight_layout(); fig.savefig(KOK / "deneyler" / "oyun_simulasyonu.png", dpi=110)
-    (KOK / "deneyler" / "oyun_simulasyonu.json").write_text(json.dumps(sonuc, indent=2), encoding="utf-8")
+    fig.tight_layout(); fig.savefig(KOK / "deneyler" / f"oyun_simulasyonu{SON_EK}.png", dpi=110)
+    (KOK / "deneyler" / f"oyun_simulasyonu{SON_EK}.json").write_text(json.dumps(sonuc, indent=2), encoding="utf-8")
 
 
 if __name__ == "__main__":

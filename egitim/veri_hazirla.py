@@ -1,11 +1,12 @@
 """Quick, Draw! `simplified` ndjson dosyalarını indirir, ayırır ve 28x28'e çizer.
 
 Çıktılar (veri/islenmis/):
-  egitim.npz, dogrulama.npz, test.npz  -> X (N, 28, 28) uint8, y (N,) uint8
+  egitim.npz, dogrulama.npz, test.npz  -> X (N, 28, 28) uint8, y (N,) uint16 (50 sınıfın eski dosyalarında uint8)
   test_vuruslar/<sinif>.ndjson          -> test çizimlerinin vuruşları (erken tanıma ölçümü)
 Ayırma: yalnız recognized=true, sabit tohumla karıştırılır; sınıf başına 30k/5k/5k.
 
 Kullanım: .venv\\Scripts\\python.exe egitim\\veri_hazirla.py
+345 sınıf için önce: set SINIF_SETI=345 (çıktı veri/islenmis345/, sınıf başına 20k/2,5k/2,5k)
 """
 import json
 import random
@@ -20,13 +21,15 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).parent))
 from onisleme import ciz  # noqa: E402
-from siniflar import ADLAR  # noqa: E402
+from siniflar import ADLAR, ISLENMIS_AD, SINIF_SETI  # noqa: E402
 
 KOK = Path(__file__).resolve().parent.parent
 HAM = KOK / "veri" / "ham"
-ISLENMIS = KOK / "veri" / "islenmis"
+ISLENMIS = KOK / "veri" / ISLENMIS_AD
 ADRES = "https://storage.googleapis.com/quickdraw_dataset/full/simplified/{}.ndjson"
-SAYI = {"egitim": 30_000, "dogrulama": 5_000, "test": 5_000}
+# 345 sınıfta bellek (GPU 16 GB) için sınıf başına daha az örnek
+SAYI = ({"egitim": 20_000, "dogrulama": 2_500, "test": 2_500} if SINIF_SETI == "345"
+        else {"egitim": 30_000, "dogrulama": 5_000, "test": 5_000})
 TOHUM = 1234
 
 
@@ -82,7 +85,7 @@ def main():
             print(f"işlendi {ADLAR[no]} ({tanınan} tanınmış)", flush=True)
     for b, liste in parcalar.items():
         X = np.concatenate(liste)
-        y = np.concatenate([np.full(len(x), i, np.uint8) for i, x in enumerate(liste)])
+        y = np.concatenate([np.full(len(x), i, np.uint16) for i, x in enumerate(liste)])  # 345 > 255
         np.savez(ISLENMIS / f"{b}.npz", X=X, y=y)
         print(f"{b}: {X.shape}", flush=True)
     print(f"işleme bitti: {time.time() - t0:.0f} sn")

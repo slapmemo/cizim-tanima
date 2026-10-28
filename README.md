@@ -12,6 +12,8 @@ npm run dev        # http://localhost:5173 — telefondan denemek için: npm run
 
 "Çizimi kaydet" yalnız `npm run dev` / `npm run preview` ile çalışır; çizimler `kayitlar/` altına JSON olarak yazılır.
 
+Arkadaşlardan çizim toplama: yayımlanan sitede `/topla` (Vercel, kök klasör `demo`). Gelen `cizimler-*.json` dosyaları `test-verileri/` altına konur.
+
 ## Eğitim (Windows, NVIDIA GPU)
 
 ```sh
@@ -28,7 +30,8 @@ python -m venv .venv
 .venv\Scripts\python.exe egitim\egit.py --ad m3_kismi --model m3 --epoch 20 --artirma --kismi 0.5
 .venv\Scripts\python.exe egitim\degerlendir.py       # test, ONNX, şekiller -> deneyler/
 .venv\Scripts\python.exe egitim\oyun_simulasyonu.py
-.venv\Scripts\python.exe egitim\gercek_degerlendir.py  # kayitlar/ ile gerçek kullanıcı ölçümü
+.venv\Scripts\python.exe egitim\kisi_raporu.py         # test-verileri/*.json -> kişi başına klasör + rapor.md
+.venv\Scripts\python.exe egitim\gercek_degerlendir.py  # kayitlar/ + test-verileri/ ile gerçek kullanıcı ölçümü
 ```
 
 ONNX dosyaları `modeller/` altından `demo/public/model/` altına kopyalanır.

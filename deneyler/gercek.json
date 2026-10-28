@@ -1,63 +1,145 @@
 {
-  "cizim": 1,
-  "kisi": 1,
+  "cizim": 229,
+  "kisi": 6,
   "aygit": {
-    "fare": 1
+    "fare": 179,
+    "dokunma": 50
   },
   "modeller": {
     "m1": {
-      "ilk1": 1.0,
-      "ilk3": 1.0,
-      "oyunda_taninir": 1.0,
+      "ilk1": 0.8253275109170306,
+      "ilk3": 0.9082969432314411,
+      "oyunda_taninir": 0.8253275109170306,
       "aygit": {
-        "fare": 1.0
+        "dokunma": 0.74,
+        "fare": 0.8491620111731844
       },
       "kisi": {
-        "yerel": 1.0
+        "NECO": 0.82,
+        "alper": 0.88,
+        "büş": 0.74,
+        "faruk": 0.75,
+        "yerel": 1.0,
+        "ömer": 0.9
       }
     },
     "m2_artirmasiz": {
-      "ilk1": 1.0,
-      "ilk3": 1.0,
-      "oyunda_taninir": 1.0,
+      "ilk1": 0.8602620087336245,
+      "ilk3": 0.9388646288209607,
+      "oyunda_taninir": 0.851528384279476,
       "aygit": {
-        "fare": 1.0
+        "dokunma": 0.8,
+        "fare": 0.8770949720670391
       },
       "kisi": {
-        "yerel": 1.0
+        "NECO": 0.86,
+        "alper": 0.92,
+        "büş": 0.8,
+        "faruk": 0.75,
+        "yerel": 1.0,
+        "ömer": 0.92
       }
     },
     "m2": {
-      "ilk1": 1.0,
-      "ilk3": 1.0,
-      "oyunda_taninir": 1.0,
+      "ilk1": 0.8558951965065502,
+      "ilk3": 0.9388646288209607,
+      "oyunda_taninir": 0.851528384279476,
       "aygit": {
-        "fare": 1.0
+        "dokunma": 0.7,
+        "fare": 0.8994413407821229
       },
       "kisi": {
-        "yerel": 1.0
+        "NECO": 0.88,
+        "alper": 0.9,
+        "büş": 0.7,
+        "faruk": 0.8571428571428571,
+        "yerel": 1.0,
+        "ömer": 0.94
       }
     },
     "m3": {
-      "ilk1": 1.0,
-      "ilk3": 1.0,
-      "oyunda_taninir": 1.0,
+      "ilk1": 0.8820960698689956,
+      "ilk3": 0.9432314410480349,
+      "oyunda_taninir": 0.8733624454148472,
       "aygit": {
-        "fare": 1.0
+        "dokunma": 0.8,
+        "fare": 0.9050279329608939
       },
       "kisi": {
-        "yerel": 1.0
+        "NECO": 0.92,
+        "alper": 0.9,
+        "büş": 0.8,
+        "faruk": 0.8214285714285714,
+        "yerel": 1.0,
+        "ömer": 0.94
       }
     },
     "m3_kismi": {
-      "ilk1": 1.0,
-      "ilk3": 1.0,
-      "oyunda_taninir": 1.0,
+      "ilk1": 0.868995633187773,
+      "ilk3": 0.9432314410480349,
+      "oyunda_taninir": 0.8602620087336245,
       "aygit": {
-        "fare": 1.0
+        "dokunma": 0.78,
+        "fare": 0.8938547486033519
       },
       "kisi": {
-        "yerel": 1.0
+        "NECO": 0.96,
+        "alper": 0.88,
+        "büş": 0.78,
+        "faruk": 0.75,
+        "yerel": 1.0,
+        "ömer": 0.92
+      }
+    },
+    "s345_m1": {
+      "ilk1": 0.6200873362445415,
+      "ilk3": 0.777292576419214,
+      "oyunda_taninir": 0.5676855895196506,
+      "aygit": {
+        "dokunma": 0.46,
+        "fare": 0.664804469273743
+      },
+      "kisi": {
+        "NECO": 0.64,
+        "alper": 0.7,
+        "büş": 0.46,
+        "faruk": 0.6071428571428571,
+        "yerel": 0.0,
+        "ömer": 0.7
+      }
+    },
+    "s345_m3": {
+      "ilk1": 0.6855895196506551,
+      "ilk3": 0.8165938864628821,
+      "oyunda_taninir": 0.6550218340611353,
+      "aygit": {
+        "dokunma": 0.6,
+        "fare": 0.7094972067039106
+      },
+      "kisi": {
+        "NECO": 0.72,
+        "alper": 0.74,
+        "büş": 0.6,
+        "faruk": 0.5714285714285714,
+        "yerel": 0.0,
+        "ömer": 0.76
+      }
+    },
+    "s345_m3_kismi": {
+      "ilk1": 0.6855895196506551,
+      "ilk3": 0.8078602620087336,
+      "oyunda_taninir": 0.62882096069869,
+      "aygit": {
+        "dokunma": 0.6,
+        "fare": 0.7094972067039106
+      },
+      "kisi": {
+        "NECO": 0.74,
+        "alper": 0.7,
+        "büş": 0.6,
+        "faruk": 0.6071428571428571,
+        "yerel": 0.0,
+        "ömer": 0.76
       }
     }
   },
@@ -65,5 +147,56 @@
     "tur": 9,
     "taninan": 7
   },
-  "en_cok_karisan": []
+  "en_cok_karisan": [
+    {
+      "gercek": "dağ",
+      "tahmin": "hız treni",
+      "sayi": 3
+    },
+    {
+      "gercek": "balık",
+      "tahmin": "köpek balığı",
+      "sayi": 2
+    },
+    {
+      "gercek": "kapı",
+      "tahmin": "şifonyer",
+      "sayi": 2
+    },
+    {
+      "gercek": "saat",
+      "tahmin": "pizza",
+      "sayi": 2
+    },
+    {
+      "gercek": "muz",
+      "tahmin": "ay",
+      "sayi": 2
+    },
+    {
+      "gercek": "ağaç",
+      "tahmin": "brokoli",
+      "sayi": 1
+    },
+    {
+      "gercek": "şapka",
+      "tahmin": "kurbağa",
+      "sayi": 1
+    },
+    {
+      "gercek": "kardan adam",
+      "tahmin": "panda",
+      "sayi": 1
+    },
+    {
+      "gercek": "uçak",
+      "tahmin": "gökdelen",
+      "sayi": 1
+    },
+    {
+      "gercek": "kedi",
+      "tahmin": "köpek",
+      "sayi": 1
+    }
+  ]
 }

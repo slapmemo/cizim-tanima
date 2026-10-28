@@ -3,6 +3,7 @@
 Kullanım:
   .venv\\Scripts\\python.exe egitim\\egit.py --ad m1 --model m1 --epoch 10
   .venv\\Scripts\\python.exe egitim\\egit.py --ad m2 --model m2 --epoch 20 --artirma
+345 sınıf: SINIF_SETI=345 ortam değişkeniyle (veri veri/islenmis345/, ad örn. s345_m3)
 Çıktılar: modeller/<ad>.pt, deneyler/<ad>/ayarlar.json, deneyler/<ad>/gecmis.json
 """
 import argparse
@@ -19,9 +20,10 @@ from torch.nn import functional as F
 
 sys.path.insert(0, str(Path(__file__).parent))
 from modeller import MODELLER  # noqa: E402
+from siniflar import ADLAR, ISLENMIS_AD  # noqa: E402
 
 KOK = Path(__file__).resolve().parent.parent
-VERI = KOK / "veri" / "islenmis"
+VERI = KOK / "veri" / ISLENMIS_AD
 
 
 def yukle(bolum, cihaz):
@@ -77,8 +79,14 @@ def main():
     Xe, ye = yukle("egitim", cihaz)
     Xd, yd = yukle("dogrulama", cihaz)
     if a.kismi:
-        Xek = torch.from_numpy(np.load(VERI / "egitim_kismi.npz")["X"]).to(cihaz)
-    model =MODELLER[a.model]().to(cihaz)
+        Xek = torch.from_numpy(np.load(VERI / "egitim_kismi.npz")["X"])
+        try:
+            Xek = Xek.to(cihaz)
+        except torch.OutOfMemoryError:
+            # 345 sınıfta GPU'ya sığmazsa sabitlenmiş bellekte kalır, yığın başına taşınır
+            print("yarım çizimler GPU'ya sığmadı, sabitlenmiş bellekte", flush=True)
+            Xek = Xek.pin_memory()
+    model = MODELLER[a.model](len(ADLAR)).to(cihaz)
     parametre = sum(p.numel() for p in model.parameters())
     print(f"{a.ad}: {a.model}, {parametre:,} parametre, eğitim {len(Xe):,}, doğrulama {len(Xd):,}", flush=True)
 
@@ -104,7 +112,8 @@ def main():
             xb, yb = Xe[idx], ye[idx]
             if a.kismi:
                 sec = torch.rand(len(idx), device=cihaz, generator=uretec) < a.kismi
-                xb = torch.where(sec[:, None, None], Xek[idx], xb)
+                yarim = Xek[idx] if Xek.is_cuda else Xek[idx.cpu()].to(cihaz, non_blocking=True)
+                xb = torch.where(sec[:, None, None], yarim, xb)
             xb = hazirla(xb)
             if a.artirma:
                 xb = artir(xb, uretec)
@@ -126,7 +135,8 @@ def main():
         gecmis.append(satir)
         if dd > eniyi:
             eniyi = dd
-            torch.save({"model": a.model, "durum": model.state_dict(), "epoch": ep}, KOK / "modeller" / f"{a.ad}.pt")
+            torch.save({"model": a.model, "sinif": len(ADLAR), "durum": model.state_dict(), "epoch": ep},
+                       KOK / "modeller" / f"{a.ad}.pt")
         (klasor / "gecmis.json").write_text(json.dumps(gecmis, indent=2), encoding="utf-8")
         print(f"epoch {ep:2d}  kayıp {satir['egitim_kayip']:.4f}  eğitim {satir['egitim_dogruluk']:.4f}  "
               f"doğrulama {dd:.4f}  ({sure:.0f} sn)", flush=True)

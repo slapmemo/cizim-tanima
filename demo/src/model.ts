@@ -7,9 +7,15 @@ ort.env.wasm.numThreads = 1; // çok iş parçacığı cross-origin isolation is
 export type Sinif = { en: string; tr: string };
 export type Tahmin = { sira: number[]; olasilik: Float32Array; ms: number };
 
-export const MODELLER = ["m1", "m2_artirmasiz", "m2", "m3", "m3_kismi"] as const;
-// Yarım çizimlerle de eğitilen M3: erken tanımada en iyisi (docs/rapor/rapor.md §4).
-export const OYUN_MODELI = "m3_kismi";
+// "s345_" önekliler Quick, Draw!'ın 345 sınıfının tamamıyla eğitildi, diğerleri 50 sınıfla.
+export const MODELLER = ["m1", "m2_artirmasiz", "m2", "m3", "m3_kismi", "s345_m1", "s345_m3", "s345_m3_kismi"] as const;
+// Yarım çizimlerle de eğitilen M3, erken tanımada en iyisi (docs/rapor/rapor.md §4). Oyunda 345 sınıflısı:
+// model bütün sınıfları tanır, oyunda yalnız oyun_kelimeleri.json'dakiler sorulur.
+export const OYUN_MODELI = "s345_m3_kismi";
+// "Oyun · 50" sekmesi: ilk sürüm, 50 sınıflı model ve 50 sınıfın hepsi sorulur
+export const KOLAY_OYUN_MODELI = "m3_kismi";
+// Çizim toplama sayfası 50 sınıfla (arkadaşlardan gelen veriler karşılaştırılabilir kalsın)
+export const TOPLA_MODELI = "m3_kismi";
 
 const oturumlar = new Map<string, Promise<ort.InferenceSession>>();
 
@@ -22,9 +28,29 @@ export function oturum(ad: string): Promise<ort.InferenceSession> {
   return o;
 }
 
-export async function siniflar(): Promise<Sinif[]> {
-  const y = await fetch(`${import.meta.env.BASE_URL}model/siniflar.json`);
-  return y.json();
+const listeler = new Map<string, Promise<Sinif[]>>();
+
+/** Modelin çıkış sırasındaki sınıflar; model adı verilmezse 50 sınıflık liste. */
+export function siniflar(model = "m3_kismi"): Promise<Sinif[]> {
+  const dosya = model.startsWith("s345_") ? "siniflar345.json" : "siniflar.json";
+  let l = listeler.get(dosya);
+  if (!l) {
+    l = fetch(`${import.meta.env.BASE_URL}model/${dosya}`).then((y) => y.json());
+    listeler.set(dosya, l);
+  }
+  return l;
+}
+
+/** Oyunda sorulan kelimeler (OYUN_MODELI'nin sınıf sırasında indisler). Dosya yoksa bütün sınıflar. */
+export async function oyunKelimeleri(): Promise<number[]> {
+  const liste = await siniflar(OYUN_MODELI);
+  try {
+    const y = await fetch(`${import.meta.env.BASE_URL}model/oyun_kelimeleri.json`);
+    const adlar: string[] = await y.json();
+    const indis = adlar.map((en) => liste.findIndex((s) => s.en === en)).filter((i) => i >= 0);
+    if (indis.length) return indis;
+  } catch { /* dosya yok */ }
+  return liste.map((_, i) => i);
 }
 
 export async function tahminEt(ad: string, vuruslar: Vurus[]): Promise<Tahmin> {

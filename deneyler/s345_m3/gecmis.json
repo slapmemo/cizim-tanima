@@ -1,0 +1,122 @@
+[
+  {
+    "epoch": 1,
+    "egitim_kayip": 1.9509421739130435,
+    "egitim_dogruluk": 0.5203426086956522,
+    "dogrulama_kayip": 1.3085477779664856,
+    "dogrulama_dogruluk": 0.6415153623188405,
+    "sure_sn": 225.11684036254883
+  },
+  {
+    "epoch": 2,
+    "egitim_kayip": 1.2873401449275361,
+    "egitim_dogruluk": 0.6508949275362319,
+    "dogrulama_kayip": 1.2663694345844656,
+    "dogrulama_dogruluk": 0.653983768115942,
+    "sure_sn": 224.59246516227722
+  },
+  {
+    "epoch": 3,
+    "egitim_kayip": 1.2183297101449275,
+    "egitim_dogruluk": 0.6673124637681159,
+    "dogrulama_kayip": 1.3990312168817935,
+    "dogrulama_dogruluk": 0.626311884057971,
+    "sure_sn": 233.20873594284058
+  },
+  {
+    "epoch": 4,
+    "egitim_kayip": 1.1842342028985506,
+    "egitim_dogruluk": 0.6755342028985507,
+    "dogrulama_kayip": 1.0851455555083787,
+    "dogrulama_dogruluk": 0.697616231884058,
+    "sure_sn": 233.13012099266052
+  },
+  {
+    "epoch": 5,
+    "egitim_kayip": 1.1623980434782608,
+    "egitim_dogruluk": 0.6806705797101449,
+    "dogrulama_kayip": 1.0763522484997736,
+    "dogrulama_dogruluk": 0.7004985507246377,
+    "sure_sn": 235.4296736717224
+  },
+  {
+    "epoch": 6,
+    "egitim_kayip": 1.141309347826087,
+    "egitim_dogruluk": 0.6859240579710145,
+    "dogrulama_kayip": 1.023565814085145,
+    "dogrulama_dogruluk": 0.7118608695652174,
+    "sure_sn": 238.08153295516968
+  },
+  {
+    "epoch": 7,
+    "egitim_kayip": 1.1194101449275362,
+    "egitim_dogruluk": 0.691349420289855,
+    "dogrulama_kayip": 1.0393738077445651,
+    "dogrulama_dogruluk": 0.7077194202898551,
+    "sure_sn": 239.7603828907013
+  },
+  {
+    "epoch": 8,
+    "egitim_kayip": 1.094243768115942,
+    "egitim_dogruluk": 0.6978169565217391,
+    "dogrulama_kayip": 1.1139975532155797,
+    "dogrulama_dogruluk": 0.6915721739130435,
+    "sure_sn": 237.04588985443115
+  },
+  {
+    "epoch": 9,
+    "egitim_kayip": 1.0655853623188405,
+    "egitim_dogruluk": 0.7048078260869565,
+    "dogrulama_kayip": 1.1005520401664401,
+    "dogrulama_dogruluk": 0.6947049275362319,
+    "sure_sn": 237.7498435974121
+  },
+  {
+    "epoch": 10,
+    "egitim_kayip": 1.0334390579710144,
+    "egitim_dogruluk": 0.7128610144927536,
+    "dogrulama_kayip": 0.9227241997848732,
+    "dogrulama_dogruluk": 0.736855652173913,
+    "sure_sn": 233.29264211654663
+  },
+  {
+    "epoch": 11,
+    "egitim_kayip": 0.9964694927536232,
+    "egitim_dogruluk": 0.7222466666666667,
+    "dogrulama_kayip": 0.8637799484827898,
+    "dogrulama_dogruluk": 0.7528255072463768,
+    "sure_sn": 225.9080331325531
+  },
+  {
+    "epoch": 12,
+    "egitim_kayip": 0.9554271739130434,
+    "egitim_dogruluk": 0.7325827536231884,
+    "dogrulama_kayip": 0.8861476873867754,
+    "dogrulama_dogruluk": 0.7463257971014493,
+    "sure_sn": 227.22342681884766
+  },
+  {
+    "epoch": 13,
+    "egitim_kayip": 0.9129346376811595,
+    "egitim_dogruluk": 0.743281884057971,
+    "dogrulama_kayip": 0.8206408766417572,
+    "dogrulama_dogruluk": 0.7635246376811594,
+    "sure_sn": 225.79144144058228
+  },
+  {
+    "epoch": 14,
+    "egitim_kayip": 0.8743139855072464,
+    "egitim_dogruluk": 0.7532189855072464,
+    "dogrulama_kayip": 0.7897650324105525,
+    "dogrulama_dogruluk": 0.7714886956521739,
+    "sure_sn": 224.88621711730957
+  },
+  {
+    "epoch": 15,
+    "egitim_kayip": 0.8516734782608696,
+    "egitim_dogruluk": 0.7590460869565218,
+    "dogrulama_kayip": 0.7994265923629982,
+    "dogrulama_dogruluk": 0.7690968115942028,
+    "sure_sn": 225.26613092422485
+  }
+]

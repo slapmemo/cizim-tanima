@@ -1,17 +1,17 @@
-"""Karşılaştırılan üç model. Giriş (N, 1, 28, 28), 0-1 arası; çıkış 50 sınıfın logitleri."""
+"""Karşılaştırılan üç model. Giriş (N, 1, 28, 28), 0-1 arası; çıkış sınıf logitleri (varsayılan 50)."""
 from torch import nn
 
 SINIF = 50
 
 
-def m1():
+def m1(sinif=SINIF):
     """Basit CNN: 2 evrişim + havuzlama + 1 gizli tam bağlı katman (temel çizgi)."""
     return nn.Sequential(
         nn.Conv2d(1, 32, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),     # 14x14
         nn.Conv2d(32, 64, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),    # 7x7
         nn.Flatten(),
         nn.Linear(64 * 7 * 7, 128), nn.ReLU(),
-        nn.Linear(128, SINIF),
+        nn.Linear(128, sinif),
     )
 
 
@@ -24,7 +24,7 @@ def _blok(giris, cikis):
     )
 
 
-def m2():
+def m2(sinif=SINIF):
     """Derin CNN: 3 blok (2 evrişim + BatchNorm), Dropout; veri artırmayla eğitilir."""
     return nn.Sequential(
         _blok(1, 32),     # 14x14
@@ -33,7 +33,7 @@ def m2():
         nn.Flatten(),
         nn.Linear(128 * 3 * 3, 256, bias=False), nn.BatchNorm1d(256), nn.ReLU(),
         nn.Dropout(0.4),
-        nn.Linear(256, SINIF),
+        nn.Linear(256, sinif),
     )
 
 
@@ -55,7 +55,7 @@ class ArtikBlok(nn.Module):
         return self.relu(self.govde(x) + self.kisa(x))
 
 
-def m3():
+def m3(sinif=SINIF):
     """Hafif ResNet: 3 aşama x 2 artık blok (32/64/128 kanal), küresel ortalama havuzlama."""
     return nn.Sequential(
         nn.Conv2d(1, 32, 3, padding=1, bias=False), nn.BatchNorm2d(32), nn.ReLU(),
@@ -64,7 +64,7 @@ def m3():
         ArtikBlok(64, 128, 2), ArtikBlok(128, 128),       # 7x7
         nn.AdaptiveAvgPool2d(1), nn.Flatten(),
         nn.Dropout(0.2),
-        nn.Linear(128, SINIF),
+        nn.Linear(128, sinif),
     )
 
 

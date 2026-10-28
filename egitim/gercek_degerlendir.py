@@ -6,7 +6,7 @@
 Oyun kayıtları tanındığı anda kesildiği için (model lehine yanlı) doğruluğa katılmaz, ayrıca özetlenir.
 Aynı oturum iki kez gönderildiyse (aynı "oturum" kimliği) en çok çizim içeren dosya alınır.
 
-Kullanım: .venv\\Scripts\\python.exe egitim\\gercek_degerlendir.py [m1 m2_artirmasiz m2 m3 m3_kismi]
+Kullanım: .venv\\Scripts\\python.exe egitim\\gercek_degerlendir.py [model adları; varsayılan: bulunan 50 ve 345 sınıflı modellerin hepsi]
 Çıktı: deneyler/gercek.json ve ekrana tablolar.
 """
 import json
@@ -20,15 +20,18 @@ import onnxruntime as ort
 sys.path.insert(0, str(Path(__file__).parent))
 from onisleme import ciz  # noqa: E402
 from siniflar import ADLAR, SINIFLAR  # noqa: E402
+from siniflar345 import ADLAR as ADLAR345, SINIFLAR as SINIFLAR345  # noqa: E402
 
 KOK = Path(__file__).resolve().parent.parent
 TR = dict(SINIFLAR)
+TR345 = dict(SINIFLAR345)
 AYGIT = {"mouse": "fare", "touch": "dokunma", "pen": "kalem"}
 
 
 def yukle():
     oturumlar, tekil, oyun = {}, [], []
-    for yol in sorted((KOK / "kayitlar").glob("*.json")):
+    yollar = sorted((KOK / "kayitlar").glob("*.json")) + sorted((KOK / "test-verileri").glob("**/*.json"))
+    for yol in yollar:
         k = json.loads(yol.read_text(encoding="utf-8"))
         if isinstance(k.get("kayitlar"), list):
             onceki = oturumlar.get(k.get("oturum") or yol.name)
@@ -46,7 +49,8 @@ def yukle():
 
 
 def main():
-    adlar = sys.argv[1:] or ["m1", "m2_artirmasiz", "m2", "m3", "m3_kismi"]
+    adlar = sys.argv[1:] or ["m1", "m2_artirmasiz", "m2", "m3", "m3_kismi", "s345_m1", "s345_m3", "s345_m3_kismi"]
+    adlar = [a for a in adlar if (KOK / "modeller" / f"{a}.onnx").exists()]
     cizimler, oyun = yukle()
     if oyun:
         taninan = [k for k in oyun if k.get("taninan")]
@@ -57,10 +61,11 @@ def main():
         return
 
     X = np.stack([ciz(c["vuruslar"]) for c in cizimler]).astype(np.float32)[:, None] / 255.0
-    y = np.array([ADLAR.index(c["etiket"]) for c in cizimler])
+    y50 = np.array([ADLAR.index(c["etiket"]) for c in cizimler])
+    y345 = np.array([ADLAR345.index(c["etiket"]) for c in cizimler])
     kisi = np.array([c["kisi"] for c in cizimler])
     aygit = np.array([AYGIT.get(c.get("aygit"), c.get("aygit") or "?") for c in cizimler])
-    print(f"{len(cizimler)} çizim, {len(set(kisi))} kişi, {len(set(y))} sınıf, aygıt: {dict(Counter(aygit.tolist()))}\n")
+    print(f"{len(cizimler)} çizim, {len(set(kisi))} kişi, {len(set(y50))} sınıf, aygıt: {dict(Counter(aygit.tolist()))}\n")
 
     test = {}
     sonuc_yolu = KOK / "deneyler" / "sonuclar.json"
@@ -75,7 +80,9 @@ def main():
     for ad in adlar:
         oturum = ort.InferenceSession(str(KOK / "modeller" / f"{ad}.onnx"), providers=["CPUExecutionProvider"])
         p = oturum.run(None, {"giris": X})[0]
-        tahminler[ad] = p
+        # 345 sınıflı modellerde etiketler 345 listesindeki sıraya çevrilir
+        y = y345 if ad.startswith("s345_") else y50
+        tahminler[ad] = (p, y)
         dogru = p.argmax(1) == y
         r = {
             "ilk1": float(dogru.mean()),
@@ -99,8 +106,9 @@ def main():
                                       for k, v in sonuc["modeller"][ad]["kisi"].items()))
 
     son = adlar[-1]
-    p = tahminler[son]
-    hatalar = Counter((TR[ADLAR[a]], TR[ADLAR[b]]) for a, b in zip(y, p.argmax(1)) if a != b)
+    p, y = tahminler[son]
+    liste, tr = (ADLAR345, TR345) if son.startswith("s345_") else (ADLAR, TR)
+    hatalar = Counter((tr[liste[a]], tr[liste[b]]) for a, b in zip(y, p.argmax(1)) if a != b)
     sonuc["en_cok_karisan"] = [{"gercek": a, "tahmin": b, "sayi": n} for (a, b), n in hatalar.most_common(10)]
     print(f"\n{son} en çok karışan: " + ", ".join(f"{a}→{b} ({n})" for (a, b), n in hatalar.most_common(10)))
     (KOK / "deneyler" / "gercek.json").write_text(json.dumps(sonuc, indent=2, ensure_ascii=False), encoding="utf-8")

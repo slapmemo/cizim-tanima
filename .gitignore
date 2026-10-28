@@ -1,6 +1,7 @@
 .venv/
 veri/
 kayitlar/
+test-verileri/
 modeller/*.pt
 __pycache__/
 node_modules/

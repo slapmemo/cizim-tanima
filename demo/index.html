@@ -12,7 +12,8 @@
   <header class="ust">
     <div class="logo">Çizim<b>Tanı</b></div>
     <nav class="sekmeler">
-      <button data-sekme="oyun" class="secili">Oyun</button>
+      <button data-sekme="oyun" data-mod="zor" class="secili">Oyun · 242</button>
+      <button data-sekme="oyun" data-mod="kolay">Oyun · 50</button>
       <button data-sekme="serbest">Serbest çizim</button>
     </nav>
   </header>
@@ -21,6 +22,7 @@
     <section id="oyun" class="sekme">
       <div id="oyunGiris" class="kart orta">
         <h1>Yapay zekâya tanıt!</h1>
+        <p id="modAciklama" class="hap"></p>
         <p>5 tur, her turda 20 saniye. Ekrandaki nesneyi çiz; yapay zekâ çizimini tanıdığı anda puanı alırsın. Ne kadar erken tanınırsan o kadar çok puan.</p>
         <label class="secim"><input type="checkbox" id="oyunKaydet" /> Çizimlerimi kaydet (rapor için, yalnız bu bilgisayara)</label>
         <button id="basla" class="ana buyuk">Başla</button>

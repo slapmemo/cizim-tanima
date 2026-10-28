@@ -2,7 +2,7 @@
 // tarayıcıda saklanır, sonda tek JSON dosyası (paylaş ya da indir). Ölçüm:
 // egitim/gercek_degerlendir.py (dosyalar kayitlar/ altına konur).
 import type { Vurus } from "./onisleme.ts";
-import { OYUN_MODELI, siniflar, tahminEt, type Sinif } from "./model.ts";
+import { TOPLA_MODELI, siniflar, tahminEt, type Sinif } from "./model.ts";
 import { kelimeSec } from "./oyun.ts";
 import { Tuval } from "./tuval.ts";
 
@@ -131,7 +131,7 @@ async function bitir() {
   let dogru = 0;
   for (const k of d.kayitlar) {
     const hedef = SINIFLAR.findIndex((s) => s.en === k.etiket);
-    const t = await tahminEt(OYUN_MODELI, k.vuruslar);
+    const t = await tahminEt(TOPLA_MODELI, k.vuruslar);
     if (t.sira[0] === hedef) dogru++;
     else yanlis.push(`${SINIFLAR[hedef].tr} → “${SINIFLAR[t.sira[0]].tr}” sandı`);
   }

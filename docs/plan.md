@@ -102,6 +102,16 @@ Giriş, veri ve ön işleme, modeller, deneyler ve sonuçlar (§5), oyun, sını
 - Web kumanda ve Flutter'da tuval; Flutter'da vuruşlar tarayıcıdakiyle aynı koordinat biçiminde.
 - Ön işleme ve tahmin kodu 3b/3c'den aynen alınır.
 
+## 7b. 345 sınıf (eklendi, 28 Ekim 2026)
+
+Kullanıcı isteği: oyun çok kolay (2–3 sn'de tanıyor), nesne sayısı artsın. Kararlar:
+
+- Model 345 sınıfın tamamını tanır; oyunda yalnız seçilmiş kelimeler sorulur (test doğruluğu ≥ %70, çizilemeyenler elle çıkarılır; `egitim/oyun_kelimeleri.py`).
+- 50 sınıflık çalışma raporda kalır; 345 sınıf "ölçeklendirme" bölümü olarak eklenir.
+- 345 sınıfta M1, M3, M3-kısmi eğitilir (sınıf başına 20k/2,5k/2,5k; M2 atlandı).
+- Arkadaşlardan çizim toplama sayfası 50 sınıfla kalır; toplanan çizimler 345 sınıflı modellerle de ölçülür.
+- Çalıştırma: `SINIF_SETI=345` ortam değişkeni (`egitim/siniflar.py`), zincir `egitim/calistir345.ps1`.
+
 ## 8. Klasör yapısı (öneri)
 
 ```

@@ -1,5 +1,5 @@
 import { ciz } from "./onisleme.ts";
-import { MODELLER, OYUN_MODELI, hizOlc, oturum, siniflar, tahminEt, type Sinif } from "./model.ts";
+import { KOLAY_OYUN_MODELI, MODELLER, OYUN_MODELI, hizOlc, oturum, oyunKelimeleri, siniflar, tahminEt, type Sinif } from "./model.ts";
 import { TAHMIN_ARALIGI_MS, TUR_SAYISI, TUR_SURESI_MS, kelimeSec, puan, tanindiMi } from "./oyun.ts";
 import { Tuval } from "./tuval.ts";
 
@@ -14,13 +14,31 @@ function mi(sozcuk: string): string {
   return `${sozcuk} ${ek}`;
 }
 
+// OYUN_MODELI'nin sınıfları (345; serbest çizimde "ne çizdin" listesi); serbest çizim seçili modelin listesini kullanır
 let SINIFLAR: Sinif[] = [];
+
+// İki oyun sekmesi aynı ekranı kullanır; mod yalnız modeli ve sorulan kelimeleri belirler
+type Mod = "zor" | "kolay";
+const MODLAR: Record<Mod, { model: string; aciklama: string }> = {
+  zor: { model: OYUN_MODELI, aciklama: "242 kelime · yapay zekâ 345 nesne biliyor" },
+  kolay: { model: KOLAY_OYUN_MODELI, aciklama: "50 kelime · yapay zekâ 50 nesne biliyor (kolay)" },
+};
+let mod: Mod = "zor";
+let oyunSiniflari: Sinif[] = [];
+let oyunKelimeListesi: number[] = [];
+
+/** Modun model ve kelime listesi (zor: oyun_kelimeleri.json, kolay: 50 sınıfın hepsi). */
+async function modYukle(m: Mod) {
+  const s = await siniflar(MODLAR[m].model);
+  return { s, k: m === "zor" ? await oyunKelimeleri() : s.map((_, i) => i) };
+}
 
 // ---- sekmeler
 for (const b of document.querySelectorAll<HTMLButtonElement>(".sekmeler button")) {
   b.addEventListener("click", () => {
     for (const d of document.querySelectorAll<HTMLButtonElement>(".sekmeler button")) d.classList.toggle("secili", d === b);
     for (const s of document.querySelectorAll<HTMLElement>(".sekme")) s.hidden = s.id !== b.dataset.sekme;
+    if (b.dataset.mod && b.dataset.mod !== mod) modDegistir(b.dataset.mod as Mod);
   });
 }
 
@@ -66,9 +84,10 @@ const serbestTahmin = tahminSirasi(async () => {
   p.forEach((v, i) => { resim.data.set([v, v, v, 255], i * 4); });
   onizleme.putImageData(resim, 0, 0);
   if (!tuval1.vuruslar.length) { $("tahminler").innerHTML = ""; return; }
-  const t = await tahminEt(seciliModel, tuval1.vuruslar);
+  const model = seciliModel;
+  const [t, liste] = await Promise.all([tahminEt(model, tuval1.vuruslar), siniflar(model)]);
   $("tahminler").innerHTML = t.sira.slice(0, 5).map((i) =>
-    `<li><span>${SINIFLAR[i].tr}</span><span>${yuzde(t.olasilik[i])}</span>` +
+    `<li><span>${liste[i].tr}</span><span>${yuzde(t.olasilik[i])}</span>` +
     `<span class="cubuk"><i style="width:${(t.olasilik[i] * 100).toFixed(1)}%"></i></span></li>`).join("");
   $("sure1").textContent = `Ön işleme + tahmin: ${t.ms.toFixed(1)} ms`;
 });
@@ -124,15 +143,15 @@ let sonTahmin = -1;
 const oyunTahmin = tahminSirasi(async () => {
   if (!turAcik || !tuval2.vuruslar.length) return;
   const kimlik = turKimligi;
-  const t = await tahminEt(OYUN_MODELI, tuval2.vuruslar);
+  const t = await tahminEt(MODLAR[mod].model, tuval2.vuruslar);
   if (!turAcik || kimlik !== turKimligi) return;
   const hedef = kelimeler[tur];
   sonTahmin = t.sira[0];
   if (tanindiMi(t.sira, t.olasilik, hedef)) {
-    $("canliTahmin").innerHTML = `Yapay zekâ: Bu bir ${SINIFLAR[hedef].tr}! <small>${yuzde(t.olasilik[hedef])}</small>`;
+    $("canliTahmin").innerHTML = `Yapay zekâ: Bu bir ${oyunSiniflari[hedef].tr}! <small>${yuzde(t.olasilik[hedef])}</small>`;
     return turBitir(true);
   }
-  const ilk = SINIFLAR[t.sira[0]].tr, ikinci = SINIFLAR[t.sira[1]].tr;
+  const ilk = oyunSiniflari[t.sira[0]].tr, ikinci = oyunSiniflari[t.sira[1]].tr;
   $("canliTahmin").innerHTML = `Yapay zekâ: ${mi(ilk)}? <small>${yuzde(t.olasilik[t.sira[0]])} · yoksa ${mi(ikinci)}?</small>`;
 });
 
@@ -147,7 +166,7 @@ function turBasla() {
   sonTahmin = -1;
   $("bildirim").hidden = true;
   $("turNo").textContent = `Tur ${tur + 1}/${TUR_SAYISI}`;
-  $("kelime").textContent = buyukHarf(SINIFLAR[kelimeler[tur]].tr);
+  $("kelime").textContent = buyukHarf(oyunSiniflari[kelimeler[tur]].tr);
   $("canliTahmin").textContent = "Çizmeye başla…";
   turBasi = performance.now();
   turAcik = true;
@@ -178,12 +197,14 @@ function turBitir(taninan: boolean) {
   b.classList.toggle("olmadi", !taninan);
   b.innerHTML = taninan
     ? `Tanındı! <small>${(ms / 1000).toFixed(1)} sn · +${p} puan</small>`
-    : `Süre doldu <small>${sonTahmin >= 0 ? `Yapay zekâ en son “${SINIFLAR[sonTahmin].tr}” dedi` : "Çizim yoktu"}</small>`;
+    : `Süre doldu <small>${sonTahmin >= 0 ? `Yapay zekâ en son “${oyunSiniflari[sonTahmin].tr}” dedi` : "Çizim yoktu"}</small>`;
   b.hidden = false;
   if ($<HTMLInputElement>("oyunKaydet").checked && tuval2.vuruslar.length) {
-    void kaydet({ etiket: SINIFLAR[hedef].en, mod: "oyun", taninan, sure_ms: Math.round(ms), vuruslar: tuval2.vuruslar, aygit: tuval2.aygit });
+    void kaydet({ etiket: oyunSiniflari[hedef].en, mod: "oyun", taninan, sure_ms: Math.round(ms), vuruslar: tuval2.vuruslar, aygit: tuval2.aygit });
   }
+  const kimlik = turKimligi;
   setTimeout(() => {
+    if (kimlik !== turKimligi) return; // bu arada mod değişti
     tur++;
     if (tur < TUR_SAYISI) turBasla(); else macBitir();
   }, taninan ? 1600 : 2000);
@@ -195,7 +216,7 @@ function macBitir() {
   $("sonBaslik").textContent = taninanSayi === TUR_SAYISI ? "Kusursuz!" : taninanSayi ? "Maç bitti" : "Bir dahakine!";
   $("sonPuan").textContent = `${toplam} puan`;
   $("sonListe").innerHTML = sonuclar.map((s) =>
-    `<li class="${s.taninan ? "tamam" : ""}"><span>${SINIFLAR[s.hedef].tr}</span>` +
+    `<li class="${s.taninan ? "tamam" : ""}"><span>${oyunSiniflari[s.hedef].tr}</span>` +
     `<span>${s.taninan ? `✓ ${(s.ms / 1000).toFixed(1)} sn · ${s.puan}` : "✗ tanınmadı"}</span></li>`).join("");
 }
 
@@ -204,7 +225,8 @@ async function macBasla() {
   b.disabled = true;
   $("yukleniyor").textContent = "Model yükleniyor…";
   try {
-    await oturum(OYUN_MODELI);
+    await modHazir;
+    await oturum(MODLAR[mod].model);
   } catch (e) {
     $("yukleniyor").textContent = `Model yüklenemedi: ${e}`;
     b.disabled = false;
@@ -212,7 +234,7 @@ async function macBasla() {
   }
   $("yukleniyor").textContent = "";
   b.disabled = false;
-  kelimeler = kelimeSec(SINIFLAR.length, TUR_SAYISI);
+  kelimeler = kelimeSec(oyunKelimeListesi.length, TUR_SAYISI).map((i) => oyunKelimeListesi[i]);
   tur = 0; toplam = 0; sonuclar = [];
   $("puan").textContent = "0 puan";
   ekran("oyunTur");
@@ -233,11 +255,29 @@ if (!import.meta.env.DEV) {
   document.querySelector("#serbest h3")?.setAttribute("hidden", "");
 }
 
+let modHazir: Promise<void> = Promise.resolve();
+
+/** Sekme değişince süren maç bırakılır, seçilen modun listeleri ve modeli yüklenir. */
+function modDegistir(m: Mod) {
+  turAcik = false;
+  turKimligi++;
+  tuval2.kilitli = true;
+  mod = m;
+  ekran("oyunGiris");
+  $("modAciklama").textContent = MODLAR[m].aciklama;
+  modHazir = modYukle(m).then(({ s, k }) => {
+    if (mod !== m) return;
+    oyunSiniflari = s;
+    oyunKelimeListesi = k;
+    void oturum(MODLAR[m].model).catch(() => {});
+  });
+}
+
 // ---- açılış
-siniflar().then((s) => {
+modDegistir(mod);
+siniflar(OYUN_MODELI).then((s) => {
   SINIFLAR = s;
   const sirali = s.map((c, i) => [c.tr, i] as const).sort((a, b) => a[0].localeCompare(b[0], "tr"));
   $<HTMLSelectElement>("etiket").innerHTML = `<option value="">seç…</option>` +
     sirali.map(([tr, i]) => `<option value="${i}">${tr}</option>`).join("");
-  void oturum(OYUN_MODELI).catch(() => {});
 });

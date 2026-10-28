@@ -24,13 +24,15 @@ import matplotlib.pyplot as plt  # noqa: E402
 sys.path.insert(0, str(Path(__file__).parent))
 from modeller import MODELLER  # noqa: E402
 from onisleme import ciz, kismi  # noqa: E402
-from siniflar import ADLAR, SINIFLAR  # noqa: E402
+from siniflar import ADLAR, ISLENMIS_AD, ON_EK, SINIF_SETI, SINIFLAR  # noqa: E402
 
 KOK = Path(__file__).resolve().parent.parent
-VERI = KOK / "veri" / "islenmis"
+VERI = KOK / "veri" / ISLENMIS_AD
 DENEY = KOK / "deneyler"
 ORANLAR = [0.25, 0.5, 0.75, 1.0]
-KISMI_SINIF_BASI = 1000
+KISMI_SINIF_BASI = 200 if SINIF_SETI == "345" else 1000
+SON_EK = "345" if SINIF_SETI == "345" else ""  # ortak çıktı dosyaları: sonuclar345.json vb.
+N = len(ADLAR)
 TR = [tr for _, tr in SINIFLAR]
 
 
@@ -41,7 +43,7 @@ def kismi_veri():
         d = np.load(yol)
         return d["X"], d["y"]
     X = np.zeros((len(ORANLAR), len(ADLAR) * KISMI_SINIF_BASI, 28, 28), np.uint8)
-    y = np.zeros(len(ADLAR) * KISMI_SINIF_BASI, np.uint8)
+    y = np.zeros(len(ADLAR) * KISMI_SINIF_BASI, np.uint16)
     i = 0
     for no, ad in enumerate(ADLAR):
         with open(VERI / "test_vuruslar" / f"{ad}.ndjson", encoding="utf-8") as f:
@@ -99,7 +101,8 @@ def onnx_aktar(model, ad):
 
 
 def main():
-    adlar = sys.argv[1:] or ["m1", "m2_artirmasiz", "m2", "m3", "m3_kismi"]
+    varsayilan = ["m1", "m3", "m3_kismi"] if SINIF_SETI == "345" else ["m1", "m2_artirmasiz", "m2", "m3", "m3_kismi"]
+    adlar = sys.argv[1:] or [ON_EK + a for a in varsayilan]
     cihaz = torch.device("cuda")
     d = np.load(VERI / "test.npz")
     Xt, yt = d["X"], d["y"].astype(np.int64)
@@ -107,18 +110,18 @@ def main():
     sonuclar = {}
     for ad in adlar:
         kayit = torch.load(KOK / "modeller" / f"{ad}.pt", map_location=cihaz)
-        model = MODELLER[kayit["model"]]().to(cihaz)
+        model = MODELLER[kayit["model"]](kayit.get("sinif", 50)).to(cihaz)
         model.load_state_dict(kayit["durum"])
         model.eval()
         p = olasiliklar(model, Xt, cihaz)
         tahmin = p.argmax(1)
-        ilk3 = np.argsort(-p, 1)[:, :3]
-        km = np.zeros((50, 50), np.int64)
+        ilk3 = np.argpartition(-p, 3, axis=1)[:, :3]
+        km = np.zeros((N, N), np.int64)
         np.add.at(km, (yt, tahmin), 1)
         sinif_dogruluk = km.diagonal() / km.sum(1)
         karisan = []
-        for a in range(50):
-            for b in range(50):
+        for a in range(N):
+            for b in range(N):
                 if a != b and km[a, b]:
                     karisan.append((int(km[a, b]), ADLAR[a], ADLAR[b]))
         karisan.sort(reverse=True)
@@ -138,7 +141,7 @@ def main():
             "test_ilk1": float((tahmin == yt).mean()),
             "test_ilk3": float((ilk3 == yt[:, None]).any(1).mean()),
             "sinif_dogruluk": {ADLAR[i]: float(v) for i, v in enumerate(sinif_dogruluk)},
-            "en_cok_karisan": [{"sayi": s, "gercek": a, "tahmin": b} for s, a, b in karisan[:10]],
+            "en_cok_karisan": [{"sayi": s, "gercek": a, "tahmin": b} for s, a, b in karisan[:30]],
             "kismi": kismi_dogruluk,
             "onnx_bayt": boyut,
             "onnx_en_buyuk_fark": fark,
@@ -151,8 +154,11 @@ def main():
         kmn = km / km.sum(1, keepdims=True)
         fig, ax = plt.subplots(figsize=(13, 12))
         ax.imshow(kmn[sira][:, sira], cmap="Blues", vmin=0, vmax=1)
-        ax.set_xticks(range(50), [TR[i] for i in sira], rotation=90, fontsize=7)
-        ax.set_yticks(range(50), [TR[i] for i in sira], fontsize=7)
+        if N <= 60:
+            ax.set_xticks(range(N), [TR[i] for i in sira], rotation=90, fontsize=7)
+            ax.set_yticks(range(N), [TR[i] for i in sira], fontsize=7)
+        else:
+            ax.set_xticks([]); ax.set_yticks([])
         ax.set_xlabel("Tahmin"); ax.set_ylabel("Gerçek")
         ax.set_title(f"{ad} karışıklık matrisi (satır normalleştirilmiş, zordan kolaya)")
         fig.tight_layout(); fig.savefig(DENEY / ad / "karisiklik.png", dpi=110); plt.close(fig)
@@ -168,16 +174,16 @@ def main():
     ax[0].set_title("Kayıp"); ax[1].set_title("Doğruluk")
     for a in ax:
         a.set_xlabel("epoch"); a.grid(alpha=.3); a.legend(fontsize=7)
-    fig.tight_layout(); fig.savefig(DENEY / "egriler.png", dpi=110); plt.close(fig)
+    fig.tight_layout(); fig.savefig(DENEY / f"egriler{SON_EK}.png", dpi=110); plt.close(fig)
 
     fig, ax = plt.subplots(figsize=(6, 4))
     for ad in adlar:
         ax.plot([o * 100 for o in ORANLAR], [sonuclar[ad]["kismi"][str(o)]["ilk1"] for o in ORANLAR], "o-", label=ad)
     ax.set_xlabel("Çizimin tamamlanan kısmı (%)"); ax.set_ylabel("İlk-1 doğruluk")
     ax.set_title("Erken tanıma"); ax.grid(alpha=.3); ax.legend()
-    fig.tight_layout(); fig.savefig(DENEY / "kismi.png", dpi=110); plt.close(fig)
+    fig.tight_layout(); fig.savefig(DENEY / f"kismi{SON_EK}.png", dpi=110); plt.close(fig)
 
-    (DENEY / "sonuclar.json").write_text(json.dumps(sonuclar, indent=2, ensure_ascii=False), encoding="utf-8")
+    (DENEY / f"sonuclar{SON_EK}.json").write_text(json.dumps(sonuclar, indent=2, ensure_ascii=False), encoding="utf-8")
     satirlar = ["| Model | Parametre | Test ilk-1 | Test ilk-3 | %25 | %50 | %75 | ONNX | CPU ms |",
                 "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |"]
     for ad, s in sonuclar.items():
@@ -186,7 +192,7 @@ def main():
             f"| {ad} | {s['parametre']:,} | {s['test_ilk1']:.2%} | {s['test_ilk3']:.2%} | "
             f"{k['0.25']['ilk1']:.1%} | {k['0.5']['ilk1']:.1%} | {k['0.75']['ilk1']:.1%} | "
             f"{s['onnx_bayt'] / 1024:.0f} KB | {s['onnx_cpu_ms']:.3f} |")
-    (DENEY / "sonuclar.md").write_text("\n".join(satirlar) + "\n", encoding="utf-8")
+    (DENEY / f"sonuclar{SON_EK}.md").write_text("\n".join(satirlar) + "\n", encoding="utf-8")
     print("\n".join(satirlar))
 
 

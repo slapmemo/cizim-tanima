@@ -4,6 +4,7 @@
 kamyon/araba, kalem/boya kalemi gibi çiftlerden yalnız biri ya da hiçbiri alındı).
 Sıra modelin çıkış sırasıdır; değiştirilirse modeller yeniden eğitilmeli.
 """
+import os
 
 SINIFLAR = [
     ("airplane", "uçak"),
@@ -60,3 +61,15 @@ SINIFLAR = [
 
 ADLAR = [en for en, _ in SINIFLAR]
 assert len(SINIFLAR) == 50 and len(set(ADLAR)) == 50
+
+# Ortam değişkeni SINIF_SETI=345 verilirse bütün betikler 345 sınıfla çalışır (siniflar345.py):
+# işlenmiş veri veri/islenmis345/, model ve deney adları "s345_" önekli.
+SINIFLAR_50 = SINIFLAR
+SINIF_SETI = os.environ.get("SINIF_SETI", "50")
+if SINIF_SETI == "345":
+    from siniflar345 import SINIFLAR  # noqa: E402
+    ADLAR = [en for en, _ in SINIFLAR]
+elif SINIF_SETI != "50":
+    raise ValueError(f"SINIF_SETI 50 ya da 345 olmalı: {SINIF_SETI}")
+ON_EK = "s345_" if SINIF_SETI == "345" else ""
+ISLENMIS_AD = "islenmis345" if SINIF_SETI == "345" else "islenmis"

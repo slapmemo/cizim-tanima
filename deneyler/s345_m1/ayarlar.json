@@ -1,0 +1,12 @@
+{
+  "ad": "s345_m1",
+  "model": "m1",
+  "epoch": 10,
+  "yigin": 512,
+  "oo": 0.003,
+  "agirlik_azalmasi": 0.05,
+  "artirma": false,
+  "kismi": 0.0,
+  "tohum": 42,
+  "parametre": 464857
+}

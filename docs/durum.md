@@ -47,8 +47,31 @@ Plan: [plan.md](plan.md). Rapor taslağı: [rapor/rapor.md](rapor/rapor.md).
 - **Yapılmayan:** "Gönder" (Web Share) gerçek telefonda denenmedi (headless'ta yok, düğme gizleniyor). Vercel'e yüklenmedi.
 - **Git:** depo `cizim-tanima/`, uzak `origin` = https://github.com/slapmemo/cizim-tanima.git, ilk commit `f0e3d8b` (71 dosya, 24,5 MB; veri, `.venv`, `kayitlar/`, `.pt` dışarıda). Commit mesajına imza/Co-Authored-By yok.
 
+## Arkadaş çizimleri ve kişi raporları (28 Ekim 2026)
+
+- **Ne:** `egitim/kisi_raporu.py`: `test-verileri/*.json` (topla.html çıktısı) → `test-verileri/<takma_ad>/` (JSON taşınır, `cizimler.png` tablo, `resimler/NN-<nesne>.png`, `rapor.md`: özet, model bazında doğruluk, bilemedikleri ve ilk 3 tahmin). `gercek_degerlendir.py` `test-verileri/` altını da okuyor. `test-verileri/` git dışı (kişisel veri). Kullanıcı isteğiyle `kastamonufedaisi` dosyası ve takma adı `faruk` yapıldı.
+- **Veri (3 kişi):** büş 50 (dokunma) M3-kısmi %78; NECO 50 (fare) %96; faruk 28 (fare) %75. Toplam 129 çizim (1 yerel serbest dahil): M3 %85,3, M3-kısmi %84,5, M1 %77,5 (test setinde %95–97). Rapor §4.7 ara sonuçla güncellendi (katılımcılar A/B/C).
+- **Bulgular:** alışılmadık açı/biçim (önden araba, yumruk, sarkaçlı saat, körüklü fotoğraf makinesi), Türkçe etiket belirsizliği ("merdiven" → basamaklı merdiven çizildi; veri setinde el merdiveni), test setindeki karışıklıklar (örümcek→güneş, papyon→kelebek). büş'te 0,3 sn'lik tek çizgi "elmas" (yanlışlıkla kayıt).
+- **Açık kararlar (kullanıcıya soruldu):** "merdiven" → "el merdiveni" (siteye gönderim gerekir); 1 sn'den kısa çizimleri ve şaka çizimleri eleme kuralı. Şimdilik hiçbir çizim elenmedi.
+- **Sonra gelen (5 kişi):** alper 50 (fare) M3-kısmi 44/50; ömer 50 (fare) 46/50 (`alper` asıl adı yerine, kullanıcı isteğiyle). Toplam 229 çizim (179 fare, 50 dokunma): M3 %88,2, M3-kısmi %86,9, M1 %82,5. "Merdiven" 3 kişide basamaklı çizildi, rakamlı saat 2 kişide pizza. Rapor §4.7 5 kişiyle (A–E) güncellendi.
+
+## 345 sınıf (28 Ekim 2026, plan §7b)
+
+- **Neden:** kullanıcı oyunu çok kolay buldu. Model 345 sınıfın hepsini tanır, oyunda seçilmiş kelimeler sorulur.
+- **Ne:** `SINIF_SETI=345` (`siniflar.py` → `siniflar345.py`, TR adlar), veri sınıf başına 20k/2,5k/2,5k → `veri/islenmis345/` (6,9M / 862,5k / 862,5k; etiket `uint16`). Zincir `egitim/calistir345.ps1` (17:23–19:34): yarım çizimler, s345_m1 (10 epoch), s345_m3 ve s345_m3_kismi (15 epoch, artırmalı), değerlendirme, oyun simülasyonu. M3 epoch başına 225 sn.
+- **Test (862,5k):** M1 %70,12 · M3 %77,30 · M3-kısmi %75,12 (ilk-3 %87–92). %50 mürekkep: M3 %21,0, M3-kısmi %37,3. Simülasyon: tanınan M3 %79,9 / M3-kısmi %74,2; ortalama tanınma anı %71 / %66. En çok karışan: doğum günü pastası→pasta, kasırga→hortum, keman→gitar, otobüs↔okul otobüsü, bardak→kupa. Ayrıntı `deneyler/sonuclar345.md/json`, şekiller `*345.png`.
+- **Oyun kelimeleri:** `egitim/oyun_kelimeleri.py` → `demo/public/model/oyun_kelimeleri.json`, 242 kelime (M3-kısmi doğruluğu ≥ %70; 97 düşük, 6 elle çıkarıldı; liste `deneyler/oyun_kelimeleri.md`).
+- **Gerçek kullanıcı (229 çizim, 345 seçenek):** M1 %62,0 · M3 %68,6 · M3-kısmi %68,6 (aynı 50 sınıf test setinde %80–84). Kişi raporları yenilendi (345 sütunları).
+- **Demo:** oyun 345 sınıflı `s345_m3_kismi` ile, kelimeler listeden; `s345_*.onnx` `demo/public/model/` altına kopyalandı. Toplama sayfası 50 sınıfla kaldı (`m3_kismi`).
+- **Doğrulama:** `npm run build` temiz. Playwright (vite dev, `--mute-audio`): 5 tur, 4 tanındı (zikzak: birinci tahmin doğru ama eşik altı, süre doldu), serbest çizim bisiklet %92, kayıt (deneme kaydı silindi), hız 345: M1 0,25 ms, M3-kısmi 4,37 ms; 390×844 taşma yok, konsol hatası yok. Görüntülere bakılmadı.
+- **Rapor:** §1 hedef 5, §4.7 (5 kişi), yeni §4.8 ölçeklendirme, §5 süre tablosu, §6, §7.
+- **İki oyun sekmesi (kullanıcı isteği):** "Oyun · 242" (`s345_m3_kismi`, oyun_kelimeleri.json) ve "Oyun · 50" (`m3_kismi`, 50 sınıfın hepsi; `KOLAY_OYUN_MODELI`). Aynı oyun ekranı; sekme değişince süren maç bırakılır, giriş ekranına dönülür (bekleyen tur zamanlayıcısı `turKimligi` ile iptal). Dar ekranda sekme yazıları tek satır. Doğrulama: tsc + build temiz; Playwright iki sekmede 5'er tur (zor 5/5, kolay 5/5 son koşuda), maç ortasında sekme değişimi, 390×844 taşma yok, konsol hatası yok; görüntülere bakıldı.
+- **Yapılmayan:** commit/push (`f0e3d8b`, `084c809` sonrası hepsi commit'siz); Vercel deploy doğrulanmadı; telefonda deneme.
+
 ## Sıradaki
 
-1. Kullanıcı ve arkadaşları demoda çizim kaydeder (fare + telefon), `gercek_degerlendir.py` → rapor §4.7.
-2. Telefonda deneme (`npm run dev:lan`) ve hız testi.
-3. Aşama 6: CepKonsol entegrasyonu ("Çizim Düellosu").
+1. Commit ve push (kullanıcıya sorulacak); Vercel'de oyunun 345 sınıfla çalıştığını doğrula.
+2. Açık kararlar: "el merdiveni", eleme kuralı.
+3. Telefonda deneme ve hız testi; Web Share.
+4. Aşama 6: CepKonsol entegrasyonu ("Çizim Düellosu").
+5. **Bakılabilir (sonra karar):** yalnız 242 oyun kelimesiyle model eğitmek (~1 saat). 345'li modelle karşılaştırma rapora "rakip sınıfların etkisi" olarak girer. Beklenen: 242'lik model oyunda daha çok tanır (bardak/kupa gibi rakipler yok), ama kaba çizimleri de en yakın kelimeye bağlar (daha kolay kandırılır). 345'li model "zor" sekmede kalır; 242'lik olursa ayrı sekme ya da kolay mod olabilir.

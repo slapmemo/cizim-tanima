@@ -34,7 +34,8 @@ select { font: inherit; border-radius: 12px; border: 2px solid #dbe3f5; padding:
 .logo { color: #fff; font-weight: 900; font-size: 1.5rem; }
 .logo b { color: var(--cyan); }
 .sekmeler { display: flex; gap: 6px; background: rgba(255,255,255,.08); padding: 4px; border-radius: 999px; }
-.sekmeler button { background: transparent; color: #cfe0ff; }
+.sekmeler button { background: transparent; color: #cfe0ff; white-space: nowrap; }
+@media (max-width: 480px) { .sekmeler { gap: 2px; } .sekmeler button { padding: 8px 12px; font-size: 14px; } }
 .sekmeler button.secili { background: var(--cyan); color: var(--navy); }
 
 main { max-width: 960px; margin: 0 auto; }
