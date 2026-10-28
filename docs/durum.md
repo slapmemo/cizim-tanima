@@ -85,9 +85,10 @@ Plan: [plan.md](plan.md). Rapor taslağı: [rapor/rapor.md](rapor/rapor.md).
 
 ## Sıradaki
 
-1. Commit ve push (kullanıcıya sorulacak); Vercel'de oyunun 345 sınıfla çalıştığını doğrula.
-2. Açık kararlar: "el merdiveni", eleme kuralı.
-3. Telefonda deneme ve hız testi; Web Share.
-4. Aşama 6: CepKonsol entegrasyonu ("Çizim Düellosu").
-5. ~~Tanınma eşiği~~: karar verildi ve uygulandı (242 sekmesi birinci + ≥%30), [tanima-esigi.md](tanima-esigi.md).
-6. **Bakılabilir (sonra karar):** yalnız 242 oyun kelimesiyle model eğitmek (~1 saat). 345'li modelle karşılaştırma rapora "rakip sınıfların etkisi" olarak girer. Beklenen: 242'lik model oyunda daha çok tanır (bardak/kupa gibi rakipler yok), ama kaba çizimleri de en yakın kelimeye bağlar (daha kolay kandırılır). 345'li model "zor" sekmede kalır; 242'lik olursa ayrı sekme ya da kolay mod olabilir.
+Son commit `1070071` (seri modu + pas cezası), GitHub'a gönderildi. Depo `slapmemo/cizim-tanima` (gizli), Vercel kökü `demo`.
+
+1. Vercel'de iki sekmenin (Oyun · 242 / Oyun · 50) ve seri modunun çalıştığını doğrula.
+2. Telefonda deneme ve hız testi; Web Share.
+3. Açık kararlar: "merdiven" → "el merdiveni"; 1 sn'den kısa ve şaka çizimlerin elenmesi.
+4. **Bakılabilir (önerilen):** yalnız 242 oyun kelimesiyle model eğitmek (~1 saat). 345'li modelle karşılaştırma rapora "rakip sınıfların etkisi" olarak girer. Beklenen: 242'lik model oyunda daha çok tanır (bardak/kupa gibi rakipler yok), ama kaba çizimleri de en yakın kelimeye bağlar (daha kolay kandırılır). 345'li model "zor" sekmede kalır; 242'lik olursa ayrı sekme ya da kolay mod olabilir.
+5. Aşama 6: CepKonsol entegrasyonu ("Çizim Düellosu"); seçilen modlar Seri ve Sahtekâr (`plan.md` Aşama 6).
