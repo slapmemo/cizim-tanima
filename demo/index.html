@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Çizim Tanıma</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap" />
+  <link rel="stylesheet" href="/src/stil.css" />
+</head>
+<body>
+  <header class="ust">
+    <div class="logo">Çizim<b>Tanı</b></div>
+    <nav class="sekmeler">
+      <button data-sekme="oyun" class="secili">Oyun</button>
+      <button data-sekme="serbest">Serbest çizim</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="oyun" class="sekme">
+      <div id="oyunGiris" class="kart orta">
+        <h1>Yapay zekâya tanıt!</h1>
+        <p>5 tur, her turda 20 saniye. Ekrandaki nesneyi çiz; yapay zekâ çizimini tanıdığı anda puanı alırsın. Ne kadar erken tanınırsan o kadar çok puan.</p>
+        <label class="secim"><input type="checkbox" id="oyunKaydet" /> Çizimlerimi kaydet (rapor için, yalnız bu bilgisayara)</label>
+        <button id="basla" class="ana buyuk">Başla</button>
+        <div id="yukleniyor" class="kucuk"></div>
+      </div>
+
+      <div id="oyunTur" hidden>
+        <div class="kart tur-ust">
+          <span id="turNo" class="hap">Tur 1/5</span>
+          <span id="kelime" class="kelime"></span>
+          <span id="puan" class="hap">0 puan</span>
+        </div>
+        <div class="sure-cubuk"><i id="sureDolgu"></i></div>
+        <div class="kart tuval-kart">
+          <canvas id="tuval2" class="tuval"></canvas>
+          <div id="bildirim" class="bildirim" hidden></div>
+        </div>
+        <div id="canliTahmin" class="kart tahmin-serit">Çizmeye başla…</div>
+        <div class="dugmeler">
+          <button id="geri2">Geri al</button>
+          <button id="temizle2">Temizle</button>
+          <button id="pas">Pas geç</button>
+        </div>
+      </div>
+
+      <div id="oyunSon" class="kart orta" hidden>
+        <h1 id="sonBaslik">Maç bitti</h1>
+        <div id="sonPuan" class="son-puan"></div>
+        <ol id="sonListe" class="son-liste"></ol>
+        <button id="tekrar" class="ana buyuk">Tekrar oyna</button>
+      </div>
+    </section>
+
+    <section id="serbest" class="sekme" hidden>
+      <div class="izgara">
+        <div class="kart tuval-kart">
+          <canvas id="tuval1" class="tuval"></canvas>
+          <div class="dugmeler">
+            <button id="geri1">Geri al</button>
+            <button id="temizle1">Temizle</button>
+          </div>
+        </div>
+        <div class="kart yan">
+          <h2>Yapay zekâ ne görüyor?</h2>
+          <ol id="tahminler" class="tahminler"></ol>
+          <div class="satir">
+            <canvas id="onizleme" width="28" height="28" title="Modelin gördüğü 28×28 görüntü"></canvas>
+            <div class="kucuk" id="sure1">Modelin girdisi (28×28)</div>
+          </div>
+          <div class="satir">
+            <label>Model <select id="modelSec"></select></label>
+            <button id="hizTesti">Hız testi</button>
+          </div>
+          <div id="hizSonuc" class="kucuk"></div>
+          <hr />
+          <h3>Rapor için kaydet</h3>
+          <div class="satir">
+            <label>Ne çizdin? <select id="etiket"></select></label>
+            <button id="kaydet" class="ana">Çizimi kaydet</button>
+          </div>
+          <div id="kayitDurum" class="kucuk"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

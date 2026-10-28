@@ -1,0 +1,12 @@
+{
+  "ad": "m3",
+  "model": "m3",
+  "epoch": 20,
+  "yigin": 512,
+  "oo": 0.003,
+  "agirlik_azalmasi": 0.05,
+  "artirma": true,
+  "kismi": 0.0,
+  "tohum": 42,
+  "parametre": 701202
+}

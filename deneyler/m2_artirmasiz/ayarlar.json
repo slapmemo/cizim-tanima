@@ -1,0 +1,11 @@
+{
+  "ad": "m2_artirmasiz",
+  "model": "m2",
+  "epoch": 20,
+  "yigin": 512,
+  "oo": 0.003,
+  "agirlik_azalmasi": 0.05,
+  "artirma": false,
+  "tohum": 42,
+  "parametre": 595154
+}

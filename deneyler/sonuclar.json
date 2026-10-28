@@ -1,0 +1,662 @@
+{
+  "m1": {
+    "model": "m1",
+    "en_iyi_epoch": 9,
+    "parametre": 426802,
+    "test_ilk1": 0.952228,
+    "test_ilk3": 0.988112,
+    "sinif_dogruluk": {
+      "airplane": 0.9366,
+      "snail": 0.9614,
+      "apple": 0.9722,
+      "banana": 0.9084,
+      "bicycle": 0.9708,
+      "bird": 0.8688,
+      "book": 0.9672,
+      "bowtie": 0.9438,
+      "butterfly": 0.962,
+      "cactus": 0.9298,
+      "camera": 0.976,
+      "car": 0.978,
+      "cat": 0.9504,
+      "chair": 0.966,
+      "clock": 0.9746,
+      "cloud": 0.9464,
+      "crown": 0.9718,
+      "diamond": 0.9528,
+      "door": 0.966,
+      "envelope": 0.9876,
+      "eye": 0.9588,
+      "eyeglasses": 0.954,
+      "fish": 0.9476,
+      "flower": 0.9438,
+      "guitar": 0.9614,
+      "hammer": 0.9438,
+      "hand": 0.9594,
+      "hat": 0.9536,
+      "house": 0.976,
+      "ice cream": 0.9626,
+      "key": 0.9364,
+      "ladder": 0.9778,
+      "light bulb": 0.9498,
+      "lightning": 0.941,
+      "moon": 0.8598,
+      "mountain": 0.9632,
+      "mushroom": 0.9028,
+      "pants": 0.9768,
+      "pizza": 0.9524,
+      "rainbow": 0.9812,
+      "scissors": 0.9442,
+      "snowman": 0.9664,
+      "spider": 0.925,
+      "star": 0.9562,
+      "sun": 0.9342,
+      "sword": 0.953,
+      "t-shirt": 0.9852,
+      "table": 0.9682,
+      "tree": 0.9326,
+      "umbrella": 0.9536
+    },
+    "en_cok_karisan": [
+      {
+        "sayi": 347,
+        "gercek": "banana",
+        "tahmin": "moon"
+      },
+      {
+        "sayi": 304,
+        "gercek": "moon",
+        "tahmin": "banana"
+      },
+      {
+        "sayi": 181,
+        "gercek": "spider",
+        "tahmin": "sun"
+      },
+      {
+        "sayi": 175,
+        "gercek": "sun",
+        "tahmin": "spider"
+      },
+      {
+        "sayi": 139,
+        "gercek": "mushroom",
+        "tahmin": "umbrella"
+      },
+      {
+        "sayi": 123,
+        "gercek": "bird",
+        "tahmin": "airplane"
+      },
+      {
+        "sayi": 111,
+        "gercek": "moon",
+        "tahmin": "pizza"
+      },
+      {
+        "sayi": 96,
+        "gercek": "tree",
+        "tahmin": "mushroom"
+      },
+      {
+        "sayi": 93,
+        "gercek": "mushroom",
+        "tahmin": "tree"
+      },
+      {
+        "sayi": 84,
+        "gercek": "umbrella",
+        "tahmin": "mushroom"
+      }
+    ],
+    "kismi": {
+      "0.25": {
+        "ilk1": 0.12804,
+        "oyunda_taninir": 0.06486
+      },
+      "0.5": {
+        "ilk1": 0.43138,
+        "oyunda_taninir": 0.37436
+      },
+      "0.75": {
+        "ilk1": 0.82256,
+        "oyunda_taninir": 0.80122
+      },
+      "1.0": {
+        "ilk1": 0.95202,
+        "oyunda_taninir": 0.94578
+      }
+    },
+    "onnx_bayt": 1709132,
+    "onnx_en_buyuk_fark": 6.556510925292969e-07,
+    "onnx_cpu_ms": 0.06245419988408684
+  },
+  "m2_artirmasiz": {
+    "model": "m2",
+    "en_iyi_epoch": 20,
+    "parametre": 595154,
+    "test_ilk1": 0.971288,
+    "test_ilk3": 0.99348,
+    "sinif_dogruluk": {
+      "airplane": 0.9594,
+      "snail": 0.9826,
+      "apple": 0.9818,
+      "banana": 0.9264,
+      "bicycle": 0.9884,
+      "bird": 0.9204,
+      "book": 0.9802,
+      "bowtie": 0.963,
+      "butterfly": 0.9792,
+      "cactus": 0.9676,
+      "camera": 0.9858,
+      "car": 0.9902,
+      "cat": 0.9834,
+      "chair": 0.9772,
+      "clock": 0.9832,
+      "cloud": 0.974,
+      "crown": 0.9862,
+      "diamond": 0.9672,
+      "door": 0.9794,
+      "envelope": 0.9896,
+      "eye": 0.9802,
+      "eyeglasses": 0.9736,
+      "fish": 0.9728,
+      "flower": 0.9676,
+      "guitar": 0.9804,
+      "hammer": 0.9652,
+      "hand": 0.9784,
+      "hat": 0.9648,
+      "house": 0.988,
+      "ice cream": 0.973,
+      "key": 0.9678,
+      "ladder": 0.9906,
+      "light bulb": 0.9648,
+      "lightning": 0.9722,
+      "moon": 0.9114,
+      "mountain": 0.9724,
+      "mushroom": 0.9298,
+      "pants": 0.984,
+      "pizza": 0.9742,
+      "rainbow": 0.9856,
+      "scissors": 0.9682,
+      "snowman": 0.9826,
+      "spider": 0.9518,
+      "star": 0.9798,
+      "sun": 0.966,
+      "sword": 0.9692,
+      "t-shirt": 0.988,
+      "table": 0.973,
+      "tree": 0.9552,
+      "umbrella": 0.9686
+    },
+    "en_cok_karisan": [
+      {
+        "sayi": 308,
+        "gercek": "banana",
+        "tahmin": "moon"
+      },
+      {
+        "sayi": 231,
+        "gercek": "moon",
+        "tahmin": "banana"
+      },
+      {
+        "sayi": 155,
+        "gercek": "spider",
+        "tahmin": "sun"
+      },
+      {
+        "sayi": 104,
+        "gercek": "sun",
+        "tahmin": "spider"
+      },
+      {
+        "sayi": 103,
+        "gercek": "mushroom",
+        "tahmin": "umbrella"
+      },
+      {
+        "sayi": 86,
+        "gercek": "bird",
+        "tahmin": "airplane"
+      },
+      {
+        "sayi": 73,
+        "gercek": "mushroom",
+        "tahmin": "tree"
+      },
+      {
+        "sayi": 72,
+        "gercek": "moon",
+        "tahmin": "pizza"
+      },
+      {
+        "sayi": 71,
+        "gercek": "light bulb",
+        "tahmin": "mushroom"
+      },
+      {
+        "sayi": 67,
+        "gercek": "tree",
+        "tahmin": "mushroom"
+      }
+    ],
+    "kismi": {
+      "0.25": {
+        "ilk1": 0.1533,
+        "oyunda_taninir": 0.07306
+      },
+      "0.5": {
+        "ilk1": 0.4967,
+        "oyunda_taninir": 0.44274
+      },
+      "0.75": {
+        "ilk1": 0.86198,
+        "oyunda_taninir": 0.84958
+      },
+      "1.0": {
+        "ilk1": 0.97184,
+        "oyunda_taninir": 0.96904
+      }
+    },
+    "onnx_bayt": 2385215,
+    "onnx_en_buyuk_fark": 4.172325134277344e-07,
+    "onnx_cpu_ms": 0.24205499980598688
+  },
+  "m2": {
+    "model": "m2",
+    "en_iyi_epoch": 20,
+    "parametre": 595154,
+    "test_ilk1": 0.96942,
+    "test_ilk3": 0.99332,
+    "sinif_dogruluk": {
+      "airplane": 0.9674,
+      "snail": 0.9822,
+      "apple": 0.9818,
+      "banana": 0.9434,
+      "bicycle": 0.9904,
+      "bird": 0.909,
+      "book": 0.9848,
+      "bowtie": 0.9568,
+      "butterfly": 0.9798,
+      "cactus": 0.9616,
+      "camera": 0.9852,
+      "car": 0.991,
+      "cat": 0.9826,
+      "chair": 0.979,
+      "clock": 0.9774,
+      "cloud": 0.967,
+      "crown": 0.9882,
+      "diamond": 0.9688,
+      "door": 0.9728,
+      "envelope": 0.9902,
+      "eye": 0.9788,
+      "eyeglasses": 0.9614,
+      "fish": 0.9708,
+      "flower": 0.9672,
+      "guitar": 0.9808,
+      "hammer": 0.9626,
+      "hand": 0.976,
+      "hat": 0.9582,
+      "house": 0.9908,
+      "ice cream": 0.9684,
+      "key": 0.9658,
+      "ladder": 0.99,
+      "light bulb": 0.956,
+      "lightning": 0.969,
+      "moon": 0.8638,
+      "mountain": 0.9682,
+      "mushroom": 0.9282,
+      "pants": 0.9836,
+      "pizza": 0.9772,
+      "rainbow": 0.9872,
+      "scissors": 0.9776,
+      "snowman": 0.9804,
+      "spider": 0.9484,
+      "star": 0.9812,
+      "sun": 0.9654,
+      "sword": 0.9656,
+      "t-shirt": 0.9906,
+      "table": 0.973,
+      "tree": 0.9554,
+      "umbrella": 0.97
+    },
+    "en_cok_karisan": [
+      {
+        "sayi": 408,
+        "gercek": "moon",
+        "tahmin": "banana"
+      },
+      {
+        "sayi": 220,
+        "gercek": "banana",
+        "tahmin": "moon"
+      },
+      {
+        "sayi": 159,
+        "gercek": "spider",
+        "tahmin": "sun"
+      },
+      {
+        "sayi": 121,
+        "gercek": "mushroom",
+        "tahmin": "umbrella"
+      },
+      {
+        "sayi": 106,
+        "gercek": "moon",
+        "tahmin": "pizza"
+      },
+      {
+        "sayi": 106,
+        "gercek": "bird",
+        "tahmin": "airplane"
+      },
+      {
+        "sayi": 100,
+        "gercek": "sun",
+        "tahmin": "spider"
+      },
+      {
+        "sayi": 95,
+        "gercek": "light bulb",
+        "tahmin": "mushroom"
+      },
+      {
+        "sayi": 82,
+        "gercek": "ice cream",
+        "tahmin": "diamond"
+      },
+      {
+        "sayi": 75,
+        "gercek": "eyeglasses",
+        "tahmin": "bicycle"
+      }
+    ],
+    "kismi": {
+      "0.25": {
+        "ilk1": 0.1369,
+        "oyunda_taninir": 0.07184
+      },
+      "0.5": {
+        "ilk1": 0.4945,
+        "oyunda_taninir": 0.44248
+      },
+      "0.75": {
+        "ilk1": 0.86734,
+        "oyunda_taninir": 0.85376
+      },
+      "1.0": {
+        "ilk1": 0.96996,
+        "oyunda_taninir": 0.96676
+      }
+    },
+    "onnx_bayt": 2385215,
+    "onnx_en_buyuk_fark": 8.195638656616211e-07,
+    "onnx_cpu_ms": 0.2399868001230061
+  },
+  "m3": {
+    "model": "m3",
+    "en_iyi_epoch": 19,
+    "parametre": 701202,
+    "test_ilk1": 0.974308,
+    "test_ilk3": 0.994644,
+    "sinif_dogruluk": {
+      "airplane": 0.966,
+      "snail": 0.9832,
+      "apple": 0.986,
+      "banana": 0.9508,
+      "bicycle": 0.991,
+      "bird": 0.9308,
+      "book": 0.988,
+      "bowtie": 0.9628,
+      "butterfly": 0.9804,
+      "cactus": 0.9684,
+      "camera": 0.989,
+      "car": 0.99,
+      "cat": 0.9896,
+      "chair": 0.98,
+      "clock": 0.9826,
+      "cloud": 0.9758,
+      "crown": 0.988,
+      "diamond": 0.9738,
+      "door": 0.9798,
+      "envelope": 0.9924,
+      "eye": 0.9842,
+      "eyeglasses": 0.9692,
+      "fish": 0.974,
+      "flower": 0.9724,
+      "guitar": 0.9866,
+      "hammer": 0.9746,
+      "hand": 0.9822,
+      "hat": 0.9716,
+      "house": 0.9922,
+      "ice cream": 0.9704,
+      "key": 0.9716,
+      "ladder": 0.9916,
+      "light bulb": 0.968,
+      "lightning": 0.9774,
+      "moon": 0.8844,
+      "mountain": 0.9742,
+      "mushroom": 0.9304,
+      "pants": 0.9862,
+      "pizza": 0.983,
+      "rainbow": 0.9894,
+      "scissors": 0.9766,
+      "snowman": 0.9814,
+      "spider": 0.9552,
+      "star": 0.9832,
+      "sun": 0.9634,
+      "sword": 0.976,
+      "t-shirt": 0.9916,
+      "table": 0.977,
+      "tree": 0.958,
+      "umbrella": 0.971
+    },
+    "en_cok_karisan": [
+      {
+        "sayi": 367,
+        "gercek": "moon",
+        "tahmin": "banana"
+      },
+      {
+        "sayi": 204,
+        "gercek": "banana",
+        "tahmin": "moon"
+      },
+      {
+        "sayi": 141,
+        "gercek": "spider",
+        "tahmin": "sun"
+      },
+      {
+        "sayi": 124,
+        "gercek": "mushroom",
+        "tahmin": "umbrella"
+      },
+      {
+        "sayi": 108,
+        "gercek": "sun",
+        "tahmin": "spider"
+      },
+      {
+        "sayi": 94,
+        "gercek": "moon",
+        "tahmin": "pizza"
+      },
+      {
+        "sayi": 69,
+        "gercek": "ice cream",
+        "tahmin": "diamond"
+      },
+      {
+        "sayi": 67,
+        "gercek": "tree",
+        "tahmin": "mushroom"
+      },
+      {
+        "sayi": 66,
+        "gercek": "bird",
+        "tahmin": "airplane"
+      },
+      {
+        "sayi": 63,
+        "gercek": "mushroom",
+        "tahmin": "tree"
+      }
+    ],
+    "kismi": {
+      "0.25": {
+        "ilk1": 0.14666,
+        "oyunda_taninir": 0.07042
+      },
+      "0.5": {
+        "ilk1": 0.50524,
+        "oyunda_taninir": 0.44524
+      },
+      "0.75": {
+        "ilk1": 0.8708,
+        "oyunda_taninir": 0.85634
+      },
+      "1.0": {
+        "ilk1": 0.97492,
+        "oyunda_taninir": 0.97232
+      }
+    },
+    "onnx_bayt": 2807922,
+    "onnx_en_buyuk_fark": 2.384185791015625e-07,
+    "onnx_cpu_ms": 0.5971884001046419
+  },
+  "m3_kismi": {
+    "model": "m3",
+    "en_iyi_epoch": 20,
+    "parametre": 701202,
+    "test_ilk1": 0.965032,
+    "test_ilk3": 0.992188,
+    "sinif_dogruluk": {
+      "airplane": 0.965,
+      "snail": 0.9854,
+      "apple": 0.9742,
+      "banana": 0.946,
+      "bicycle": 0.9906,
+      "bird": 0.9106,
+      "book": 0.9848,
+      "bowtie": 0.9614,
+      "butterfly": 0.9782,
+      "cactus": 0.9604,
+      "camera": 0.9874,
+      "car": 0.9914,
+      "cat": 0.9886,
+      "chair": 0.982,
+      "clock": 0.9532,
+      "cloud": 0.9634,
+      "crown": 0.9884,
+      "diamond": 0.9374,
+      "door": 0.9628,
+      "envelope": 0.9906,
+      "eye": 0.9768,
+      "eyeglasses": 0.9374,
+      "fish": 0.9684,
+      "flower": 0.9748,
+      "guitar": 0.9884,
+      "hammer": 0.971,
+      "hand": 0.9818,
+      "hat": 0.9434,
+      "house": 0.9908,
+      "ice cream": 0.976,
+      "key": 0.9596,
+      "ladder": 0.9884,
+      "light bulb": 0.9612,
+      "lightning": 0.967,
+      "moon": 0.788,
+      "mountain": 0.9288,
+      "mushroom": 0.924,
+      "pants": 0.9836,
+      "pizza": 0.9798,
+      "rainbow": 0.9764,
+      "scissors": 0.9766,
+      "snowman": 0.976,
+      "spider": 0.9574,
+      "star": 0.9774,
+      "sun": 0.9504,
+      "sword": 0.9672,
+      "t-shirt": 0.9892,
+      "table": 0.964,
+      "tree": 0.9578,
+      "umbrella": 0.9682
+    },
+    "en_cok_karisan": [
+      {
+        "sayi": 516,
+        "gercek": "moon",
+        "tahmin": "banana"
+      },
+      {
+        "sayi": 176,
+        "gercek": "banana",
+        "tahmin": "moon"
+      },
+      {
+        "sayi": 167,
+        "gercek": "sun",
+        "tahmin": "spider"
+      },
+      {
+        "sayi": 166,
+        "gercek": "diamond",
+        "tahmin": "ice cream"
+      },
+      {
+        "sayi": 147,
+        "gercek": "moon",
+        "tahmin": "pizza"
+      },
+      {
+        "sayi": 134,
+        "gercek": "eyeglasses",
+        "tahmin": "bicycle"
+      },
+      {
+        "sayi": 126,
+        "gercek": "spider",
+        "tahmin": "sun"
+      },
+      {
+        "sayi": 117,
+        "gercek": "moon",
+        "tahmin": "clock"
+      },
+      {
+        "sayi": 117,
+        "gercek": "clock",
+        "tahmin": "pizza"
+      },
+      {
+        "sayi": 113,
+        "gercek": "mushroom",
+        "tahmin": "umbrella"
+      }
+    ],
+    "kismi": {
+      "0.25": {
+        "ilk1": 0.40208,
+        "oyunda_taninir": 0.26166
+      },
+      "0.5": {
+        "ilk1": 0.76322,
+        "oyunda_taninir": 0.68022
+      },
+      "0.75": {
+        "ilk1": 0.91946,
+        "oyunda_taninir": 0.89894
+      },
+      "1.0": {
+        "ilk1": 0.96548,
+        "oyunda_taninir": 0.9581
+      }
+    },
+    "onnx_bayt": 2807922,
+    "onnx_en_buyuk_fark": 9.834766387939453e-07,
+    "onnx_cpu_ms": 0.6002658000215888
+  }
+}

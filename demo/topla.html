@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Çizim Topla</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap" />
+  <link rel="stylesheet" href="/src/stil.css" />
+</head>
+<body>
+  <header class="ust">
+    <div class="logo">Çizim<b>Tanı</b></div>
+    <span class="hap koyu" id="ilerlemeHap" hidden></span>
+  </header>
+
+  <main>
+    <div id="giris" class="kart orta">
+      <h1>Çizimlerinle yapay zekâyı test et</h1>
+      <p>Sinir ağları dersi projesi için çizim tanıyan bir yapay zekâ geliştirdik. Gerçek insanların çizimleriyle ne kadar başarılı olduğunu ölçmek istiyoruz.</p>
+      <ul class="kurallar">
+        <li>Ekranda gösterilen <b>50 nesneyi</b> sırayla çiz, her biri birkaç saniye.</li>
+        <li>Aklına ilk gelen şekilde çiz; güzel olması gerekmiyor.</li>
+        <li>Yapay zekânın tahminini çizerken görmeyeceksin; sonunda kaç tanesini bildiğini göreceksin.</li>
+        <li>İstediğin an bitirip gönderebilirsin; yarım bırakırsan bu cihazdan kaldığın yerden devam edersin.</li>
+      </ul>
+      <label class="alan">Takma ad <input id="takmaAd" maxlength="24" autocomplete="nickname" placeholder="ör. ayse" /></label>
+      <label class="secim"><input type="checkbox" id="onay" /> Çizimlerimin yalnız bu ders projesinde, adım olmadan kullanılmasını kabul ediyorum.</label>
+      <button id="basla" class="ana buyuk" disabled>Başla</button>
+    </div>
+
+    <div id="cizim" hidden>
+      <div class="kart tur-ust">
+        <span id="sayac" class="hap">1/50</span>
+        <span id="kelime" class="kelime"></span>
+        <button id="atla" class="kucuk-dugme">Atla</button>
+      </div>
+      <div class="sure-cubuk"><i id="ilerleme"></i></div>
+      <div class="kart tuval-kart">
+        <canvas id="tuval" class="tuval"></canvas>
+      </div>
+      <div class="dugmeler">
+        <button id="geri">Geri al</button>
+        <button id="temizle">Temizle</button>
+        <button id="kaydet" class="ana">Kaydet, sonraki →</button>
+      </div>
+      <div class="dugmeler">
+        <button id="bitir" class="seffaf">Bitir ve gönder</button>
+      </div>
+    </div>
+
+    <div id="son" class="kart orta" hidden>
+      <h1>Teşekkürler!</h1>
+      <div id="ozet" class="son-puan"></div>
+      <p id="ozetMetin"></p>
+      <p><b>Son adım:</b> dosyayı projeyi sana gönderen kişiye ilet.</p>
+      <div class="dugmeler">
+        <button id="gonder" class="ana buyuk" hidden>Gönder</button>
+        <button id="indir" class="buyuk">Dosyayı indir</button>
+      </div>
+      <details class="yanlislar"><summary>Yapay zekânın bilemedikleri</summary><ul id="yanlisListe"></ul></details>
+      <div class="dugmeler">
+        <button id="devam" class="seffaf-koyu" hidden>Çizmeye devam et</button>
+        <a href="/" class="dugme-bag">Oyunu dene →</a>
+      </div>
+    </div>
+  </main>
+  <script type="module" src="/src/topla.ts"></script>
+</body>
+</html>

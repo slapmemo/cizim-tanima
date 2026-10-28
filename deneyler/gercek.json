@@ -1,0 +1,69 @@
+{
+  "cizim": 1,
+  "kisi": 1,
+  "aygit": {
+    "fare": 1
+  },
+  "modeller": {
+    "m1": {
+      "ilk1": 1.0,
+      "ilk3": 1.0,
+      "oyunda_taninir": 1.0,
+      "aygit": {
+        "fare": 1.0
+      },
+      "kisi": {
+        "yerel": 1.0
+      }
+    },
+    "m2_artirmasiz": {
+      "ilk1": 1.0,
+      "ilk3": 1.0,
+      "oyunda_taninir": 1.0,
+      "aygit": {
+        "fare": 1.0
+      },
+      "kisi": {
+        "yerel": 1.0
+      }
+    },
+    "m2": {
+      "ilk1": 1.0,
+      "ilk3": 1.0,
+      "oyunda_taninir": 1.0,
+      "aygit": {
+        "fare": 1.0
+      },
+      "kisi": {
+        "yerel": 1.0
+      }
+    },
+    "m3": {
+      "ilk1": 1.0,
+      "ilk3": 1.0,
+      "oyunda_taninir": 1.0,
+      "aygit": {
+        "fare": 1.0
+      },
+      "kisi": {
+        "yerel": 1.0
+      }
+    },
+    "m3_kismi": {
+      "ilk1": 1.0,
+      "ilk3": 1.0,
+      "oyunda_taninir": 1.0,
+      "aygit": {
+        "fare": 1.0
+      },
+      "kisi": {
+        "yerel": 1.0
+      }
+    }
+  },
+  "oyun": {
+    "tur": 9,
+    "taninan": 7
+  },
+  "en_cok_karisan": []
+}

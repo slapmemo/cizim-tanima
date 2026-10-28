@@ -1,0 +1,11 @@
+{
+  "ad": "m1",
+  "model": "m1",
+  "epoch": 10,
+  "yigin": 512,
+  "oo": 0.003,
+  "agirlik_azalmasi": 0.05,
+  "artirma": false,
+  "tohum": 42,
+  "parametre": 426802
+}

@@ -1,0 +1,4 @@
+# PyTorch CUDA 12.8 derlemesi (RTX 50 serisi bunu ister):
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+torch==2.11.0+cu128
+torchvision

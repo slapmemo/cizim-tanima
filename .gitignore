@@ -1,0 +1,7 @@
+.venv/
+veri/
+kayitlar/
+modeller/*.pt
+__pycache__/
+node_modules/
+demo/dist/

@@ -1,0 +1,12 @@
+﻿m1: m1, 426,802 parametre, eğitim 1,500,000, doğrulama 250,000
+epoch  1  kayıp 0.8960  eğitim 0.7666  doğrulama 0.8925  (6 sn)
+epoch  2  kayıp 0.3061  eğitim 0.9137  doğrulama 0.9241  (5 sn)
+epoch  3  kayıp 0.2329  eğitim 0.9334  doğrulama 0.9341  (5 sn)
+epoch  4  kayıp 0.2028  eğitim 0.9413  doğrulama 0.9422  (5 sn)
+epoch  5  kayıp 0.1823  eğitim 0.9469  doğrulama 0.9430  (5 sn)
+epoch  6  kayıp 0.1635  eğitim 0.9522  doğrulama 0.9455  (5 sn)
+epoch  7  kayıp 0.1452  eğitim 0.9576  doğrulama 0.9485  (5 sn)
+epoch  8  kayıp 0.1282  eğitim 0.9626  doğrulama 0.9508  (5 sn)
+epoch  9  kayıp 0.1138  eğitim 0.9673  doğrulama 0.9524  (5 sn)
+epoch 10  kayıp 0.1052  eğitim 0.9702  doğrulama 0.9523  (6 sn)
+en iyi doğrulama doğruluğu: 0.9524
