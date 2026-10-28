@@ -258,7 +258,17 @@ Tarayıcıda tek tahmin süresi (masaüstü Chromium, WebAssembly, tek iş parç
 
 Demo iki bölümden oluşur:
 
-- **Oyun:** 5 tur, her turda rastgele ve tekrarsız bir nesne, 20 saniye. İki sekme vardır: "Oyun · 242" (345 sınıflı M3-kısmi, 242 kelimelik listeden; §4.8) ve "Oyun · 50" (50 sınıflı M3-kısmi, 50 sınıfın hepsi; daha kolay). Oyuncu çizerken modelin tahmini ("Yapay zekâ: kedi mi? %62 · yoksa kuş mu?") ekranda canlı görünür. Tanınınca çizim kilitlenir ve puan gösterilir; maç sonunda turların listesi ve toplam puan çıkar.
+- **Oyun:** 5 tur, her turda rastgele ve tekrarsız bir nesne, 20 saniye. İki sekme vardır: "Oyun · 242" (345 sınıflı M3-kısmi, 242 kelimelik listeden; §4.8) ve "Oyun · 50" (50 sınıflı M3-kısmi, 50 sınıfın hepsi; daha kolay). 242 sekmesinde tanınma eşiği %30'dur (aşağıda).
+
+**Tanınma eşiğinin seçimi.** 345 sınıfta olasılık benzer sınıflara bölündüğü için doğru sınıf birinci olsa bile çoğu zaman %50'ye ulaşmamaktadır. Farklı kurallar, oyun kelimelerinin test çizimlerinde (kelime başına 50) ve gerçek çizimlerde ölçülmüştür (`egitim/esik_karsilastir.py`). "Yanlış kabul", aynı çizime rastgele başka bir oyun kelimesi sorulduğunda kuralın bunu kabul etme oranıdır:
+
+| Kural (242 sekmesi) | Tanınan | Gerçek çizim | İlk %20 mürekkepte | Yanlış kabul |
+| --- | ---: | ---: | ---: | ---: |
+| birinci + ≥%50 | %83,2 | %72,4 | %1,2 | %0,1 |
+| birinci + ≥%30 (seçilen) | %89,2 | %77,6 | %2,5 | %0,3 |
+| ilk 3'te + ≥%20 | %93,3 | %82,0 | %4,2 | %0,6 |
+
+Eşik %30'a indirildiğinde tanınan oran 6 puan artmakta, şans eseri erken tanınma ve yanlış kabul düşük kalmaktadır. Quick, Draw!'ın istemci kodu, hedefin birinci olmasını şart koşmadığını ve eş anlamlıları kabul ettiğini göstermektedir; buna benzeyen "ilk 3'te" kuralı daha yüksek tanıma verse de benzer nesneleri (ör. kupa sorulunca bardak) kabul ettiği için seçilmemiştir. 50 sınıflı modelde eşiği düşürmek yalnız şans eseri erken tanınmayı artırdığından (%17 → %26) bu sekmede %50 korunmuştur. Oyuncu çizerken modelin tahmini ("Yapay zekâ: kedi mi? %62 · yoksa kuş mu?") ekranda canlı görünür. Tanınınca çizim kilitlenir ve puan gösterilir; maç sonunda turların listesi ve toplam puan çıkar.
 - **Serbest çizim:** İlk beş tahmin ve olasılıkları, modelin gördüğü 28×28 görüntü, model seçimi, tarayıcıda hız testi ve rapor için çizim kaydetme.
 
 Demo, CepKonsol çok oyunculu platformuna "Çizim Düellosu" oyunu olarak eklenecek biçimde tasarlanmıştır: ön işleme, model ve oyun kuralları arayüzden bağımsız modüllerdedir.

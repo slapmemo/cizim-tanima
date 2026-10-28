@@ -101,6 +101,10 @@ Giriş, veri ve ön işleme, modeller, deneyler ve sonuçlar (§5), oyun, sını
 - Protokol: telefon için yeni kontrol (çizim tuvali); vuruşlar parça parça gönderilir (mesaj sınırı 16 KB). Host tahmini telefona geri yollar. TS + Dart + `docs/protocol.md` birlikte değişir.
 - Web kumanda ve Flutter'da tuval; Flutter'da vuruşlar tarayıcıdakiyle aynı koordinat biçiminde.
 - Ön işleme ve tahmin kodu 3b/3c'den aynen alınır.
+- **Oyun modları (kullanıcı seçti, 28 Ekim 2026):**
+  - *Seri:* 60 sn'de art arda kaç kelime tanıtılır; tanınınca hemen yeni kelime. Ders demosuna da eklenecek.
+  - *Sahtekâr:* herkese aynı kelime, bir oyuncuya farklı kelime; herkes telefonda çizer, ortak ekranda çizimler ve model tahminleri görünür, oyuncular (ve model) sahtekârı bulur.
+  - Değerlendirilip bırakılanlar (gerekirse): az çizgiyle tanıt, tek çizgi, kör çizim, yasaklı kelime (345 sınıftaki karışan çiftlerle), kategori, kulaktan kulağa, insan mı makine mi.
 
 ## 7b. 345 sınıf (eklendi, 28 Ekim 2026)
 

@@ -68,10 +68,20 @@ Plan: [plan.md](plan.md). Rapor taslağı: [rapor/rapor.md](rapor/rapor.md).
 - **İki oyun sekmesi (kullanıcı isteği):** "Oyun · 242" (`s345_m3_kismi`, oyun_kelimeleri.json) ve "Oyun · 50" (`m3_kismi`, 50 sınıfın hepsi; `KOLAY_OYUN_MODELI`). Aynı oyun ekranı; sekme değişince süren maç bırakılır, giriş ekranına dönülür (bekleyen tur zamanlayıcısı `turKimligi` ile iptal). Dar ekranda sekme yazıları tek satır. Doğrulama: tsc + build temiz; Playwright iki sekmede 5'er tur (zor 5/5, kolay 5/5 son koşuda), maç ortasında sekme değişimi, 390×844 taşma yok, konsol hatası yok; görüntülere bakıldı.
 - **Yapılmayan:** commit/push (`f0e3d8b`, `084c809` sonrası hepsi commit'siz); Vercel deploy doğrulanmadı; telefonda deneme.
 
+## Tanınma eşiği (28 Ekim 2026)
+
+- **Sorun:** 345 sınıfta doğru tahmin %50'ye ulaşmıyordu (ör. "daire" birinci %41, kabul edilmedi). Quick, Draw! kaynak kodu incelendi (`oyun-incelemeleri/quick-draw/`): hedefin birinci olmasını istemiyor, eş anlamlıları kabul ediyor.
+- **Ölçüm:** `egitim/esik_karsilastir.py` → `deneyler/esik_karsilastir.md`. 242 sekmesinde %50 → %30: tanınan %83,2 → %89,2, gerçek çizim %72,4 → %77,6, yanlış kabul %0,1 → %0,3, ilk %20'de tanınan %1,2 → %2,5. 50 sekmesinde gevşetme yalnız şans eseri erken tanımayı artırıyor.
+- **Karar (kullanıcı):** 242 sekmesi birinci + ≥%30 (`TANIMA_ESIGI_345`), 50 sekmesi %50. "İlk 3'te" kuralı benzer kelimeleri kabul ettiği için seçilmedi.
+- **Ek düzeltme:** model yüklenirken sekme değişirse eski maç başlamıyor (`macBasla` modu yakalar).
+- **Doğrulama:** tsc, `npm test` (304 örnek, 0 fark), build temiz. Playwright 6 koşu: 242 sekmesinde %44 ile tanınan çizim (dürbün) görüldü; konsol hatası yok. İlk koşulardaki takılma test betiğinden çıktı (tanındıktan sonra çizmeye devam edip sonraki tura taşıyordu); betik düzeltildi, sonra 5 koşu sorunsuz. Uygulamada hedef/model sınıf indisi uyuşmazlığı geçici kayıtla arandı, bulunmadı.
+- **Yapılmayan:** commit/push.
+
 ## Sıradaki
 
 1. Commit ve push (kullanıcıya sorulacak); Vercel'de oyunun 345 sınıfla çalıştığını doğrula.
 2. Açık kararlar: "el merdiveni", eleme kuralı.
 3. Telefonda deneme ve hız testi; Web Share.
 4. Aşama 6: CepKonsol entegrasyonu ("Çizim Düellosu").
-5. **Bakılabilir (sonra karar):** yalnız 242 oyun kelimesiyle model eğitmek (~1 saat). 345'li modelle karşılaştırma rapora "rakip sınıfların etkisi" olarak girer. Beklenen: 242'lik model oyunda daha çok tanır (bardak/kupa gibi rakipler yok), ama kaba çizimleri de en yakın kelimeye bağlar (daha kolay kandırılır). 345'li model "zor" sekmede kalır; 242'lik olursa ayrı sekme ya da kolay mod olabilir.
+5. ~~Tanınma eşiği~~: karar verildi ve uygulandı (242 sekmesi birinci + ≥%30), [tanima-esigi.md](tanima-esigi.md).
+6. **Bakılabilir (sonra karar):** yalnız 242 oyun kelimesiyle model eğitmek (~1 saat). 345'li modelle karşılaştırma rapora "rakip sınıfların etkisi" olarak girer. Beklenen: 242'lik model oyunda daha çok tanır (bardak/kupa gibi rakipler yok), ama kaba çizimleri de en yakın kelimeye bağlar (daha kolay kandırılır). 345'li model "zor" sekmede kalır; 242'lik olursa ayrı sekme ya da kolay mod olabilir.

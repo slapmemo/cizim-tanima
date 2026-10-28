@@ -3,11 +3,14 @@
 export const TUR_SAYISI = 5;
 export const TUR_SURESI_MS = 20_000;
 export const TANIMA_ESIGI = 0.5;
+// 345 sınıfta olasılık benzer sınıflara bölünür; doğru tahmin %50'ye zor ulaşır (docs/tanima-esigi.md).
+// %30'da tanınan %83 → %89, şans eseri erken tanınma %2,5, yanlış kabul %0,3.
+export const TANIMA_ESIGI_345 = 0.3;
 export const TAHMIN_ARALIGI_MS = 250;
 
 /** Hedef sınıf birinci tahminse ve olasılığı eşiği geçiyorsa çizim tanınmıştır. */
-export function tanindiMi(sira: number[], olasilik: ArrayLike<number>, hedef: number): boolean {
-  return sira[0] === hedef && olasilik[hedef] >= TANIMA_ESIGI;
+export function tanindiMi(sira: number[], olasilik: ArrayLike<number>, hedef: number, esik = TANIMA_ESIGI): boolean {
+  return sira[0] === hedef && olasilik[hedef] >= esik;
 }
 
 /** Tanınma anında kalan süreyle orantılı puan (0-100). */

@@ -1,6 +1,6 @@
 import { ciz } from "./onisleme.ts";
 import { KOLAY_OYUN_MODELI, MODELLER, OYUN_MODELI, hizOlc, oturum, oyunKelimeleri, siniflar, tahminEt, type Sinif } from "./model.ts";
-import { TAHMIN_ARALIGI_MS, TUR_SAYISI, TUR_SURESI_MS, kelimeSec, puan, tanindiMi } from "./oyun.ts";
+import { TAHMIN_ARALIGI_MS, TANIMA_ESIGI, TANIMA_ESIGI_345, TUR_SAYISI, TUR_SURESI_MS, kelimeSec, puan, tanindiMi } from "./oyun.ts";
 import { Tuval } from "./tuval.ts";
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -19,9 +19,9 @@ let SINIFLAR: Sinif[] = [];
 
 // İki oyun sekmesi aynı ekranı kullanır; mod yalnız modeli ve sorulan kelimeleri belirler
 type Mod = "zor" | "kolay";
-const MODLAR: Record<Mod, { model: string; aciklama: string }> = {
-  zor: { model: OYUN_MODELI, aciklama: "242 kelime · yapay zekâ 345 nesne biliyor" },
-  kolay: { model: KOLAY_OYUN_MODELI, aciklama: "50 kelime · yapay zekâ 50 nesne biliyor (kolay)" },
+const MODLAR: Record<Mod, { model: string; esik: number; aciklama: string }> = {
+  zor: { model: OYUN_MODELI, esik: TANIMA_ESIGI_345, aciklama: "242 kelime · yapay zekâ 345 nesne biliyor" },
+  kolay: { model: KOLAY_OYUN_MODELI, esik: TANIMA_ESIGI, aciklama: "50 kelime · yapay zekâ 50 nesne biliyor (kolay)" },
 };
 let mod: Mod = "zor";
 let oyunSiniflari: Sinif[] = [];
@@ -146,8 +146,7 @@ const oyunTahmin = tahminSirasi(async () => {
   const t = await tahminEt(MODLAR[mod].model, tuval2.vuruslar);
   if (!turAcik || kimlik !== turKimligi) return;
   const hedef = kelimeler[tur];
-  sonTahmin = t.sira[0];
-  if (tanindiMi(t.sira, t.olasilik, hedef)) {
+  sonTahmin = t.sira[0];  if (tanindiMi(t.sira, t.olasilik, hedef, MODLAR[mod].esik)) {
     $("canliTahmin").innerHTML = `Yapay zekâ: Bu bir ${oyunSiniflari[hedef].tr}! <small>${yuzde(t.olasilik[hedef])}</small>`;
     return turBitir(true);
   }
@@ -224,9 +223,10 @@ async function macBasla() {
   const b = $<HTMLButtonElement>("basla");
   b.disabled = true;
   $("yukleniyor").textContent = "Model yükleniyor…";
+  const m = mod;
   try {
     await modHazir;
-    await oturum(MODLAR[mod].model);
+    await oturum(MODLAR[m].model);
   } catch (e) {
     $("yukleniyor").textContent = `Model yüklenemedi: ${e}`;
     b.disabled = false;
@@ -234,6 +234,7 @@ async function macBasla() {
   }
   $("yukleniyor").textContent = "";
   b.disabled = false;
+  if (m !== mod) return; // yüklenirken sekme değişti
   kelimeler = kelimeSec(oyunKelimeListesi.length, TUR_SAYISI).map((i) => oyunKelimeListesi[i]);
   tur = 0; toplam = 0; sonuclar = [];
   $("puan").textContent = "0 puan";
