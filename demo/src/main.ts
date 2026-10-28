@@ -1,6 +1,6 @@
 import { ciz } from "./onisleme.ts";
 import { KOLAY_OYUN_MODELI, MODELLER, OYUN_MODELI, hizOlc, oturum, oyunKelimeleri, siniflar, tahminEt, type Sinif } from "./model.ts";
-import { TAHMIN_ARALIGI_MS, TANIMA_ESIGI, TANIMA_ESIGI_345, TUR_SAYISI, TUR_SURESI_MS, kelimeSec, puan, tanindiMi } from "./oyun.ts";
+import { SERI_PAS_CEZASI, SERI_PAS_HAKKI, SERI_SURESI_MS, TAHMIN_ARALIGI_MS, TANIMA_ESIGI, TANIMA_ESIGI_345, TUR_SAYISI, TUR_SURESI_MS, kelimeSec, puan, tanindiMi } from "./oyun.ts";
 import { Tuval } from "./tuval.ts";
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -133,12 +133,20 @@ $("kaydet").addEventListener("click", async () => {
 });
 
 // ---- oyun
-type TurSonucu = { hedef: number; taninan: boolean; ms: number; puan: number };
+// "tur": 5 tur × 20 sn, erken tanınan çok puan; "seri": 60 sn'de art arda kaç kelime, 3 ücretsiz pas, sonrası puan düşürür
+type Bicim = "tur" | "seri";
+const BICIM_ACIKLAMA: Record<Bicim, string> = {
+  tur: "5 tur, her turda 20 saniye. Ekrandaki nesneyi çiz; yapay zekâ çizimini tanıdığı anda puanı alırsın. Ne kadar erken tanınırsan o kadar çok puan.",
+  seri: `${SERI_SURESI_MS / 1000} saniyede art arda kaç nesne tanıtabilirsin? Tanınan her nesne 1 puan, tanınınca hemen yeni nesne gelir. ${SERI_PAS_HAKKI} pas ücretsiz, sonraki her pas ${SERI_PAS_CEZASI} puan düşürür; süre pas geçerken de akar.`,
+};
+let bicim: Bicim = "tur";
+type TurSonucu = { hedef: number; taninan: boolean; ms: number; puan: number; pas?: boolean; yarim?: boolean };
 const tuval2 = new Tuval($<HTMLCanvasElement>("tuval2"), (bitti) => oyunTahmin(bitti));
 let kelimeler: number[] = [];
 let tur = 0, toplam = 0, turBasi = 0, turAcik = false, turKimligi = 0;
 let sonuclar: TurSonucu[] = [];
 let sonTahmin = -1;
+let seriBasi = 0, seriAcik = false, pasKalan = 0;
 
 const oyunTahmin = tahminSirasi(async () => {
   if (!turAcik || !tuval2.vuruslar.length) return;
@@ -146,7 +154,8 @@ const oyunTahmin = tahminSirasi(async () => {
   const t = await tahminEt(MODLAR[mod].model, tuval2.vuruslar);
   if (!turAcik || kimlik !== turKimligi) return;
   const hedef = kelimeler[tur];
-  sonTahmin = t.sira[0];  if (tanindiMi(t.sira, t.olasilik, hedef, MODLAR[mod].esik)) {
+  sonTahmin = t.sira[0];
+  if (tanindiMi(t.sira, t.olasilik, hedef, MODLAR[mod].esik)) {
     $("canliTahmin").innerHTML = `Yapay zekâ: Bu bir ${oyunSiniflari[hedef].tr}! <small>${yuzde(t.olasilik[hedef])}</small>`;
     return turBitir(true);
   }
@@ -164,15 +173,16 @@ function turBasla() {
   tuval2.kilitli = false;
   sonTahmin = -1;
   $("bildirim").hidden = true;
-  $("turNo").textContent = `Tur ${tur + 1}/${TUR_SAYISI}`;
+  $("turNo").textContent = bicim === "seri" ? (pasKalan ? `${pasKalan} pas` : `pas −${SERI_PAS_CEZASI}`) : `Tur ${tur + 1}/${TUR_SAYISI}`;
   $("kelime").textContent = buyukHarf(oyunSiniflari[kelimeler[tur]].tr);
   $("canliTahmin").textContent = "Çizmeye başla…";
   turBasi = performance.now();
   turAcik = true;
-  requestAnimationFrame(sayac);
+  if (bicim === "tur") requestAnimationFrame(sayac);
 }
 
 function sayac() {
+  if (bicim === "seri") return seriSayac();
   if (!turAcik) return;
   const gecen = performance.now() - turBasi;
   const kalan = Math.max(0, 1 - gecen / TUR_SURESI_MS);
@@ -182,7 +192,58 @@ function sayac() {
   requestAnimationFrame(sayac);
 }
 
+/** Seride süre maç boyunca akar (tanınma bildirimi ve pas sırasında da). */
+function seriSayac() {
+  if (!seriAcik) return;
+  const gecen = performance.now() - seriBasi;
+  const kalan = Math.max(0, 1 - gecen / SERI_SURESI_MS);
+  $("sureDolgu").style.transform = `scaleX(${kalan})`;
+  $("sureDolgu").parentElement!.classList.toggle("az", kalan < 0.25);
+  if (gecen >= SERI_SURESI_MS) return seriBitir();
+  requestAnimationFrame(seriSayac);
+}
+
+function seriBitir() {
+  seriAcik = false;
+  if (turAcik) {
+    turAcik = false;
+    tuval2.kilitli = true;
+    sonuclar.push({ hedef: kelimeler[tur], taninan: false, ms: performance.now() - turBasi, puan: 0, yarim: true });
+  }
+  turKimligi++; // bekleyen bildirim zamanlayıcısı yeni kelime açmasın
+  macBitir();
+}
+
+/** Seride tanınan ya da pas: kısa bildirimden sonra hemen yeni kelime, süre durmaz. */
+function seriTurBitir(taninan: boolean) {
+  if (!turAcik) return;
+  const ceza = !taninan && pasKalan === 0;
+  if (!taninan && !ceza) pasKalan--;
+  turAcik = false;
+  tuval2.kilitli = true;
+  const ms = performance.now() - turBasi;
+  const p = taninan ? 1 : ceza ? -SERI_PAS_CEZASI : 0;
+  sonuclar.push({ hedef: kelimeler[tur], taninan, ms, puan: p, pas: !taninan });
+  toplam += p;
+  $("puan").textContent = `${toplam} puan`;
+  const b = $("bildirim");
+  b.classList.toggle("olmadi", !taninan);
+  b.innerHTML = taninan ? `Tanındı! <small>${(ms / 1000).toFixed(1)} sn · +1</small>`
+    : ceza ? `Pas <small>−${SERI_PAS_CEZASI} puan</small>` : `Pas <small>${pasKalan} ücretsiz hak kaldı</small>`;
+  b.hidden = false;
+  if ($<HTMLInputElement>("oyunKaydet").checked && tuval2.vuruslar.length) {
+    void kaydet({ etiket: oyunSiniflari[kelimeler[tur]].en, mod: "seri", taninan, sure_ms: Math.round(ms), vuruslar: tuval2.vuruslar, aygit: tuval2.aygit });
+  }
+  const kimlik = turKimligi;
+  setTimeout(() => {
+    if (kimlik !== turKimligi || !seriAcik) return;
+    tur = (tur + 1) % kelimeler.length;
+    turBasla();
+  }, taninan ? 700 : 300);
+}
+
 function turBitir(taninan: boolean) {
+  if (bicim === "seri") return seriTurBitir(taninan);
   if (!turAcik) return;
   turAcik = false;
   tuval2.kilitli = true;
@@ -211,6 +272,15 @@ function turBitir(taninan: boolean) {
 
 function macBitir() {
   ekran("oyunSon");
+  if (bicim === "seri") {
+    const taninanSayi = sonuclar.filter((s) => s.taninan).length;
+    $("sonBaslik").textContent = toplam >= 10 ? "Harika seri!" : taninanSayi ? "Süre bitti" : "Bir dahakine!";
+    $("sonPuan").innerHTML = `${toplam} puan <small>${taninanSayi} nesne tanıttın</small>`;
+    $("sonListe").innerHTML = sonuclar.map((s) =>
+      `<li class="${s.taninan ? "tamam" : ""}"><span>${oyunSiniflari[s.hedef].tr}</span>` +
+      `<span>${s.taninan ? `✓ ${(s.ms / 1000).toFixed(1)} sn` : s.pas ? (s.puan < 0 ? `pas ${s.puan}` : "pas") : "süre bitti"}</span></li>`).join("");
+    return;
+  }
   const taninanSayi = sonuclar.filter((s) => s.taninan).length;
   $("sonBaslik").textContent = taninanSayi === TUR_SAYISI ? "Kusursuz!" : taninanSayi ? "Maç bitti" : "Bir dahakine!";
   $("sonPuan").textContent = `${toplam} puan`;
@@ -235,14 +305,29 @@ async function macBasla() {
   $("yukleniyor").textContent = "";
   b.disabled = false;
   if (m !== mod) return; // yüklenirken sekme değişti
-  kelimeler = kelimeSec(oyunKelimeListesi.length, TUR_SAYISI).map((i) => oyunKelimeListesi[i]);
+  const seri = bicim === "seri";
+  kelimeler = kelimeSec(oyunKelimeListesi.length, seri ? oyunKelimeListesi.length : TUR_SAYISI).map((i) => oyunKelimeListesi[i]);
   tur = 0; toplam = 0; sonuclar = [];
+  pasKalan = SERI_PAS_HAKKI;
   $("puan").textContent = "0 puan";
   ekran("oyunTur");
   turBasla();
+  if (seri) {
+    seriBasi = performance.now();
+    seriAcik = true;
+    requestAnimationFrame(seriSayac);
+  }
 }
 
 $("basla").addEventListener("click", macBasla);
+for (const b of document.querySelectorAll<HTMLButtonElement>(".bicimler button")) {
+  b.addEventListener("click", () => {
+    bicim = b.dataset.bicim as Bicim;
+    for (const d of document.querySelectorAll<HTMLButtonElement>(".bicimler button")) d.classList.toggle("secili", d === b);
+    $("bicimAciklama").textContent = BICIM_ACIKLAMA[bicim];
+  });
+}
+$("bicimAciklama").textContent = BICIM_ACIKLAMA[bicim];
 $("tekrar").addEventListener("click", macBasla);
 $("temizle2").addEventListener("click", () => { if (turAcik) { tuval2.temizle(); $("canliTahmin").textContent = "Çizmeye başla…"; } });
 $("geri2").addEventListener("click", () => { if (turAcik) { tuval2.geriAl(); oyunTahmin(true); } });
@@ -261,6 +346,7 @@ let modHazir: Promise<void> = Promise.resolve();
 /** Sekme değişince süren maç bırakılır, seçilen modun listeleri ve modeli yüklenir. */
 function modDegistir(m: Mod) {
   turAcik = false;
+  seriAcik = false;
   turKimligi++;
   tuval2.kilitli = true;
   mod = m;

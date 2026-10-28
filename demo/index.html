@@ -23,7 +23,11 @@
       <div id="oyunGiris" class="kart orta">
         <h1>Yapay zekâya tanıt!</h1>
         <p id="modAciklama" class="hap"></p>
-        <p>5 tur, her turda 20 saniye. Ekrandaki nesneyi çiz; yapay zekâ çizimini tanıdığı anda puanı alırsın. Ne kadar erken tanınırsan o kadar çok puan.</p>
+        <div class="bicimler">
+          <button data-bicim="tur" class="secili">5 tur</button>
+          <button data-bicim="seri">60 sn seri</button>
+        </div>
+        <p id="bicimAciklama"></p>
         <label class="secim"><input type="checkbox" id="oyunKaydet" /> Çizimlerimi kaydet (rapor için, yalnız bu bilgisayara)</label>
         <button id="basla" class="ana buyuk">Başla</button>
         <div id="yukleniyor" class="kucuk"></div>

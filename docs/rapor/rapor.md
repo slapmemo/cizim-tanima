@@ -258,6 +258,7 @@ Tarayıcıda tek tahmin süresi (masaüstü Chromium, WebAssembly, tek iş parç
 
 Demo iki bölümden oluşur:
 
+- **Seri:** başlangıç ekranında "5 tur" yerine "60 sn seri" seçilebilir. 60 saniyede art arda kaç nesne tanıtıldığı sayılır; tanınan her nesne 1 puandır ve tanınınca hemen yeni nesne gelir. İlk 3 pas ücretsizdir, sonraki her pas 1 puan düşürür; süre pas sırasında da akar. İki sekmede de oynanır.
 - **Oyun:** 5 tur, her turda rastgele ve tekrarsız bir nesne, 20 saniye. İki sekme vardır: "Oyun · 242" (345 sınıflı M3-kısmi, 242 kelimelik listeden; §4.8) ve "Oyun · 50" (50 sınıflı M3-kısmi, 50 sınıfın hepsi; daha kolay). 242 sekmesinde tanınma eşiği %30'dur (aşağıda).
 
 **Tanınma eşiğinin seçimi.** 345 sınıfta olasılık benzer sınıflara bölündüğü için doğru sınıf birinci olsa bile çoğu zaman %50'ye ulaşmamaktadır. Farklı kurallar, oyun kelimelerinin test çizimlerinde (kelime başına 50) ve gerçek çizimlerde ölçülmüştür (`egitim/esik_karsilastir.py`). "Yanlış kabul", aynı çizime rastgele başka bir oyun kelimesi sorulduğunda kuralın bunu kabul etme oranıdır:

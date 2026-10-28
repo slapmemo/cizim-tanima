@@ -37,7 +37,7 @@ def yukle():
             onceki = oturumlar.get(k.get("oturum") or yol.name)
             if not onceki or len(k["kayitlar"]) > len(onceki["kayitlar"]):
                 oturumlar[k.get("oturum") or yol.name] = k
-        elif k.get("mod") == "oyun":
+        elif k.get("mod") in ("oyun", "seri"):
             oyun.append(k)
         else:
             tekil.append({**k, "kisi": "yerel"})

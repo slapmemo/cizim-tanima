@@ -43,6 +43,10 @@ main { max-width: 960px; margin: 0 auto; }
 .orta { max-width: 520px; margin: 40px auto; text-align: center; }
 .orta h1 { margin: 0 0 8px; font-weight: 900; }
 .orta p { color: var(--gri); line-height: 1.5; }
+#modAciklama { white-space: normal; }
+.bicimler { display: inline-flex; gap: 4px; background: #eef2fb; padding: 4px; border-radius: 999px; margin-top: 12px; }
+.bicimler button { background: transparent; color: var(--navy); white-space: nowrap; }
+.bicimler button.secili { background: var(--navy); color: #fff; }
 .secim { display: block; margin: 16px 0 20px; color: var(--gri); font-size: .95rem; }
 .kucuk { color: var(--gri); font-size: .85rem; }
 .satir { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
@@ -87,6 +91,7 @@ h2, h3 { margin: 0 0 10px; font-weight: 900; }
 .bildirim.olmadi { background: rgba(7,25,67,.85); }
 .bildirim small { font-size: 1rem; font-weight: 700; opacity: .9; }
 .son-puan { font-size: 3rem; font-weight: 900; color: var(--mavi); margin: 4px 0 12px; }
+.son-puan small { display: block; font-size: 1rem; font-weight: 700; color: var(--gri); }
 .son-liste { list-style: none; padding: 0; margin: 0 0 20px; text-align: left; }
 .son-liste li { display: flex; justify-content: space-between; padding: 10px 14px; border-radius: 14px; background: #f4f7fd; margin-bottom: 6px; font-weight: 700; }
 .son-liste li.tamam { background: #e8f9ee; }

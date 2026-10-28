@@ -7,6 +7,11 @@ export const TANIMA_ESIGI = 0.5;
 // %30'da tanınan %83 → %89, şans eseri erken tanınma %2,5, yanlış kabul %0,3.
 export const TANIMA_ESIGI_345 = 0.3;
 export const TAHMIN_ARALIGI_MS = 250;
+// Seri: toplam süre içinde art arda kaç kelime tanıtılır; süre pas sırasında da akar.
+// İlk SERI_PAS_HAKKI pas ücretsiz, sonrakilerin her biri SERI_PAS_CEZASI puan düşürür.
+export const SERI_SURESI_MS = 60_000;
+export const SERI_PAS_HAKKI = 3;
+export const SERI_PAS_CEZASI = 1;
 
 /** Hedef sınıf birinci tahminse ve olasılığı eşiği geçiyorsa çizim tanınmıştır. */
 export function tanindiMi(sira: number[], olasilik: ArrayLike<number>, hedef: number, esik = TANIMA_ESIGI): boolean {

@@ -75,7 +75,13 @@ Plan: [plan.md](plan.md). Rapor taslağı: [rapor/rapor.md](rapor/rapor.md).
 - **Karar (kullanıcı):** 242 sekmesi birinci + ≥%30 (`TANIMA_ESIGI_345`), 50 sekmesi %50. "İlk 3'te" kuralı benzer kelimeleri kabul ettiği için seçilmedi.
 - **Ek düzeltme:** model yüklenirken sekme değişirse eski maç başlamıyor (`macBasla` modu yakalar).
 - **Doğrulama:** tsc, `npm test` (304 örnek, 0 fark), build temiz. Playwright 6 koşu: 242 sekmesinde %44 ile tanınan çizim (dürbün) görüldü; konsol hatası yok. İlk koşulardaki takılma test betiğinden çıktı (tanındıktan sonra çizmeye devam edip sonraki tura taşıyordu); betik düzeltildi, sonra 5 koşu sorunsuz. Uygulamada hedef/model sınıf indisi uyuşmazlığı geçici kayıtla arandı, bulunmadı.
-- **Yapılmayan:** commit/push.
+
+## Seri modu (28 Ekim 2026)
+
+- **Karar (kullanıcı):** ayrı sekme değil; iki oyun sekmesinin başlangıç ekranında "5 tur" / "60 sn seri" seçimi. 3 ücretsiz pas; sonraki her pas 1 puan düşürür (ikinci karar, önce düğme kapanıyordu).
+- **Ne:** `oyun.ts` `SERI_SURESI_MS` 60 sn, `SERI_PAS_HAKKI` 3, `SERI_PAS_CEZASI` 1. Seride süre maç boyunca akar (tanınma bildirimi 0,7 sn, pas 0,3 sn sonra yeni kelime), kelimeler listeden karışık sırayla, puan = tanınan − cezalı pas (eksiye inebilir), üstte "N pas" sonra "pas −1", sonda "N puan" + "M nesne tanıttın" ve liste (✓ süre / pas / pas -1 / süre bitti). Kayıt `mod: "seri"`; `gercek_degerlendir.py` bunları oyun kayıtları gibi doğruluğa katmaz. Telefonda mod etiketi taşması düzeltildi.
+- **Doğrulama:** tsc, `npm test`, build temiz. Playwright (`scratchpad/pw/seri.mjs`): iki sekmede 3 pas → "0 pas", düğme kapalı; süre 60,0 sn'de bitti; 50 sekmesinde 8–32 tanınan (test çizimine göre); 242 sekmesinde test çizimi tanınmayınca seri o kelimede kaldı (posta kutusu → şifonyer %21 gibi gerçek model hatası; test yeniden çizmiyor). 5 tur biçimi bozulmadı (`dene.mjs`), 390×844 taşma yok, konsol hatası yok. Görüntülere bakıldı. Test betiğinde 0,7 sn'lik bildirimi kaçırma sorunu bulundu ve düzeltildi.
+- **Pas cezası doğrulaması:** `seri2.mjs` iki sekmede 5 pas → "pas −1", puan -2, düğme açık; süre 60,0 sn; sonda "9 puan / 11 nesne" (242) ve "29 puan / 31 nesne" (50); taşma ve konsol hatası yok; görüntüye bakıldı.
 
 ## Sıradaki
 
