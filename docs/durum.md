@@ -66,7 +66,7 @@ Plan: [plan.md](plan.md). Rapor taslağı: [rapor/rapor.md](rapor/rapor.md).
 - **Doğrulama:** `npm run build` temiz. Playwright (vite dev, `--mute-audio`): 5 tur, 4 tanındı (zikzak: birinci tahmin doğru ama eşik altı, süre doldu), serbest çizim bisiklet %92, kayıt (deneme kaydı silindi), hız 345: M1 0,25 ms, M3-kısmi 4,37 ms; 390×844 taşma yok, konsol hatası yok. Görüntülere bakılmadı.
 - **Rapor:** §1 hedef 5, §4.7 (5 kişi), yeni §4.8 ölçeklendirme, §5 süre tablosu, §6, §7.
 - **İki oyun sekmesi (kullanıcı isteği):** "Oyun · 242" (`s345_m3_kismi`, oyun_kelimeleri.json) ve "Oyun · 50" (`m3_kismi`, 50 sınıfın hepsi; `KOLAY_OYUN_MODELI`). Aynı oyun ekranı; sekme değişince süren maç bırakılır, giriş ekranına dönülür (bekleyen tur zamanlayıcısı `turKimligi` ile iptal). Dar ekranda sekme yazıları tek satır. Doğrulama: tsc + build temiz; Playwright iki sekmede 5'er tur (zor 5/5, kolay 5/5 son koşuda), maç ortasında sekme değişimi, 390×844 taşma yok, konsol hatası yok; görüntülere bakıldı.
-- **Yapılmayan:** commit/push (`f0e3d8b`, `084c809` sonrası hepsi commit'siz); Vercel deploy doğrulanmadı; telefonda deneme.
+- **Yapılmayan:** Vercel deploy doğrulanmadı; telefonda deneme. (Commit'ler sonradan atıldı: `bcdd731` ve sonrası.)
 
 ## Tanınma eşiği (28 Ekim 2026)
 
@@ -83,12 +83,23 @@ Plan: [plan.md](plan.md). Rapor taslağı: [rapor/rapor.md](rapor/rapor.md).
 - **Doğrulama:** tsc, `npm test`, build temiz. Playwright (`scratchpad/pw/seri.mjs`): iki sekmede 3 pas → "0 pas", düğme kapalı; süre 60,0 sn'de bitti; 50 sekmesinde 8–32 tanınan (test çizimine göre); 242 sekmesinde test çizimi tanınmayınca seri o kelimede kaldı (posta kutusu → şifonyer %21 gibi gerçek model hatası; test yeniden çizmiyor). 5 tur biçimi bozulmadı (`dene.mjs`), 390×844 taşma yok, konsol hatası yok. Görüntülere bakıldı. Test betiğinde 0,7 sn'lik bildirimi kaçırma sorunu bulundu ve düzeltildi.
 - **Pas cezası doğrulaması:** `seri2.mjs` iki sekmede 5 pas → "pas −1", puan -2, düğme açık; süre 60,0 sn; sonda "9 puan / 11 nesne" (242) ve "29 puan / 31 nesne" (50); taşma ve konsol hatası yok; görüntüye bakıldı.
 
+## Ölçüm gözden geçirmesi (29 Ekim 2026)
+
+- **Neden:** bir arkadaşın incelemesi (7 madde): test seti seçimde kullanılmış, "yanlış kabul %0,3" kandırılamazlığı göstermiyor, ölçüm betikleri güncel kuralı (%30, çizim boyunca kabul) ölçmüyor, zorluğun bir kısmı ad belirsizliği, M3-kısmi seçimi yalnız tanınanların erkenliğiyle yapılmış, iki oyun hatası. Hepsi koda bakılarak doğrulandı. Öncesi yedek: etiket `yedek-olcum-oncesi` (push'lu) + `FinalCepKonsol/cizim-tanima-yedek-2026-10-29/` (bundle + `test-verileri/` + `kayitlar/`).
+- **Oyun hataları (`91b194c`):** Temizle/Geri al süren tahmini geçersiz kılar (`Tuval.silme`), kilit süren çizimi durdurur. Playwright (`scratchpad/hata67.mjs`, olaylar sayfa içinden eş zamanlı): eski kodda 9/10 boş tuvale +100 puan, 5/5 kilitten sonra çizim; yeni kodda 0/10, 0/5.
+- **Ölçüm (`6b3f759`):** seçimler doğrulamayla, test yalnız son ölçüm. Doğrulama vuruşları ham veriden aynı tohumla (`dogrulama_vuruslar.py`, 1 185 çizim piksel eşit). Kural tek yerde: `oyun_kurali.py` = `oyun.ts`, eşitlik `npm test` (`kural_fikstur.py`, 600 örnek). `olcum.py`: %5 adım, süre gerçek çizim süresi dağılımından (≤ 20 sn), tur puanı, seri benzetimi, eşleştirilmiş bootstrap, zor çiftler, anlamsız çizimler (karalama, çizgi, üretilmiş), bilinmeyen nesne (kolay sekme). Sonuç `deneyler/olcum.md`. `oyun_simulasyonu.py`, `esik_karsilastir.py` kaldırıldı.
+- **Eşdeğer gruplar (kullanıcı: A grubu, "grup tek sınıf"):** `demo/public/model/esdeger.json` 12 grup (pasta, otobüs, hortum, bardak/kupa/fincan, kamyon, radyo, kova, telefon, bilgisayar, araba, yüz, sakal); birinci tahmin grupta + grup toplamı ≥ eşik. Adaylar `deneyler/esdeger_adaylari.md`. Tarayıcıda: bardak sorulunca 40 kupa çiziminden 37 kabul (grupsuz 4).
+- **Kelimeler:** doğrulama + grup + oyun modeli (M3-kısmi) ≥ %70 → 258 (önce 242). Testten doğrulamaya geçiş yalnız 16 sınır kelimeyi değiştirdi; ölçülen yanlılık ihmal edilebilir (eski liste test %82,58 / doğrulama %82,57). Sekme adı kelime sayısından (`Oyun · 258`). 50 listesinde `ladder` = "el merdiveni".
+- **Sonuçlar (test):** zor sekme M3-kısmi tanınan %90,3, tur puanı 59,8, seri 6,72; M3 %91,0 / 55,8 / 5,98 (tur puanı farkı 4,0 [3,8; 4,1]) → oyun modeli değişmedi, gerekçe artık oyun puanı. Kolay sekme M3-kısmi 74,7 puan, M3 67,4. Eşik %30 doğrulamada da makul (%50'ye göre +5,5 tanınan). Kandırılabilirlik: rastgele hedef %0,36 (şans tabanı 1/257 = %0,39), başka kelimeyle kabul %62, zor çiftler ortalama %33 (M3 %27), karalama belirli hedefle %0,4 (kolay sekmede %4,5, kaçış sınıfı yok). Gerçek çizim (zor, 216): M3-kısmi %80,6, 58,4 puan.
+- **Doğrulama:** `npm run build`, `npm test` (eşitlik + kural) geçti; Playwright `dene.mjs` iki sekmede 5'er tur, serbest çizim, kayıt, taşma yok, konsol hatası yok.
+- **Rapor:** §2.3 (seçim doğrulamayla), §4.6 yeniden (oyun kuralıyla ölçüm, yöntem), §4.7 (el merdiveni, oyun kuralıyla gerçek), §4.8 (eşdeğer gruplar, kelime seçimi ve yanlılık, yeni tablo), §5 (Temizle/kilit), §6 (eşik tablosu doğrulamadan, kandırılabilirlik), §7. `docs/tanima-esigi.md` başına not.
+- **Yapılmayan:** süre modeli gerçek oyun kayıtlarıyla doğrulanmadı; kişi raporları (`kisi_raporu.py`, git dışı) yeniden üretilmedi; kısa/şaka çizim eleme kararı hâlâ açık.
+
 ## Sıradaki
 
-Son commit `1070071` (seri modu + pas cezası), GitHub'a gönderildi. Depo `slapmemo/cizim-tanima` (gizli), Vercel kökü `demo`.
-
-1. Vercel'de iki sekmenin (Oyun · 242 / Oyun · 50) ve seri modunun çalıştığını doğrula.
+1. Vercel'de iki sekmenin (Oyun · 258 / Oyun · 50), seri modunun ve eşdeğer grupların çalıştığını doğrula.
 2. Telefonda deneme ve hız testi; Web Share.
-3. Açık kararlar: "merdiven" → "el merdiveni"; 1 sn'den kısa ve şaka çizimlerin elenmesi.
-4. **Bakılabilir (önerilen):** yalnız 242 oyun kelimesiyle model eğitmek (~1 saat). 345'li modelle karşılaştırma rapora "rakip sınıfların etkisi" olarak girer. Beklenen: 242'lik model oyunda daha çok tanır (bardak/kupa gibi rakipler yok), ama kaba çizimleri de en yakın kelimeye bağlar (daha kolay kandırılır). 345'li model "zor" sekmede kalır; 242'lik olursa ayrı sekme ya da kolay mod olabilir.
-5. Aşama 6: CepKonsol entegrasyonu ("Çizim Düellosu"); seçilen modlar Seri ve Sahtekâr (`plan.md` Aşama 6).
+3. Açık karar: 1 sn'den kısa ve şaka çizimlerin elenmesi.
+4. Kolay sekmede karalama %4,5 kabul ediliyor: "hiçbiri" sınıfı (karalama + bilinmeyen nesne) ile 50 sınıflı model denemesi rapora girebilir.
+5. 242/258 kelimeyle ayrı model eğitimi: ölçüm altyapısı hazır (`olcum.py` aday listesine eklenir); kararı yeni sonuçlara göre ver (zor çiftler M3-kısmi'de zaten %33).
+6. Aşama 6: CepKonsol entegrasyonu ("Çizim Düellosu"); seçilen modlar Seri ve Sahtekâr (`plan.md` Aşama 6). Oyun kuralı `oyun.ts` + `esdeger.json` aynen taşınır.

@@ -28,6 +28,8 @@ Quick, Draw! veri seti, 345 sınıfta 50 milyondan fazla çizim içerir. Her çi
 
 Her sınıftan yalnız `recognized = true` olan çizimler alınmış, sabit tohumla karıştırılıp sınıf başına 30 000 eğitim, 5 000 doğrulama ve 5 000 test çizimi ayrılmıştır. Toplam 1,5 milyon eğitim, 250 bin doğrulama ve 250 bin test örneği vardır. Sınıflar dengelidir.
 
+Model eğitiminde en iyi epoch doğrulama doğruluğuyla seçilmiştir. Oyuna ilişkin seçimler de (tanınma eşiği, oyun modeli, oyunda sorulan kelimeler, eşdeğer gruplar; §4.6, §4.8, §6) doğrulama çizimleriyle yapılmıştır. Test çizimleri yalnız son ölçümde kullanılmıştır.
+
 ### 2.4. Vuruşlardan görüntüye
 
 Veri setinin hazır 28×28 görüntü sürümü (`numpy_bitmap`) kullanılmamıştır. Bunun nedeni, oyunda kullanıcının çizimini aynı yöntemle görüntüye çevirme imkânının olmamasıdır. Eğitimdeki görüntüler ile oyundaki görüntüler arasındaki fark, modelin gerçek kullanımda başarımını düşürür. Bunun yerine vuruşlardan görüntü üreten tek bir algoritma yazılmış ve hem eğitimde (Python) hem tarayıcıda (TypeScript) birebir uygulanmıştır:
@@ -103,7 +105,7 @@ M3'te en çok karışan çiftler (5 000 test çiziminde):
 | dondurma | elmas | 69 |
 | ağaç | mantar | 67 |
 
-Karışıklıklar şekil benzerliğinden kaynaklanmaktadır: hilal biçimli ay ile muz, ortasından çizgiler çıkan daire biçimindeki güneş ile örümcek, kubbe ve sap yapısındaki mantar ile şemsiye. "Ay → pizza" karışıklığı, dilim biçiminde çizilen aylardan gelmektedir. En zor sınıflar ay (%88,4), mantar (%93,0) ve kuş (%93,1); en kolaylar merdiven, tişört, ev ve zarftır (%99,2).
+Karışıklıklar şekil benzerliğinden kaynaklanmaktadır: hilal biçimli ay ile muz, ortasından çizgiler çıkan daire biçimindeki güneş ile örümcek, kubbe ve sap yapısındaki mantar ile şemsiye. "Ay → pizza" karışıklığı, dilim biçiminde çizilen aylardan gelmektedir. En zor sınıflar ay (%88,4), mantar (%93,0) ve kuş (%93,1); en kolaylar el merdiveni, tişört, ev ve zarftır (%99,2).
 
 ### 4.5. Erken tanıma
 
@@ -121,18 +123,33 @@ Karışıklıklar şekil benzerliğinden kaynaklanmaktadır: hilal biçimli ay i
 
 İlk dört model yalnız tamamlanmış çizimlerle eğitildiği için yarım çizimlerde başarısızdır; mimari farkı bu sorunu çözmemektedir. Bu nedenle M3, eğitim verisine yarım çizimler eklenerek yeniden eğitilmiştir (M3-kısmi): her eğitim çizimi için mürekkebin rastgele %20–100'ü alınarak bir yarım sürüm üretilmiş (`egitim/kismi_hazirla.py`), her yığında örneklerin yarısı bu sürümle değiştirilmiştir. Etiketler aynı kalmıştır. Sonuçta yarım çizimdeki doğruluk %25 mürekkepte 2,7 katına, %50'de 1,5 katına çıkmış, tam çizimdeki doğruluk ise yalnız 0,9 puan düşmüştür.
 
-### 4.6. Oyun simülasyonu
+### 4.6. Oyun kuralıyla ölçüm
 
-Oyun kuralıyla (hedef birinci tahmin ve olasılığı ≥ 0,5) her test çizimi %10'luk adımlarla ilerletilmiş ve ilk tanındığı adım kaydedilmiştir (sınıf başına 200, toplam 10 000 çizim; §4.5'te kullanılmayan çizimler).
+Sınıflandırma doğruluğu, oyunun asıl sorusunu yanıtlamaz: oyunda bir çizim, çizim sürerken herhangi bir anda kabul edilebilir ve puan, tanınma anına bağlıdır. Bu nedenle modeller oyunun kendi kuralıyla da ölçülmüştür (`egitim/olcum.py`; kural `egitim/oyun_kurali.py`, oyundaki `demo/src/oyun.ts` ile aynı, eşitliği `npm test` ile denetlenir).
 
-| Model | Tanınan çizim | Ortalama tanınma anı | Medyan tanınma anı |
-| --- | ---: | ---: | ---: |
-| M3 | %98,7 | mürekkebin %56'sı | %60 |
-| M3-kısmi | %98,2 | mürekkebin %43'ü | %40 |
+**Kural.** Modelin birinci tahmini hedefin eşdeğer grubundaysa ve grubun olasılıkları toplamı eşiği geçiyorsa çizim tanınır. Eşdeğer gruplar yalnız 345 sınıflı modelde anlamlıdır (§4.8); grubu olmayan sınıf tek başına bir gruptur ve kural "hedef birinci, olasılığı ≥ eşik" olur. Eşik 50 sınıfta 0,5, 345 sınıfta 0,3'tür (§6).
 
-![Oyun simülasyonu](../../deneyler/oyun_simulasyonu.png)
+**Yöntem.** Her çizim mürekkebin (nokta sayısının) %5'lik adımlarıyla ilerletilir; oyun 250 ms'de bir ve her vuruşun sonunda tahmin yaptığı için bu, 5–10 sn'lik bir çizimde oyundaki 20–40 tahmine karşılık gelir. İlk kabul edilen adım tanınma anıdır. Quick, Draw! çizimlerinde zaman bilgisi olmadığından her çizime bir çizim süresi T atanır: arkadaşlardan toplanan 228 çizimin süre dağılımından (medyan 11 sn) örneklenir ve tur süresiyle (20 sn) sınırlanır; mürekkebin f oranında tanınan çizim f·T anında tanınmış sayılır. Aynı çizime bütün modellerde aynı T verilir, böylece modeller aynı çizimler üzerinde eşleştirilerek karşılaştırılır (farklar için %95 bootstrap aralığı). Ölçütler:
 
-M3-kısmi çizimleri ortalama 13 puan, medyanda 20 puan daha erken tanımaktadır. Puan kalan süreyle orantılı olduğundan, oyunda M3-kısmi kullanılmıştır.
+- *Tanınan:* çizim 20 sn içinde kabul edildi mi; *ortalama an:* tanınanlarda mürekkep oranı; *ilk %20'de:* mürekkebin ilk %20'sinde tanınan oran.
+- *Tur puanı:* oyunun puanı, 100 × kalan süre / 20 sn; tanınmayan çizim 0 alır. Yalnız tanınanların erkenliğine bakmak tanınmayanları dışarıda bıraktığı için model seçimi bu ölçütle yapılır.
+- *Seri:* 60 saniyelik biçimin benzetimi (2 000 oyun). Kelimeler karışık sırayla gelir. Tanınan çizimin ardından 0,7 sn bekleme vardır; tanınmayan çizimde oyuncu çizimi bitirip pas geçer (T + 0,3 sn). Puan, tanınanlardan 3'ü aşan pasların çıkarılmasıyla bulunur.
+- *Kandırılabilirlik:* §6.
+
+**Seçim ve son ölçüm ayrıdır.** Eşik, oyun modeli ve sorulan kelimeler **doğrulama** çizimleriyle seçilmiş, **test** çizimleri yalnız son ölçümde kullanılmıştır (sınıf başına 500 çizim 50 sınıfta, 200 çizim 345 sınıfta). Doğrulama çizimlerinin vuruşları, veri hazırlığıyla aynı tohum ve sırayla ham veriden yeniden çıkarılmış, 1 185 çizim yeniden çizilip kaydedilmiş görüntülerle piksel piksel aynı bulunmuştur (`egitim/dogrulama_vuruslar.py`).
+
+50 sınıf ("Oyun · 50" sekmesi, eşik 0,5), test (25 000 çizim):
+
+| Model | Tanınan | Ortalama an | İlk %20'de | Tur puanı | Seri puanı |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| M1 | %98,1 | %56 | %4,0 | 65,7 | 7,66 |
+| M2 (artırmalı) | %98,8 | %54 | %4,1 | 67,3 | 8,09 |
+| M3 | **%98,9** | %54 | %3,8 | 67,4 | 8,12 |
+| M3-kısmi | %98,4 | **%40** | **%17,1** | **74,7** | **10,28** |
+
+![50 sınıf oyun ölçümü](../../deneyler/olcum_kolay.png)
+
+Doğrulama sonuçları testtekilerle 0,2 puan içinde aynıdır. M3 çizimlerin 0,6 puan daha fazlasını tanımaktadır (%95 aralığı [0,4; 0,7]), ancak geç tanıdığı için tur puanında M3-kısmi 7,3 puan öndedir ([7,2; 7,5]) ve seride 60 sn'de iki nesne fazla tanıtılmaktadır. Oyunda M3-kısmi kullanılmıştır.
 
 ### 4.7. Gerçek kullanıcı çizimleri
 
@@ -157,7 +174,7 @@ Gerçek kullanıcı çizimleri, demonun çizim toplama sayfasıyla (`demo/topla.
 Gerçek çizimlerde doğruluk, test setine göre 9–13 puan düşüktür. Model sıralaması büyük ölçüde korunmuştur: M1 en zayıf, M3 ve M3-kısmi en iyidir. Hataların incelenmesi (`test-verileri/<kişi>/cizimler.png`) üç kaynak göstermektedir:
 
 1. **Alışılmadık bakış açısı ya da biçim.** Önden çizilmiş araba, yumruk biçiminde el, sarkaçlı duvar saati, körüklü fotoğraf makinesi örnek verilebilir. Rakamlı çizilen saat iki katılımcıda (C, D) pizza sanılmıştır. Veri setindeki çizimlerin çoğu nesneyi en tipik açıdan ve basitçe gösterir.
-2. **Etiketin Türkçe karşılığının belirsizliği.** "Merdiven" (veri setinde *ladder*, el merdiveni) üç katılımcı (A, D, E) tarafından basamaklı merdiven olarak çizilmiştir.
+2. **Etiketin Türkçe karşılığının belirsizliği.** "Merdiven" (veri setinde *ladder*, el merdiveni) üç katılımcı (A, D, E) tarafından basamaklı merdiven olarak çizilmiştir. Bu hata oyuncunun değil etiketindir; 50 sınıflık listede de ad "el merdiveni" olarak düzeltilmiştir (345 listesinde *stairs* = merdiven ayrı sınıftır). Bu çizimler ölçümde olduğu gibi bırakılmıştır.
 3. **Test setinde de karışan sınıflar.** Örümcek → güneş ve papyon → kelebek karışıklıkları gerçek çizimlerde de görülmüştür.
 
 Örnek küçüktür (5 kişi). Dokunmatik ekranla çizen tek katılımcı (A) en düşük sonucu almıştır, ancak fareyle çizenler arasındaki fark da (%75–96) benzer büyüklükte olduğundan aygıt etkisi bu veriyle kişi etkisinden ayrıştırılamamaktadır.
@@ -170,6 +187,8 @@ Gerçek çizimlerde doğruluk, test setine göre 9–13 puan düşüktür. Model
 Her iki hata da, çizimin veri setindeki tipik çizim biçiminden uzak olmasından kaynaklanmaktadır.
 
 Oyun kayıtları tanındığı anda kesildiği için yukarıdaki doğruluk ölçümüne katılmamıştır.
+
+**Oyun kuralıyla** (§4.6; süre her çizimin kendi süresi, 20 sn ile sınırlı) 229 gerçek çizimde 50 sınıflı M3-kısmi %93,0'ını tanımakta ve tur başına 73,3 puan vermektedir (M3: %92,6, 65,7 puan). Sıralama test setindekiyle aynıdır.
 
 ### 4.8. 345 sınıfa ölçeklendirme
 
@@ -207,20 +226,23 @@ Bu çiftlerin çoğu 28×28 çözünürlükte, hatta insan gözüyle de ayırt e
 
 ![345 sınıf erken tanıma](../../deneyler/kismi345.png)
 
-**Oyun simülasyonu** (§4.6 ile aynı kural; sınıf başına 50, toplam 17 250 çizim):
+**Eşdeğer gruplar.** Yukarıdaki çiftlerin bir kısmı farklı nesneler değil, aynı nesnenin farklı adlarıdır: oyuncu "pasta" sorulunca doğum günü pastası çizebilir, model de bunları ayırt edemez. Bu durumda tanınmamak oyuncunun becerisiyle ilgili değildir. Doğrulama setinde en çok karışan 40 çift (`egitim/esdeger_aday.py` → `deneyler/esdeger_adaylari.md`) iki türe ayrılmış ve yalnız aynı nesne ya da ad belirsizliği olanlar eşdeğer sayılmıştır (`demo/public/model/esdeger.json`, 12 grup, 25 sınıf): doğum günü pastası = pasta, otobüs = okul otobüsü, kasırga = hortum, bardak = kupa = kahve fincanı, kamyon = kamyonet, radyo = müzik seti, kova = boya kovası, telefon = cep telefonu, bilgisayar = dizüstü bilgisayar, araba = polis arabası, yüz = gülen yüz, sakal = keçi sakalı. Benzer görünen ama farklı olan nesneler (altıgen / sekizgen, keman / gitar / çello, bisiklet / motosiklet, ceket / kazak, kaplan / zebra) eşdeğer sayılmamıştır; bunları ayırt etmek oyuncunun işidir. Grup, kabulde tek sınıf gibi değerlendirilir: birinci tahmin gruptaysa ve grubun olasılıkları toplamı eşiği geçiyorsa çizim tanınır. Örneğin bardak sorulduğunda 40 kupa çiziminin 37'si grupla kabul edilmekte, grupsuz kuralda yalnız 4'ü kabul edilmektedir (tarayıcıda gerçek modelle).
 
-| Model | Tanınan çizim | Mürekkebin %50'sinde tanınan | %70'inde | Ortalama tanınma anı* |
-| --- | ---: | ---: | ---: | ---: |
-| M3 | %79,9 | %15,6 | %45,4 | %71 |
-| M3-kısmi | %74,2 | %22,4 | %48,3 | %66 |
+**Oyunda sorulan kelimeler.** Model 345 sınıfın hepsini tanır, yani oyuncunun çizimi bütün sınıflarla yarışır. Ancak oyunda yalnız oyun modelinin (M3-kısmi) **doğrulama** setindeki, eşdeğer grup sayılarak hesaplanan sınıf doğruluğu en az %70 olan sınıflar sorulur (`egitim/oyun_kelimeleri.py`). Ayrıca 20 saniyede çizilemeyen ya da anlamsız 6 sınıf elle çıkarılmıştır: hayvan göçü, kamuflaj, Çin Seddi, çizgi, karalama, yoga. Liste 258 kelimedir (81 sınıf doğruluk ölçütüyle çıktı).
 
-\* Yalnız tanınan çizimler üzerinden.
+Listenin ilk sürümü (242 kelime) test setiyle ve grupsuz seçilmişti. Bu, test setini tarafsız son ölçüm olmaktan çıkarır: test setinde iyi görünen sınıfları seçip aynı setle ölçmek sonucu iyimser gösterebilir. Seçim doğrulama setine taşındığında yalnız sınırdaki 16 kelime değişmiştir (9 eklendi, 7 çıktı). Ölçülen yanlılık bu veride ihmal edilebilir düzeydedir: eski listenin ortalama sınıf doğruluğu testte %82,58, doğrulamada %82,57'dir; eşiğe en yakın 37 sınıfta da fark yoktur. Bunun nedeni sınıf başına 2 500 çizimle sınıf doğruluğunun gürültüsünün küçük olmasıdır. Gruplar 14 kelime daha eklemiştir: pasta ile doğum günü pastası, otobüs ile okul otobüsü, bardak, kupa ve kahve fincanı gibi grupların üyeleri birbirinin yerine kabul edildiği için artık sorulabilmektedir.
 
-![345 sınıf oyun simülasyonu](../../deneyler/oyun_simulasyonu345.png)
+**Oyun kuralıyla ölçüm** (§4.6; "Oyun · 258" sekmesi, eşik 0,3, 258 kelime, test 51 600 çizim):
 
-M3-kısmi, mürekkebin %70'ine kadar daha çok çizimi tanımaktadır. Ancak çizim tamamlandığında daha az çizimi tanımaktadır, çünkü eşiği (olasılık ≥ 0,5) daha seyrek aşar. Puan kalan süreyle orantılı olduğundan erken tanıma daha değerlidir. Bu nedenle oyunda M3-kısmi kullanılmıştır. Fark 50 sınıftakinden küçük olduğundan bu seçim ileride gerçek oyun verisiyle yeniden değerlendirilmelidir.
+| Model | İlk-1 (grup) | Tanınan | Ortalama an | İlk %20'de | Tur puanı | Seri puanı |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| M1 | %77,0 | %85,3 | %69 | %0,5 | 50,7 | 5,31 |
+| M3 | **%84,1** | **%91,0** | %65 | %0,7 | 55,8 | 5,98 |
+| M3-kısmi | %82,8 | %90,3 | **%57** | **%2,7** | **59,8** | **6,72** |
 
-**Oyunda sorulan kelimeler.** Model 345 sınıfın hepsini tanır, yani oyuncunun çizimi bütün sınıflarla yarışır. Ancak oyunda yalnız M3-kısmi'nin test doğruluğu en az %70 olan sınıflar sorulur (`egitim/oyun_kelimeleri.py`). Bu ölçüt 97 sınıfı çıkarmıştır. Ayrıca 20 saniyede çizilemeyen ya da anlamsız 6 sınıf elle çıkarılmıştır: hayvan göçü, kamuflaj, Çin Seddi, çizgi, karalama, yoga. Kalan 242 kelimenin ortalama test doğruluğu %82,6'dır. İlk 50 sınıfın 45'i bu listededir.
+![345 sınıf oyun ölçümü](../../deneyler/olcum_zor.png)
+
+Doğrulama sonuçları testtekilerle 0,1 puan içinde aynıdır (model seçimi doğrulamayla yapılmıştır). M3 çizimlerin 0,7 puan daha fazlasını tanımaktadır ([0,5; 0,9]). M3-kısmi ise çizimleri mürekkebin ortalama 8 puan daha erken bir noktasında tanıdığı için tur puanında 4,0 puan öndedir ([3,8; 4,1]); seride 60 sn'de 0,7 nesne fazladır. İlk sürümdeki ölçüm (eşik 0,5, %10 adım, yalnız tanınan çizimlerin erkenliği) M3'ü toplam tanınmada daha belirgin önde gösteriyordu (%79,9'a %74,2); eşik 0,3 ve eşdeğer gruplarla bu fark 0,7 puana inmiştir. Gerçek çizimlerde (bu sekmede sorulan kelimelerden 216 çizim; 13 çizimin kelimesi listede yok) M3-kısmi ve M3 aynı oranda tanır (%80,6), tur puanı M3-kısmi'de 58,4, M3'te 53,4'tür.
 
 **Gerçek kullanıcı çizimleri** (§4.7'deki 229 çizim, 345 seçenek arasından):
 
@@ -232,13 +254,13 @@ M3-kısmi, mürekkebin %70'ine kadar daha çok çizimi tanımaktadır. Ancak çi
 
 Gerçek çizimlerle test seti arasındaki fark 345 sınıfta 14–18 puandır. Bu fark 50 sınıftakinden (9–13 puan) büyüktür: veri setinin tipik çiziminden uzaklaşan bir çizim, 345 sınıfta yakınında başka bir sınıf bulma olasılığı daha yüksek olduğundan daha kolay yanlış sınıfa düşer. Katılımcılara göre M3-kısmi doğruluğu A %60, B %74, C %61, D %70, E %76'dır. Yeni karışıklıklar beklenen benzer sınıflardır: dağ → hız treni, balık → köpek balığı, kapı → şifonyer, ağaç → brokoli.
 
-Tarayıcıda tek tahmin süresi 345 sınıfta da değişmemiştir (M1 0,25 ms, M3-kısmi 4,4 ms), çünkü yalnız son katman büyümüştür. Oyunun uçtan uca otomatik denemesinde (test setinden çizimlerle, 5 tur) 4 tur tanınmıştır. Tanınmayan turda (zikzak) model doğru sınıfı birinci tahmin olarak vermiş, ancak olasılığı eşiğin altında kalmıştır.
+Tarayıcıda tek tahmin süresi 345 sınıfta da değişmemiştir (M1 0,25 ms, M3-kısmi 4,4 ms), çünkü yalnız son katman büyümüştür.
 
 ## 5. Tarayıcıda gerçek zamanlı tahmin
 
 Eğitilen modeller ONNX biçimine aktarılmış (softmax dahil) ve tarayıcıda ONNX Runtime Web (WebAssembly, tek iş parçacığı) ile çalıştırılmıştır. Aktarımın doğruluğu, PyTorch ve ONNX Runtime çıktılarının aynı girişlerdeki en büyük mutlak farkıyla kontrol edilmiştir.
 
-Oyunda tahmin, kullanıcı çizerken en fazla 250 ms'de bir ve her vuruşun sonunda yapılır. Bir tahmin sürerken gelen istekler birleştirilir ve tahmin bitince bir kez daha çalıştırılır. Çizim, hedef sınıf modelin birinci tahmini olduğunda ve olasılığı en az 0,5 olduğunda tanınmış sayılır. Puan, kalan süreyle orantılıdır: puan = 100 × kalan süre / 20 sn.
+Oyunda tahmin, kullanıcı çizerken en fazla 250 ms'de bir ve her vuruşun sonunda yapılır. Bir tahmin sürerken gelen istekler birleştirilir ve tahmin bitince bir kez daha çalıştırılır. Tahmin sürerken çizim silinirse (Temizle, Geri al) dönen sonuç atılır; aksi halde eski çizimin tahmini boş tuvale puan verebiliyordu. Çizim, §4.6'daki kuralla tanınır. Tanınınca tuval kilitlenir; parmak ekrandan kalkmamış olsa bile çizim o anda durur. Puan, kalan süreyle orantılıdır: puan = 100 × kalan süre / 20 sn.
 
 ONNX aktarımında PyTorch ile ONNX Runtime çıktıları arasındaki en büyük mutlak fark bütün modellerde 6 × 10⁻⁷'nin altındadır.
 
@@ -256,21 +278,32 @@ Tarayıcıda tek tahmin süresi (masaüstü Chromium, WebAssembly, tek iş parç
 
 ## 6. Oyun
 
-Demo iki bölümden oluşur:
+Demo üç bölümden oluşur:
 
+- **Oyun:** 5 tur, her turda rastgele ve tekrarsız bir nesne, 20 saniye. İki sekme vardır: "Oyun · 258" (345 sınıflı M3-kısmi, 258 kelimelik listeden, eşdeğer gruplarla; §4.8) ve "Oyun · 50" (50 sınıflı M3-kısmi, 50 sınıfın hepsi; daha kolay). Oyuncu çizerken modelin tahmini ("Yapay zekâ: kedi mi? %62 · yoksa kuş mu?") ekranda canlı görünür. Tanınınca çizim kilitlenir ve puan gösterilir; maç sonunda turların listesi ve toplam puan çıkar.
 - **Seri:** başlangıç ekranında "5 tur" yerine "60 sn seri" seçilebilir. 60 saniyede art arda kaç nesne tanıtıldığı sayılır; tanınan her nesne 1 puandır ve tanınınca hemen yeni nesne gelir. İlk 3 pas ücretsizdir, sonraki her pas 1 puan düşürür; süre pas sırasında da akar. İki sekmede de oynanır.
-- **Oyun:** 5 tur, her turda rastgele ve tekrarsız bir nesne, 20 saniye. İki sekme vardır: "Oyun · 242" (345 sınıflı M3-kısmi, 242 kelimelik listeden; §4.8) ve "Oyun · 50" (50 sınıflı M3-kısmi, 50 sınıfın hepsi; daha kolay). 242 sekmesinde tanınma eşiği %30'dur (aşağıda).
-
-**Tanınma eşiğinin seçimi.** 345 sınıfta olasılık benzer sınıflara bölündüğü için doğru sınıf birinci olsa bile çoğu zaman %50'ye ulaşmamaktadır. Farklı kurallar, oyun kelimelerinin test çizimlerinde (kelime başına 50) ve gerçek çizimlerde ölçülmüştür (`egitim/esik_karsilastir.py`). "Yanlış kabul", aynı çizime rastgele başka bir oyun kelimesi sorulduğunda kuralın bunu kabul etme oranıdır:
-
-| Kural (242 sekmesi) | Tanınan | Gerçek çizim | İlk %20 mürekkepte | Yanlış kabul |
-| --- | ---: | ---: | ---: | ---: |
-| birinci + ≥%50 | %83,2 | %72,4 | %1,2 | %0,1 |
-| birinci + ≥%30 (seçilen) | %89,2 | %77,6 | %2,5 | %0,3 |
-| ilk 3'te + ≥%20 | %93,3 | %82,0 | %4,2 | %0,6 |
-
-Eşik %30'a indirildiğinde tanınan oran 6 puan artmakta, şans eseri erken tanınma ve yanlış kabul düşük kalmaktadır. Quick, Draw!'ın istemci kodu, hedefin birinci olmasını şart koşmadığını ve eş anlamlıları kabul ettiğini göstermektedir; buna benzeyen "ilk 3'te" kuralı daha yüksek tanıma verse de benzer nesneleri (ör. kupa sorulunca bardak) kabul ettiği için seçilmemiştir. 50 sınıflı modelde eşiği düşürmek yalnız şans eseri erken tanınmayı artırdığından (%17 → %26) bu sekmede %50 korunmuştur. Oyuncu çizerken modelin tahmini ("Yapay zekâ: kedi mi? %62 · yoksa kuş mu?") ekranda canlı görünür. Tanınınca çizim kilitlenir ve puan gösterilir; maç sonunda turların listesi ve toplam puan çıkar.
 - **Serbest çizim:** İlk beş tahmin ve olasılıkları, modelin gördüğü 28×28 görüntü, model seçimi, tarayıcıda hız testi ve rapor için çizim kaydetme.
+
+**Tanınma eşiğinin seçimi.** 345 sınıfta olasılık benzer sınıflara bölündüğü için doğru sınıf birinci olsa bile çoğu zaman %50'ye ulaşmamaktadır. Eşik, oyun modelinin doğrulama çizimlerinde §4.6'daki kuralla seçilmiştir. "Başka kelimeyle kabul" bir sonraki paragrafta açıklanmaktadır.
+
+| Eşik ("Oyun · 258", M3-kısmi, doğrulama) | Tanınan | İlk %20'de | Tur puanı | Başka kelimeyle kabul |
+| --- | ---: | ---: | ---: | ---: |
+| %50 | %84,7 | %1,4 | 53,8 | %37,0 |
+| %40 | %88,0 | %2,0 | 57,0 | %49,2 |
+| **%30 (seçilen)** | %90,2 | %2,8 | 59,7 | %61,8 |
+| %25 | %91,1 | %3,3 | 60,9 | %68,5 |
+| %20 | %91,8 | %3,9 | 62,1 | %75,5 |
+
+Eşik düştükçe tanınan oran ve puan artar, ama model benzer bir nesneyi de daha kolay kabul eder. %30, %50'ye göre tanınan oranı 5,5 puan ve tur puanını 5,9 artırmaktadır. Daha aşağısında tanınan oran az artarken başka kelimeyle kabul hızla yükselmektedir. Test setinde aynı tablo 0,1 puan içinde tekrarlanmıştır. 50 sınıflı modelde çizimlerin %98,6'sı %50 eşikte zaten tanınmaktadır. Eşiği %30'a indirmek tur puanını 3,3 artırır, ama başka kelimeyle kabulü %60'tan %92'ye çıkarır. Bu yüzden o sekmede %50 korunmuştur. Quick, Draw!'ın istemci kodu, hedefin birinci olmasını şart koşmadığını ve eş anlamlıları kabul ettiğini göstermektedir. "İlk 3'te" türü bir kural, benzer nesneleri (ör. keman sorulunca gitar) de kabul edeceği için seçilmemiştir. Eş anlamlılar yalnız eşdeğer gruplarla, açıkça kabul edilir.
+
+**Kandırılabilirlik.** Kuralın yanlış çizimi ne kadar kabul ettiği dört biçimde ölçülmüştür (test, oyun modeli M3-kısmi; `deneyler/olcum.md`):
+
+1. *Rastgele hedef:* çizime rastgele başka bir oyun kelimesi sorulmuş gibi bakılır. Bu ölçüt tek başına yanıltıcıdır, çünkü modelin bir yanlış tahmini yalnız tek bir kelimeye denk gelir. 258 kelimede bu olasılık 1/257 ≈ %0,39'dur. Ölçülen değer de bu düzeydedir: %0,36 (50 sekmesinde 1/49 ≈ %2,0'ye karşı %1,8).
+2. *Başka kelimeyle kabul:* çizimin herhangi bir anında, kendi grubu dışındaki bir oyun kelimesinin kabul edilip edilmediğine bakılır. Yani o kelime sorulsaydı oyuncu yanlış çizimle puan alır mıydı? Çizimlerin %62'sinde en az bir kez bu durum oluşur. Sebep çoğunlukla yarım çizimdir: bir daire, tamamlanmadan önce güneş, saat ya da pizza olabilir.
+3. *Zor çiftler:* doğrulamada en çok karışan 15 çiftte, A çizildiğinde B'nin kabul edilme oranı ortalama %33'tür. En yüksekleri: ceket → kazak %65, tırmık → süpürge %54, motosiklet → bisiklet %48, kuş → ördek %39, altıgen → sekizgen %37. Burada M3-kısmi M3'ten (%27) daha kolay kandırılmaktadır. Erken tanıma, ayırt edici ayrıntı (kol, tel, kenar sayısı) çizilmeden önce karar verilmesi demektir.
+4. *Anlamsız çizimler:* veri setinin "karalama" çizimleri belirli bir hedefle yalnız %0,40, rastgele üretilmiş karalamalar %0,71, tek çizgiler %0,02 oranında kabul edilir. 345 sınıflı model "karalama" ve "çizgi" sınıflarını bildiği için anlamsız çizimi çoğu zaman bu sınıflara atar. Bu sınıflar sorulmadığından çizim kabul edilmez. 50 sınıflı modelde böyle bir kaçış sınıfı yoktur: karalama belirli bir hedefle %4,5, modelin bilmediği bir nesne (345 verisinden, 295 sınıf) %4,9 oranında kabul edilir. Bu çizimlerin %98'i en az bir kelimeyle kabul edilebilir durumdadır.
+
+Sonuç: oyuncu rastgele karalayarak belirli bir kelimeyi geçemez (258 sekmesinde %0,4). Ama hedefe benzeyen başka bir nesneyi çizerek sık sık geçebilir; kolay sekmede karalamayla her 20 denemeden biri tutar. Eşdeğer gruplar bilerek kabul edilen benzerlikleri kapsar. Kalan zor çiftler oyunun "model yanılıyor" türünden zorluğudur ve erken tanıma ile ayırt etme arasındaki ödünleşimi gösterir.
 
 Demo, CepKonsol çok oyunculu platformuna "Çizim Düellosu" oyunu olarak eklenecek biçimde tasarlanmıştır: ön işleme, model ve oyun kuralları arayüzden bağımsız modüllerdedir.
 
@@ -278,7 +311,8 @@ Demo, CepKonsol çok oyunculu platformuna "Çizim Düellosu" oyunu olarak eklene
 
 - **Gerçek kullanıcı ölçümü küçük örneklidir** (§4.7, 5 kişi, yalnız biri dokunmatik ekranla). Gerçek çizimlerde doğruluk test setine göre belirgin biçimde düşmektedir. Düşüş 345 sınıfta daha büyüktür.
 - **Veri yanlılığı:** yalnız Google'ın kendi modelinin tanıdığı çizimler (`recognized = true`) kullanıldı. Bu, kötü ya da yarım bırakılmış çizimleri veri setinden çıkarır ve test doğruluğunu iyimser gösterebilir.
-- **Anlamsız karalama** da sınıflardan birine atanır. Oyunda yalnız hedef sınıf için olasılık eşiği kullanıldığından bu oyunu bozmaz, ama serbest çizimde yanıltıcı tahminler görülebilir. Veri setindeki "squiggle" (karalama) sınıfı bunu kısmen karşılar.
-- **345 sınıfta benzer sınıflar** (pasta / doğum günü pastası, otobüs / okul otobüsü, bardak / kupa) doğruluğun büyük kısmını düşürmektedir (§4.8). Bu çiftleri birleştirmek ya da oyunda bunları kabul edilebilir karışıklık saymak doğruluğu artırır. Daha yüksek giriş çözünürlüğü (ör. 64×64) ince ayrıntıyı koruyabilir.
+- **Kandırılabilirlik** (§6): rastgele karalama belirli bir kelimeyi 345 sınıflı modelde nadiren geçer (%0,4), çünkü model "karalama" ve "çizgi" sınıflarını bilir. 50 sınıflı modelde böyle bir kaçış sınıfı yoktur ve karalama her 20 denemeden birinde kabul edilir. Bu sekmeye "hiçbiri" sınıfı (karalama ve bilinmeyen nesnelerle eğitilmiş) eklemek bunu azaltabilir. Benzer nesneler (ceket / kazak, tırmık / süpürge) iki modelde de sık kabul edilir; erken tanıyan M3-kısmi'de daha sıktır.
+- **Süre modeli** (§4.6): Quick, Draw! çizimlerinde zaman olmadığından tanınma anı mürekkep oranından, çizim süresi de 228 gerçek çizimin süre dağılımından (süre sınırı olmayan toplama sayfası) türetilmiştir. Tur puanı ve seri puanı bu varsayıma bağlıdır; modellerin sıralaması aynı çizimlerle eşleştirilmiş karşılaştırma olduğundan daha güvenilirdir. Gerçek oyun kayıtlarıyla doğrulanmalıdır.
+- **345 sınıfta benzer sınıflar** (pasta / doğum günü pastası, otobüs / okul otobüsü, bardak / kupa) doğruluğun büyük kısmını düşürmektedir (§4.8). Aynı nesnenin farklı adları oyunda eşdeğer grup olarak kabul edilmektedir; gruplar elle seçilmiştir. Farklı ama benzer nesneler için daha yüksek giriş çözünürlüğü (ör. 64×64) ince ayrıntıyı koruyabilir.
 - **Telefon tarayıcısında tahmin süresi** ölçülmedi.
 - **Gelecek çalışmalar:** vuruş sırasını doğrudan kullanan modellerle (RNN/Transformer) karşılaştırma; yarım çizim oranının ve eğitimdeki karışım oranının ayarlanması; modelin 8 bit tamsayıya nicemlenmesi (boyut ve hız); CepKonsol'da çok oyunculu "Çizim Düellosu" (telefonlarda çizim, ortak ekranda canlı tahmin).

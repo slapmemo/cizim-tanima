@@ -1,5 +1,7 @@
 # Tanınma eşiği sorunu ve çözüm yolları
 
+> **29 Ekim 2026 notu:** bu belgedeki ölçümler test setiyle, %10 adımla ve artık kaldırılan `egitim/esik_karsilastir.py` ile yapılmıştı (eski sürüm git geçmişinde, etiket `yedek-olcum-oncesi`). Eşik kararı (%30 / %50) aynı kaldı; güncel ölçüm doğrulama/test ayrımıyla ve eşdeğer gruplarla `egitim/olcum.py` → `deneyler/olcum.md`, rapor §4.6, §6. "Yanlış kabul %0,3" ölçütünün neden yetersiz olduğu rapor §6 "Kandırılabilirlik"te.
+
 Tarih: 28 Ekim 2026. **Karar (kullanıcı): "Oyun · 242" sekmesinde birinci + ≥%30; "Oyun · 50" %50 kaldı.** Uygulandı: `demo/src/oyun.ts` `TANIMA_ESIGI_345`.
 
 ## Sorun
