@@ -342,26 +342,26 @@ Gerçek kullanıcı çizimlerinde doğruluk test setine göre belirgin biçimde 
 
 ## 9. Kaynaklar
 
-*Künyeler yazar tarafından derlenmiştir; teslimden önce bağlantılarından ve yayın sayfalarından doğrulanmalıdır.*
+*Künyeler 29 Ekim 2026'da yayıncı, konferans ve arXiv sayfalarından doğrulanmıştır.*
 
 1. Jongejan, J., Rowley, H., Kawashima, T., Kim, J., Fox-Gieg, N. (2016). *The Quick, Draw! – A.I. Experiment*. https://quickdraw.withgoogle.com/
 2. Google Creative Lab (2017). *The Quick, Draw! Dataset*. https://github.com/googlecreativelab/quickdraw-dataset
-3. Ha, D., Eck, D. (2018). A Neural Representation of Sketch Drawings. *International Conference on Learning Representations (ICLR)*. arXiv:1704.03477
+3. Ha, D., Eck, D. (2018). A Neural Representation of Sketch Drawings. *6th International Conference on Learning Representations (ICLR 2018)*. arXiv:1704.03477
 4. Eitz, M., Hays, J., Alexa, M. (2012). How Do Humans Sketch Objects? *ACM Transactions on Graphics*, 31(4), 44:1–44:10.
-5. Yu, Q., Yang, Y., Liu, F., Song, Y.-Z., Xiang, T., Hospedales, T. M. (2017). Sketch-a-Net: A Deep Neural Network that Beats Humans. *International Journal of Computer Vision*, 122(3), 411–425.
-6. LeCun, Y., Bottou, L., Bengio, Y., Haffner, P. (1998). Gradient-Based Learning Applied to Document Recognition. *Proceedings of the IEEE*, 86(11), 2278–2324.
-7. He, K., Zhang, X., Ren, S., Sun, J. (2016). Deep Residual Learning for Image Recognition. *IEEE Conference on Computer Vision and Pattern Recognition (CVPR)*, 770–778.
-8. Ioffe, S., Szegedy, C. (2015). Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift. *International Conference on Machine Learning (ICML)*, 448–456.
-9. Srivastava, N., Hinton, G., Krizhevsky, A., Sutskever, I., Salakhutdinov, R. (2014). Dropout: A Simple Way to Prevent Neural Networks from Overfitting. *Journal of Machine Learning Research*, 15, 1929–1958.
-10. Loshchilov, I., Hutter, F. (2019). Decoupled Weight Decay Regularization. *International Conference on Learning Representations (ICLR)*. arXiv:1711.05101
-11. Smith, L. N., Topin, N. (2019). Super-Convergence: Very Fast Training of Neural Networks Using Large Learning Rates. *Proc. SPIE 11006, Artificial Intelligence and Machine Learning for Multi-Domain Operations Applications*. arXiv:1708.07120
-12. Ramer, U. (1972). An Iterative Procedure for the Polygonal Approximation of Plane Curves. *Computer Graphics and Image Processing*, 1(3), 244–256.
-13. Douglas, D. H., Peucker, T. K. (1973). Algorithms for the Reduction of the Number of Points Required to Represent a Digitized Line or Its Caricature. *Cartographica*, 10(2), 112–122.
-14. Paszke, A. ve diğerleri (2019). PyTorch: An Imperative Style, High-Performance Deep Learning Library. *Advances in Neural Information Processing Systems (NeurIPS)*, 32.
+5. Yu, Q., Yang, Y., Liu, F., Song, Y.-Z., Xiang, T., Hospedales, T. M. (2017). Sketch-a-Net: A Deep Neural Network that Beats Humans. *International Journal of Computer Vision*, 122(3), 411–425. https://doi.org/10.1007/s11263-016-0932-3
+6. LeCun, Y., Bottou, L., Bengio, Y., Haffner, P. (1998). Gradient-Based Learning Applied to Document Recognition. *Proceedings of the IEEE*, 86(11), 2278–2324. https://doi.org/10.1109/5.726791
+7. He, K., Zhang, X., Ren, S., Sun, J. (2016). Deep Residual Learning for Image Recognition. *IEEE Conference on Computer Vision and Pattern Recognition (CVPR)*, 770–778. https://doi.org/10.1109/CVPR.2016.90
+8. Ioffe, S., Szegedy, C. (2015). Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift. *Proceedings of the 32nd International Conference on Machine Learning (ICML)*, PMLR 37, 448–456.
+9. Srivastava, N., Hinton, G., Krizhevsky, A., Sutskever, I., Salakhutdinov, R. (2014). Dropout: A Simple Way to Prevent Neural Networks from Overfitting. *Journal of Machine Learning Research*, 15(56), 1929–1958.
+10. Loshchilov, I., Hutter, F. (2019). Decoupled Weight Decay Regularization. *7th International Conference on Learning Representations (ICLR 2019)*. arXiv:1711.05101
+11. Smith, L. N., Topin, N. (2019). Super-Convergence: Very Fast Training of Neural Networks Using Large Learning Rates. *Proc. SPIE 11006, Artificial Intelligence and Machine Learning for Multi-Domain Operations Applications*, 1100612. https://doi.org/10.1117/12.2520589
+12. Ramer, U. (1972). An Iterative Procedure for the Polygonal Approximation of Plane Curves. *Computer Graphics and Image Processing*, 1(3), 244–256. https://doi.org/10.1016/S0146-664X(72)80017-0
+13. Douglas, D. H., Peucker, T. K. (1973). Algorithms for the Reduction of the Number of Points Required to Represent a Digitized Line or Its Caricature. *Cartographica*, 10(2), 112–122. https://doi.org/10.3138/FM57-6770-U75U-7727
+14. Paszke, A. ve diğerleri (2019). PyTorch: An Imperative Style, High-Performance Deep Learning Library. *Advances in Neural Information Processing Systems 32 (NeurIPS 2019)*, 8024–8035.
 15. ONNX Runtime geliştiricileri (2021). *ONNX Runtime*. https://onnxruntime.ai/
-16. Efron, B., Tibshirani, R. J. (1993). *An Introduction to the Bootstrap*. Chapman & Hall/CRC.
-17. Cawley, G. C., Talbot, N. L. C. (2010). On Over-fitting in Model Selection and Subsequent Selection Bias in Performance Evaluation. *Journal of Machine Learning Research*, 11, 2079–2107.
-18. Guo, C., Pleiss, G., Sun, Y., Weinberger, K. Q. (2017). On Calibration of Modern Neural Networks. *International Conference on Machine Learning (ICML)*, 1321–1330.
-19. Hendrycks, D., Gimpel, K. (2017). A Baseline for Detecting Misclassified and Out-of-Distribution Examples in Neural Networks. *International Conference on Learning Representations (ICLR)*. arXiv:1610.02136
-20. Bouthillier, X. ve diğerleri (2021). Accounting for Variance in Machine Learning Benchmarks. *Proceedings of Machine Learning and Systems (MLSys)*, 3.
-21. Shorten, C., Khoshgoftaar, T. M. (2019). A Survey on Image Data Augmentation for Deep Learning. *Journal of Big Data*, 6, 60.
+16. Efron, B., Tibshirani, R. J. (1993). *An Introduction to the Bootstrap*. Monographs on Statistics and Applied Probability 57. New York: Chapman & Hall.
+17. Cawley, G. C., Talbot, N. L. C. (2010). On Over-fitting in Model Selection and Subsequent Selection Bias in Performance Evaluation. *Journal of Machine Learning Research*, 11(70), 2079–2107.
+18. Guo, C., Pleiss, G., Sun, Y., Weinberger, K. Q. (2017). On Calibration of Modern Neural Networks. *Proceedings of the 34th International Conference on Machine Learning (ICML)*, PMLR 70, 1321–1330.
+19. Hendrycks, D., Gimpel, K. (2017). A Baseline for Detecting Misclassified and Out-of-Distribution Examples in Neural Networks. *5th International Conference on Learning Representations (ICLR 2017)*. arXiv:1610.02136
+20. Bouthillier, X., Delaunay, P., Bronzi, M. ve diğerleri (2021). Accounting for Variance in Machine Learning Benchmarks. *Proceedings of Machine Learning and Systems (MLSys)*, 3.
+21. Shorten, C., Khoshgoftaar, T. M. (2019). A Survey on Image Data Augmentation for Deep Learning. *Journal of Big Data*, 6, makale 60. https://doi.org/10.1186/s40537-019-0197-0

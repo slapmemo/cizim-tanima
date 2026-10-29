@@ -98,7 +98,8 @@ Plan: [plan.md](plan.md). Rapor taslağı: [rapor/rapor.md](rapor/rapor.md).
 ## Rapor tamamlama (29 Ekim 2026)
 
 - `docs/rapor/rapor.md`: Özet, §1.1 İlgili çalışmalar, §7'ye eğitim varyansı, §8 Sonuç, §9 Kaynaklar (21 kaynak, metinde [n] atıfları; hepsi kullanılıyor). "Taslak" ibaresi kaldırıldı. ~6 000 kelime.
-- **Yapılmayan:** künyeler bilgiden derlendi, web'den tek tek doğrulanmadı (raporda not var). Hocanın şablonu/biçimi bilinmiyor (Word/PDF, kapak, sayfa sınırı).
+- Künyelerin 21'i web'den doğrulandı (yayıncı/konferans/arXiv sayfaları); hata yok, DOI ve sayfa ayrıntıları eklendi.
+- **Yapılmayan:** hocanın şablonu/biçimi bilinmiyor (Word/PDF, kapak, sayfa sınırı).
 
 
 
