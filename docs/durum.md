@@ -95,8 +95,14 @@ Plan: [plan.md](plan.md). Rapor taslağı: [rapor/rapor.md](rapor/rapor.md).
 - **Rapor:** §2.3 (seçim doğrulamayla), §4.6 yeniden (oyun kuralıyla ölçüm, yöntem), §4.7 (el merdiveni, oyun kuralıyla gerçek), §4.8 (eşdeğer gruplar, kelime seçimi ve yanlılık, yeni tablo), §5 (Temizle/kilit), §6 (eşik tablosu doğrulamadan, kandırılabilirlik), §7. `docs/tanima-esigi.md` başına not.
 - **Yapılmayan:** süre modeli gerçek oyun kayıtlarıyla doğrulanmadı; kişi raporları (`kisi_raporu.py`, git dışı) yeniden üretilmedi; kısa/şaka çizim eleme kararı hâlâ açık.
 
-## Sıradaki
+## Rapor tamamlama (29 Ekim 2026)
 
+- `docs/rapor/rapor.md`: Özet, §1.1 İlgili çalışmalar, §7'ye eğitim varyansı, §8 Sonuç, §9 Kaynaklar (21 kaynak, metinde [n] atıfları; hepsi kullanılıyor). "Taslak" ibaresi kaldırıldı. ~6 000 kelime.
+- **Yapılmayan:** künyeler bilgiden derlendi, web'den tek tek doğrulanmadı (raporda not var). Hocanın şablonu/biçimi bilinmiyor (Word/PDF, kapak, sayfa sınırı).
+
+
+
+0. **Kullanıcı kararı (29 Ekim 2026): sonra başlatılacak.** Tohum tekrarı (eğitim varyansı): 50 sınıfta M2 artırmasız, M2, M3, M3-kısmi 2'şer ek tohumla (8 eğitim, ~1,5–2 sa GPU). Amaç doğruluk artışı değil, M3 > M2 (0,3–0,5 puan) ve "artırma işe yaramadı" (0,2 puan) farklarının eğitim rastgeleliğinden büyük olup olmadığı. Rapor §4.1 tablosuna ortalama ± sapma, §4.3 ve §7 yorumu. `egit.py --tohum` var (varsayılan 42; yeni eğitimler farklı adla, ör. `m3_t2`); mevcut modeller ve oyun değişmez.
 1. Vercel'de iki sekmenin (Oyun · 258 / Oyun · 50), seri modunun ve eşdeğer grupların çalıştığını doğrula.
 2. Telefonda deneme ve hız testi; Web Share.
 3. Açık karar: 1 sn'den kısa ve şaka çizimlerin elenmesi.
