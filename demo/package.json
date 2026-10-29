@@ -9,7 +9,7 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host",
     "kontrol": "tsc --noEmit",
-    "test": "node --experimental-strip-types test/esitlik.ts"
+    "test": "node --experimental-strip-types test/esitlik.ts && node --experimental-strip-types test/kural.ts"
   },
   "devDependencies": {
     "@types/node": "^26.6.5",

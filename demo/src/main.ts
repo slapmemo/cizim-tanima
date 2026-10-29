@@ -1,6 +1,6 @@
 import { ciz } from "./onisleme.ts";
-import { KOLAY_OYUN_MODELI, MODELLER, OYUN_MODELI, hizOlc, oturum, oyunKelimeleri, siniflar, tahminEt, type Sinif } from "./model.ts";
-import { SERI_PAS_CEZASI, SERI_PAS_HAKKI, SERI_SURESI_MS, TAHMIN_ARALIGI_MS, TANIMA_ESIGI, TANIMA_ESIGI_345, TUR_SAYISI, TUR_SURESI_MS, kelimeSec, puan, tanindiMi } from "./oyun.ts";
+import { KOLAY_OYUN_MODELI, MODELLER, OYUN_MODELI, esdegerGruplar, hizOlc, oturum, oyunKelimeleri, siniflar, tahminEt, type Sinif } from "./model.ts";
+import { SERI_PAS_CEZASI, SERI_PAS_HAKKI, SERI_SURESI_MS, TAHMIN_ARALIGI_MS, TANIMA_ESIGI, TANIMA_ESIGI_345, TUR_SAYISI, TUR_SURESI_MS, grupOlasiligi, kelimeSec, puan, tanindiMi } from "./oyun.ts";
 import { Tuval } from "./tuval.ts";
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -19,18 +19,20 @@ let SINIFLAR: Sinif[] = [];
 
 // İki oyun sekmesi aynı ekranı kullanır; mod yalnız modeli ve sorulan kelimeleri belirler
 type Mod = "zor" | "kolay";
-const MODLAR: Record<Mod, { model: string; esik: number; aciklama: string }> = {
-  zor: { model: OYUN_MODELI, esik: TANIMA_ESIGI_345, aciklama: "242 kelime · yapay zekâ 345 nesne biliyor" },
-  kolay: { model: KOLAY_OYUN_MODELI, esik: TANIMA_ESIGI, aciklama: "50 kelime · yapay zekâ 50 nesne biliyor (kolay)" },
+const MODLAR: Record<Mod, { model: string; esik: number; aciklama: (kelime: number) => string }> = {
+  zor: { model: OYUN_MODELI, esik: TANIMA_ESIGI_345, aciklama: (n) => `${n} kelime · yapay zekâ 345 nesne biliyor` },
+  kolay: { model: KOLAY_OYUN_MODELI, esik: TANIMA_ESIGI, aciklama: (n) => `${n} kelime · yapay zekâ ${n} nesne biliyor (kolay)` },
 };
 let mod: Mod = "zor";
 let oyunSiniflari: Sinif[] = [];
 let oyunKelimeListesi: number[] = [];
+let oyunGruplari: number[] = [];
 
-/** Modun model ve kelime listesi (zor: oyun_kelimeleri.json, kolay: 50 sınıfın hepsi). */
+/** Modun model, kelime listesi (zor: oyun_kelimeleri.json, kolay: 50 sınıfın hepsi) ve eşdeğer grupları. */
 async function modYukle(m: Mod) {
   const s = await siniflar(MODLAR[m].model);
-  return { s, k: m === "zor" ? await oyunKelimeleri() : s.map((_, i) => i) };
+  const k = m === "zor" ? await oyunKelimeleri() : s.map((_, i) => i);
+  return { s, k, g: await esdegerGruplar(MODLAR[m].model) };
 }
 
 // ---- sekmeler
@@ -156,8 +158,8 @@ const oyunTahmin = tahminSirasi(async () => {
   if (!turAcik || kimlik !== turKimligi || silme !== tuval2.silme) return;
   const hedef = kelimeler[tur];
   sonTahmin = t.sira[0];
-  if (tanindiMi(t.sira, t.olasilik, hedef, MODLAR[mod].esik)) {
-    $("canliTahmin").innerHTML = `Yapay zekâ: Bu bir ${oyunSiniflari[hedef].tr}! <small>${yuzde(t.olasilik[hedef])}</small>`;
+  if (tanindiMi(t.sira, t.olasilik, hedef, MODLAR[mod].esik, oyunGruplari)) {
+    $("canliTahmin").innerHTML = `Yapay zekâ: Bu bir ${oyunSiniflari[hedef].tr}! <small>${yuzde(grupOlasiligi(t.olasilik, hedef, oyunGruplari))}</small>`;
     return turBitir(true);
   }
   const ilk = oyunSiniflari[t.sira[0]].tr, ikinci = oyunSiniflari[t.sira[1]].tr;
@@ -352,17 +354,21 @@ function modDegistir(m: Mod) {
   tuval2.kilitli = true;
   mod = m;
   ekran("oyunGiris");
-  $("modAciklama").textContent = MODLAR[m].aciklama;
-  modHazir = modYukle(m).then(({ s, k }) => {
+  $("modAciklama").textContent = "";
+  modHazir = modYukle(m).then(({ s, k, g }) => {
     if (mod !== m) return;
     oyunSiniflari = s;
     oyunKelimeListesi = k;
+    oyunGruplari = g;
+    $("modAciklama").textContent = MODLAR[m].aciklama(k.length);
     void oturum(MODLAR[m].model).catch(() => {});
   });
 }
 
 // ---- açılış
 modDegistir(mod);
+// sekme adında kelime sayısı (liste egitim/oyun_kelimeleri.py ile değişebilir)
+void oyunKelimeleri().then((k) => { document.querySelector<HTMLButtonElement>("button[data-mod=zor]")!.textContent = `Oyun · ${k.length}`; });
 siniflar(OYUN_MODELI).then((s) => {
   SINIFLAR = s;
   const sirali = s.map((c, i) => [c.tr, i] as const).sort((a, b) => a[0].localeCompare(b[0], "tr"));

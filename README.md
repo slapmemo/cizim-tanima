@@ -29,7 +29,10 @@ python -m venv .venv
 .venv\Scripts\python.exe egitim\egit.py --ad m3 --model m3 --epoch 20 --artirma
 .venv\Scripts\python.exe egitim\egit.py --ad m3_kismi --model m3 --epoch 20 --artirma --kismi 0.5
 .venv\Scripts\python.exe egitim\degerlendir.py       # test, ONNX, şekiller -> deneyler/
-.venv\Scripts\python.exe egitim\oyun_simulasyonu.py
+.venv\Scripts\python.exe egitim\dogrulama_vuruslar.py  # doğrulama vuruşları (seçimler doğrulamayla yapılır; 345 için de SINIF_SETI=345 ile)
+.venv\Scripts\python.exe egitim\esdeger_aday.py       # eşdeğer grup adayları -> elle demo/public/model/esdeger.json
+.venv\Scripts\python.exe egitim\oyun_kelimeleri.py    # oyunda sorulan kelimeler (doğrulama, gruplu)
+.venv\Scripts\python.exe egitim\olcum.py              # oyun kuralıyla ölçüm -> deneyler/olcum.md
 .venv\Scripts\python.exe egitim\kisi_raporu.py         # test-verileri/*.json -> kişi başına klasör + rapor.md
 .venv\Scripts\python.exe egitim\gercek_degerlendir.py  # kayitlar/ + test-verileri/ ile gerçek kullanıcı ölçümü
 ```
@@ -42,5 +45,6 @@ ONNX dosyaları `modeller/` altından `demo/public/model/` altına kopyalanır.
 
 ```sh
 .venv\Scripts\python.exe egitim\esitlik_fikstur.py
+.venv\Scripts\python.exe egitim\kural_fikstur.py      # oyun kuralı (eşik + eşdeğer gruplar), oyun.ts ile oyun_kurali.py
 cd demo && npm test
 ```

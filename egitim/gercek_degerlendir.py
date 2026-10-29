@@ -4,6 +4,8 @@
   - topla.html'den gelen toplu dosya: {"takma_ad", "kayitlar": [{etiket, vuruslar, aygit, ...}], ...}
   - yerel demodan tek kayıt: {"etiket", "vuruslar", "mod": "serbest" | "oyun", ...}
 Oyun kayıtları tanındığı anda kesildiği için (model lehine yanlı) doğruluğa katılmaz, ayrıca özetlenir.
+Burada yalnız bitmiş çizimin sınıflandırma doğruluğu ölçülür; oyun kuralıyla (eşik, eşdeğer gruplar, çizim boyunca
+kabul, sekmede sorulan kelimeler) ölçüm olcum.py'nin "gerçek" bölümündedir.
 Aynı oturum iki kez gönderildiyse (aynı "oturum" kimliği) en çok çizim içeren dosya alınır.
 
 Kullanım: .venv\\Scripts\\python.exe egitim\\gercek_degerlendir.py [model adları; varsayılan: bulunan 50 ve 345 sınıflı modellerin hepsi]
@@ -74,8 +76,8 @@ def main():
     sonuc = {"cizim": len(cizimler), "kisi": len(set(kisi)), "aygit": dict(Counter(aygit.tolist())), "modeller": {},
              "oyun": {"tur": len(oyun), "taninan": sum(1 for k in oyun if k.get("taninan"))}}
 
-    print("| Model | Gerçek ilk-1 | Gerçek ilk-3 | Oyunda tanınır | Quick, Draw! test ilk-1 |")
-    print("| --- | ---: | ---: | ---: | ---: |")
+    print("| Model | Gerçek ilk-1 | Gerçek ilk-3 | Quick, Draw! test ilk-1 |")
+    print("| --- | ---: | ---: | ---: |")
     tahminler = {}
     for ad in adlar:
         oturum = ort.InferenceSession(str(KOK / "modeller" / f"{ad}.onnx"), providers=["CPUExecutionProvider"])
@@ -87,13 +89,12 @@ def main():
         r = {
             "ilk1": float(dogru.mean()),
             "ilk3": float((np.argsort(-p, 1)[:, :3] == y[:, None]).any(1).mean()),
-            "oyunda_taninir": float((dogru & (p.max(1) >= 0.5)).mean()),
             "aygit": {a: float(dogru[aygit == a].mean()) for a in sorted(set(aygit))},
             "kisi": {k: float(dogru[kisi == k].mean()) for k in sorted(set(kisi))},
         }
         sonuc["modeller"][ad] = r
         qd = test.get(ad, {}).get("test_ilk1")
-        print(f"| {ad} | {r['ilk1']:.1%} | {r['ilk3']:.1%} | {r['oyunda_taninir']:.1%} | "
+        print(f"| {ad} | {r['ilk1']:.1%} | {r['ilk3']:.1%} | "
               + (f"{qd:.2%} |" if qd else "- |"))
 
     print("\nAygıta göre ilk-1:")

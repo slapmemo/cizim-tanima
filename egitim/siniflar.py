@@ -38,7 +38,7 @@ SINIFLAR = [
     ("house", "ev"),
     ("ice cream", "dondurma"),
     ("key", "anahtar"),
-    ("ladder", "merdiven"),
+    ("ladder", "el merdiveni"),  # 345 listesiyle aynı (stairs = merdiven); toplama sayfasında "merdiven" basamaklı çizildi
     ("light bulb", "ampul"),
     ("lightning", "şimşek"),
     ("moon", "ay"),

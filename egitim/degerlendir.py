@@ -128,11 +128,8 @@ def main():
         kismi_dogruluk = {}
         for j, oran in enumerate(ORANLAR):
             pk = olasiliklar(model, Xk[j], cihaz)
-            kismi_dogruluk[str(oran)] = {
-                "ilk1": float((pk.argmax(1) == yk).mean()),
-                # oyun kuralı: hedef birinci ve olasılık >= 0.5
-                "oyunda_taninir": float(((pk.argmax(1) == yk) & (pk.max(1) >= 0.5)).mean()),
-            }
+            # oyun kuralıyla ölçüm (eşik, eşdeğer gruplar, çizim boyunca kabul) olcum.py'de
+            kismi_dogruluk[str(oran)] = {"ilk1": float((pk.argmax(1) == yk).mean())}
         boyut, fark, ms = onnx_aktar(model, ad)
         sonuclar[ad] = {
             "model": kayit["model"],

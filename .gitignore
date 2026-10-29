@@ -6,3 +6,5 @@ modeller/*.pt
 __pycache__/
 node_modules/
 demo/dist/
+deneyler/olcum.log
+deneyler/dogrulama_vuruslar.log

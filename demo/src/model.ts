@@ -53,6 +53,20 @@ export async function oyunKelimeleri(): Promise<number[]> {
   return liste.map((_, i) => i);
 }
 
+/** Eşdeğer gruplar (public/model/esdeger.json): modelin sınıf sırasında her sınıfın grup numarası. */
+export async function esdegerGruplar(model: string): Promise<number[]> {
+  const liste = await siniflar(model);
+  const grup = liste.map((_, i) => i);
+  try {
+    const y = await fetch(`${import.meta.env.BASE_URL}model/esdeger.json`);
+    for (const adlar of (await y.json()) as string[][]) {
+      const uyeler = adlar.map((en) => liste.findIndex((s) => s.en === en)).filter((i) => i >= 0);
+      for (const i of uyeler) grup[i] = Math.min(...uyeler);
+    }
+  } catch { /* dosya yok: grup yok */ }
+  return grup;
+}
+
 export async function tahminEt(ad: string, vuruslar: Vurus[]): Promise<Tahmin> {
   const o = await oturum(ad);
   const bas = performance.now();
