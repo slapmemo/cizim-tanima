@@ -4,6 +4,8 @@ import type { Vurus } from "./onisleme.ts";
 export class Tuval {
   vuruslar: Vurus[] = [];
   kilitli = false;
+  /** Temizle ve Geri al'da artar: bu sırada başlamış bir tahmin artık çizimin kendisine ait değildir. */
+  silme = 0;
   aygit = "";
   private ctx: CanvasRenderingContext2D;
   private ciziyor = false;
@@ -35,7 +37,8 @@ export class Tuval {
   }
 
   private devam(e: PointerEvent) {
-    if (!this.ciziyor) return;
+    // kilit, çizim sürerken de gelebilir (tanınma anında parmak hâlâ ekranda)
+    if (!this.ciziyor || this.kilitli) return;
     const v = this.vuruslar[this.vuruslar.length - 1];
     for (const o of e.getCoalescedEvents?.() ?? [e]) {
       const [x, y] = this.nokta(o);
@@ -56,11 +59,13 @@ export class Tuval {
   temizle() {
     this.vuruslar = [];
     this.ciziyor = false;
+    this.silme++;
     this.yeniden();
   }
 
   geriAl() {
     this.vuruslar.pop();
+    this.silme++;
     this.yeniden();
   }
 

@@ -150,9 +150,10 @@ let seriBasi = 0, seriAcik = false, pasKalan = 0;
 
 const oyunTahmin = tahminSirasi(async () => {
   if (!turAcik || !tuval2.vuruslar.length) return;
-  const kimlik = turKimligi;
+  const kimlik = turKimligi, silme = tuval2.silme;
   const t = await tahminEt(MODLAR[mod].model, tuval2.vuruslar);
-  if (!turAcik || kimlik !== turKimligi) return;
+  // tahmin sürerken tur değiştiyse ya da çizim silindiyse sonuç eskidir
+  if (!turAcik || kimlik !== turKimligi || silme !== tuval2.silme) return;
   const hedef = kelimeler[tur];
   sonTahmin = t.sira[0];
   if (tanindiMi(t.sira, t.olasilik, hedef, MODLAR[mod].esik)) {
