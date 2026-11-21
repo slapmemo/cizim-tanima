@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>CNN ile Gerçek Zamanlı Çizim Tanıma</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&display=swap&subset=latin-ext" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<style>
+:root{--ink:#1f2933;--mute:#6b7683;--line:#e3e7eb;--acc:#0b6bcb;--soft:#eef4fb;--bg:#fbfbf9}
+.reveal-viewport{background:var(--bg)}
+.reveal{font-family:"Source Sans 3",system-ui,sans-serif;font-size:28px;color:var(--ink);font-weight:400}
+.reveal .slides{text-align:left}
+.reveal .slides section{padding:0 70px;box-sizing:border-box;height:100%}
+.reveal h1,.reveal h2{font-family:inherit;text-transform:none;color:var(--ink);margin:0 0 .5em;letter-spacing:-.01em;line-height:1.15}
+.reveal h1{font-size:2.3em;font-weight:700}
+.reveal h2{font-size:1.5em;font-weight:700;padding-bottom:.35em;position:relative}
+.reveal h2::after{content:"";position:absolute;left:0;bottom:0;width:56px;height:4px;background:var(--acc)}
+.reveal h3{font-family:inherit;text-transform:none;font-size:.8em;color:var(--mute);font-weight:600;letter-spacing:.06em;margin:0 0 .5em}
+.reveal ul{margin:0;padding:0;list-style:none;display:block}
+.reveal li{margin:.45em 0;padding-left:1em;position:relative;line-height:1.35}
+.reveal li::before{content:"";position:absolute;left:0;top:.6em;width:.4em;height:.4em;background:var(--acc);border-radius:50%}
+.reveal b,.reveal strong{font-weight:700}
+.acc{color:var(--acc)}.mute{color:var(--mute)}
+.small{font-size:.75em}
+.cols{display:flex;gap:56px;align-items:flex-start}
+.cols>div{flex:1}
+.ph{background:#e6e8ea;border:2px dashed #b9bfc5;border-radius:10px;height:380px;display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:.85em}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 22px;margin:12px 0}
+.card b{color:var(--acc)}
+table{border-collapse:collapse;width:100%;font-size:.8em;margin:0}
+.reveal table th{font-weight:600;color:var(--mute);text-align:left;border-bottom:2px solid var(--ink);padding:8px 12px}
+.reveal table td{padding:8px 12px;border-bottom:1px solid var(--line)}
+table .n{text-align:right;font-variant-numeric:tabular-nums}
+table th.n{text-align:right}
+tr.hl td{background:var(--soft);font-weight:600}
+/* yatay çubuk */
+.hbar{display:grid;grid-template-columns:200px 1fr;row-gap:16px;align-items:center;margin:10px 0 0}
+.hbar .l{font-size:.85em}
+.hbar .t{background:#f0f2f4;height:38px;border-radius:6px;position:relative}
+.hbar .f{height:100%;background:#aab4bf;border-radius:6px;display:flex;align-items:center;justify-content:flex-end;padding-right:12px;color:#fff;font-weight:700;font-size:.8em}
+.hbar .f.a{background:var(--acc)}
+/* sütun */
+.vchart{display:flex;gap:44px;align-items:flex-end;height:300px;border-bottom:2px solid var(--ink);padding:0 10px}
+.grp{flex:1;display:flex;gap:10px;align-items:flex-end;height:100%;justify-content:center}
+.col{width:62px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
+.col .v{font-size:.62em;font-weight:700;margin-bottom:4px;white-space:nowrap}
+.col .b{width:100%;background:#aab4bf;border-radius:5px 5px 0 0}
+.col.a .b{background:var(--acc)}
+.xl{display:flex;gap:44px;padding:0 10px;margin-top:8px}
+.xl div{flex:1;text-align:center;font-weight:600;font-size:.85em}
+.leg{display:flex;gap:28px;font-size:.7em;margin-bottom:10px;color:var(--mute)}
+.leg i{display:inline-block;width:14px;height:14px;border-radius:3px;background:#aab4bf;margin-right:8px;vertical-align:-2px}
+.leg i.a{background:var(--acc)}
+.big{display:flex;gap:40px;margin:20px 0 40px}
+.big div{flex:1;border-top:4px solid var(--acc);padding-top:14px}
+.big .num{font-size:2.3em;font-weight:700;color:var(--acc);line-height:1.1}
+.big .cap{color:var(--mute);font-size:.8em}
+.flow{display:flex;align-items:center;gap:18px;font-size:.9em}
+.flow span.s{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 24px;font-weight:600}
+.flow span.ar{color:var(--acc);font-size:1.3em}
+.reveal .slides section.cover{display:flex!important;flex-direction:column;justify-content:center}
+.stat{display:flex;align-items:baseline;gap:18px;margin:6px 0 18px}
+.stat .num{font-size:2.1em;font-weight:700;color:var(--acc)}
+.stat .arrow{color:var(--mute);font-size:1.4em}
+.stat .num.g{color:var(--mute)}
+</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- 1 Kapak -->
+<section class="cover">
+  <h3>SİNİR AĞLARI DERSİ PROJESİ</h3>
+  <h1>CNN ile Gerçek Zamanlı<br>Çizim Tanıma</h1>
+  <div style="width:80px;height:5px;background:var(--acc);margin:10px 0 30px"></div>
+  <p class="mute" style="margin:0">Sinir Ağları dersi projesi</p>
+  <p class="mute" style="margin:.4em 0 0">[Ad Soyad] · [Öğrenci no] · Kasım 2026</p>
+  <aside class="notes">Bu projede, oyuncunun ekrana çizdiği nesneyi çizim sürerken tanıyan, tarayıcıda sunucusuz çalışan, evrişimli sinir ağı (CNN) tabanlı bir çizim oyunu geliştirdik.</aside>
+</section>
+
+<!-- 2 Amaç -->
+<section>
+  <h2>Amaç</h2>
+  <div class="cols">
+    <div>
+      <div class="card">Çizim sürerken <b>anında tanıyan</b>, tarayıcıda sunucusuz çalışan CNN tabanlı oyun</div>
+      <ul>
+        <li>Kelime gelir, <b>20 sn</b> içinde çiz</li>
+        <li>Model tanıyınca tur biter</li>
+        <li>Puan = <b>100 × kalan süre / 20 sn</b></li>
+        <li>Neden anlık? <b>Erken tanıma = puan</b></li>
+      </ul>
+    </div>
+    <div><div class="ph">[oyun ekranı görüntüsü]</div></div>
+  </div>
+  <aside class="notes">Oyun: kelime gelir, oyuncu 20 sn içinde çizer, model tanıyınca tur biter. Puan = 100 × kalan süre / 20 sn. Neden anlık: erken tanıma puan demek; model yarım çizimi de tanımalı, bu yüzden eğitime yarım çizim ekledik (ayrıntısı erken tanıma bölümünde).
+Hoca sorarsa: Tarayıcıda nasıl? Model ONNX'e çevrildi, tek tahmin ~5 ms. CNN nedir? Görüntüde küçük filtrelerle çizgi, köşe, kavis gibi desenleri yakalayan sinir ağı; çizimi 28×28 görüntüye çevirip veriyoruz.</aside>
+</section>
+
+<!-- 3 Veri seti -->
+<section>
+  <h2>Veri seti: Quick, Draw!</h2>
+  <div class="big">
+    <div><div class="num">345</div><div class="cap">sınıf</div></div>
+    <div><div class="num">50 milyon+</div><div class="cap">çizim (kalem hareketi)</div></div>
+    <div><div class="num">50</div><div class="cap">sınıfla başladık</div></div>
+  </div>
+  <ul>
+    <li>50 sınıf ölçütü: 20 sn'de çizilebilir · birbirine benzemeyen · Türkçe adı açık</li>
+    <li>Sınıf başına bölme: <b>30 000</b> eğitim / <b>5 000</b> doğrulama / <b>5 000</b> test</li>
+    <li>Vuruştan görüntüye <b>tek algoritma</b>: Python = TypeScript, <b>304 örnekte 0</b> farklı piksel</li>
+  </ul>
+  <aside class="notes">Quick, Draw! Google'ın çevrimiçi oyunu; çizimler resim değil kalem hareketi (vuruş) olarak saklanıyor. Yalnız Google'ın tanıdığı (recognized) çizimleri kullandık; kötü çizimler veride yok. Önce 50 sınıf: yöntemi küçükte denemek için. Eğitim: model öğrenir; doğrulama: ayar ve model seçimi; test: en sonda bir kez. Hazır 28×28 görüntüler kullanılmadı, çünkü oyunda aynı dönüşüm yapılamazdı.
+Hoca sorarsa: Test neden en sonda? Seçimi testle yaparsak test tarafsız olmaz, sonuç iyimser görünür. Sınıflar dengeli mi? Evet, her sınıfta eşit sayı.</aside>
+</section>
+
+<!-- 4 Modeller -->
+<section>
+  <h2>Modeller</h2>
+  <table>
+    <tr><th>Model</th><th>Yapı</th><th class="n">Parametre</th></tr>
+    <tr><td><b>M1</b> Basit CNN</td><td>2 evrişim + havuzlama, tam bağlı katman</td><td class="n">427 bin</td></tr>
+    <tr><td><b>M2</b> Derin CNN</td><td>Daha çok evrişim, BatchNorm, Dropout</td><td class="n">595 bin</td></tr>
+    <tr class="hl"><td><b>M3</b> Hafif ResNet</td><td>Artık bağlantılı küçük ResNet</td><td class="n">701 bin</td></tr>
+    <tr class="hl"><td><b>M3-kısmi</b></td><td>M3 ile aynı mimari, eğitimde yarım çizimler de var</td><td class="n">701 bin</td></tr>
+  </table>
+  <p class="mute small" style="margin-top:28px">Hepsi küçük (400–700 bin parametre): tarayıcıda hızlı. Amaç: yapının farkını görmek.</p>
+  <aside class="notes">Üç model, her biri bir öncekinden gelişmiş. Evrişim: gezen 3×3 filtre, çizgi/köşe/kavis öğrenir. Havuzlama görüntüyü küçültür. BatchNorm eğitimi hızlı ve kararlı yapar; Dropout ezberi azaltır; artık bağlantı bilgiyi derin ağda kaybolmadan taşır. M2 artırmalı ve artırmasız iki kez eğitildi (±15° döndürme, ölçekleme, kaydırma).
+Hoca sorarsa: Neden büyük hazır model yok? Tarayıcıda her 250 ms'de çalışacak; küçük ve hızlı olmalı, giriş 28×28. Eğitim: AdamW, 20 epoch (M1 10), yığın 512, RTX 5070 Ti.</aside>
+</section>
+
+<!-- 5 50 sınıf sonuçları -->
+<section>
+  <h2>50 sınıf: test hata oranı (%)</h2>
+  <div class="cols">
+    <div style="flex:1.6">
+      <div class="hbar">
+        <div class="l">M1</div><div class="t"><div class="f" style="width:95.6%">4,78</div></div>
+        <div class="l">M2 artırmasız</div><div class="t"><div class="f" style="width:57.4%">2,87</div></div>
+        <div class="l">M2 artırmalı</div><div class="t"><div class="f" style="width:61.2%">3,06</div></div>
+        <div class="l"><b>M3</b></div><div class="t"><div class="f a" style="width:51.4%">2,57</div></div>
+        <div class="l">M3-kısmi</div><div class="t"><div class="f" style="width:70%">3,50</div></div>
+      </div>
+      <p class="mute small">Test seti: 250 000 çizim · düşük daha iyi</p>
+    </div>
+    <div style="flex:1">
+      <ul style="font-size:.85em">
+        <li>M1 → M2: hata <b>neredeyse yarıya</b></li>
+        <li>M2 → M3: yalnız 0,3 puan kazanç</li>
+        <li>Her model bir kez eğitildi; küçük farklar kesin değil</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">1) M1 → M2: hata %4,8'den %2,9'a. BatchNorm, Dropout, derinlik işe yarıyor. 2) M2 → M3: yalnız 0,3 puan kazanç, ama M3 2,5 kat yavaş. 3) Veri artırma test setinde işe yaramadı (−0,19 puan); 30 000 çizim zaten çeşitli. 4) Dürüstlük: her model bir kez eğitildi. 5) M3-kısmi tam çizimde 0,9 puan geride; neden seçildiği sonraki slaytlarda.
+Hoca sorarsa: En çok karışan: ay↔muz, örümcek↔güneş, mantar↔şemsiye (şekil benzerliği). Aşırı öğrenme: M1'de biraz (eğitim %97, doğrulama %95); M2 ve M3'te eğriler yakın.</aside>
+</section>
+
+<!-- 6 Erken tanıma -->
+<section>
+  <h2>Erken tanıma: çizginin yüzde kaçında doğru?</h2>
+  <div class="leg"><span><i class="a"></i>M3</span><span><i></i>M3-kısmi</span><span>Doğruluk (%)</span></div>
+  <div class="vchart">
+    <div class="grp"><div class="col a"><div class="v">14,7</div><div class="b" style="height:44px"></div></div><div class="col"><div class="v">40,2</div><div class="b" style="height:121px"></div></div></div>
+    <div class="grp"><div class="col a"><div class="v">50,5</div><div class="b" style="height:152px"></div></div><div class="col"><div class="v">76,3</div><div class="b" style="height:229px"></div></div></div>
+    <div class="grp"><div class="col a"><div class="v">87,1</div><div class="b" style="height:261px"></div></div><div class="col"><div class="v">91,9</div><div class="b" style="height:276px"></div></div></div>
+    <div class="grp"><div class="col a"><div class="v">97,4</div><div class="b" style="height:292px"></div></div><div class="col"><div class="v">96,5</div><div class="b" style="height:290px"></div></div></div>
+  </div>
+  <div class="xl"><div>%25</div><div>%50</div><div>%75</div><div>%100</div></div>
+  <p style="margin:16px 0 0;font-size:.9em"><b class="acc">İlk çeyrekte 2,7 kat</b> · bedeli tam çizimde <b>−0,9 puan</b></p>
+  <aside class="notes">İlk üç model yarım çizimde çöküyor: tam %97, ilk çeyrekte %15; eğitimde hiç yarım çizim görmediler. Mimari çözmüyor: M1–M3 hepsi %13–15. Çözüm veride: her çizimin rastgele %20–100'ü alınarak yarım sürüm üretildi; eğitimde her yığının yarısı bununla değiştirildi, etiket aynı. Sonuç: ilk çeyrekte %15 → %40 (2,7 kat); bedeli tam çizimde −0,9 puan. Ana cümle: erken tanımada belirleyici olan mimari değil, eğitim verisiydi. (%25 = mürekkebin ilk çeyreği.)
+Hoca sorarsa: Dezavantaj? Ayrıntı çizilmeden karar verdiği için benzer nesneleri (ceket/kazak) daha kolay karıştırır. Neden %20–100? Çok küçük parça bilgi taşımaz; oran ayrıca denenmedi (sınırlılık).</aside>
+</section>
+
+<!-- 7 Oyunda fark -->
+<section>
+  <h2>Oyunda fark (50 sınıf, test)</h2>
+  <table style="font-size:.95em">
+    <tr><th></th><th class="n">M3</th><th class="n">M3-kısmi</th></tr>
+    <tr><td>Tanınan çizim</td><td class="n">%98,9</td><td class="n">%98,4</td></tr>
+    <tr class="hl"><td>Tur puanı</td><td class="n">67,4</td><td class="n acc">74,7</td></tr>
+    <tr class="hl"><td>60 sn'de tanınan nesne</td><td class="n">8,1</td><td class="n acc">10,3</td></tr>
+  </table>
+  <div class="card" style="margin-top:36px">M3 biraz daha çok tanıyor ama geç. <b>Model, oyun puanına göre seçildi.</b></div>
+  <aside class="notes">Oyun kuralıyla, 50 sınıf, test seti. M3 biraz daha çok tanıyor ama geç; M3-kısmi 7 puan önde. Model doğruluğa göre değil oyun puanına göre seçildi.</aside>
+</section>
+
+<!-- 8 Gerçek kullanıcı -->
+<section>
+  <h2>Gerçek kullanıcı testi</h2>
+  <div class="stat"><span class="num g">%97,4</span><span class="arrow">→</span><span class="num">%88,2</span></div>
+  <p class="mute small" style="margin:0 0 26px">test seti → gerçek çizim · M3, 50 sınıf, 5 kişi, 229 çizim, tahmin gizli</p>
+  <h3>ÜÇ HATA SEBEBİ</h3>
+  <ul style="font-size:.9em">
+    <li>Alışılmadık biçim (önden araba, rakamlı saat)</li>
+    <li>Türkçe ad belirsizliği (merdiven → el merdiveni)</li>
+    <li>Zaten karışan sınıflar (örümcek → güneş)</li>
+  </ul>
+  <aside class="notes">Test seti de Quick, Draw!'dan; gerçek kişi fareyle/telefonda farklı çizer. Ayrı çizim toplama sayfası, kişi başı 50 nesne, kişiye özel rastgele sıra. Model tahmini gizli: görse çizimini düzeltir, sonuç iyimser çıkar. 5 kişi, 229 çizim (179 fare, 50 dokunmatik). Gerçekte 9–13 puan düşük; sıralama korunuyor (M3 %88,2, M3-kısmi %86,9, M1 %82,5). Dürüstlük: 5 kişi küçük; aygıt etkisi kişi etkisinden ayrılamıyor.
+Hoca sorarsa: Veri artırma işe yaradı mı? Hayır: artırmalı M2 %85,6, artırmasız %86,0. Neden sonuç gösterilmedi? Görse düzeltirdi, ölçüm iyimser olurdu.</aside>
+</section>
+
+<!-- 9 345 sınıf -->
+<section>
+  <h2>345 sınıfa geçiş</h2>
+  <div class="cols" style="gap:48px">
+    <div>
+      <div class="stat" style="margin:0 0 8px"><span class="num g">%97</span><span class="arrow">→</span><span class="num">%77</span></div>
+      <p class="mute small" style="margin:0 0 10px">M3: 97,4 → 77,3 · benzer sınıflar bir arada</p>
+      <table style="font-size:.62em">
+        <tr><th>Gerçek</th><th>Tahmin</th><th class="n">/2 500</th></tr>
+        <tr><td>doğum günü pastası</td><td>pasta</td><td class="n">936</td></tr>
+        <tr><td>kasırga</td><td>hortum</td><td class="n">871</td></tr>
+        <tr><td>keman</td><td>gitar</td><td class="n">710</td></tr>
+        <tr><td>okul otobüsü</td><td>otobüs</td><td class="n">663</td></tr>
+        <tr><td>bardak</td><td>kupa</td><td class="n">645</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>OYUNDA ÜÇ ÇÖZÜM</h3>
+      <div class="card"><b>1 · Eşdeğer gruplar (12)</b><br><span class="small">bardak = kupa = kahve fincanı</span></div>
+      <div class="card"><b>2 · Eşik %50 → %30</b><br><span class="small">olasılık benzer sınıflara bölünüyor</span></div>
+      <div class="card"><b>3 · Sorulan kelimeler: 258</b><br><span class="small">iyi tanınanlar; "Oyun · 50" ve "Oyun · 258"</span></div>
+    </div>
+  </div>
+  <aside class="notes">Neden geçtik: 50 sınıflı oyun çok kolay geldi, çizimler 2–4 sn'de tanınıyordu. Sınıf başına 20 000 eğitim (toplam 6,9 milyon); mimari aynı, yalnız son katman 345 çıkış; M2 atlandı. M3 %77,3, M3-kısmi %75,1, M1 %70,1. Düşüşün sebebi yeni sınıfların zor olması değil: aynı 50 sınıf 345'li modelde %84,4. Sebep benzer sınıfların bir arada olması. Keman/gitar gibi farklı nesneler birleştirilmedi.
+Hoca sorarsa: Eşik neden %30? %50/40/30/25/20 denendi; düştükçe daha çok tanınır ama yanlış kabul artar; %30 denge, doğrulama setiyle seçildi. Daha iyi nasıl? 64×64 giriş ince ayrıntıyı koruyabilir.</aside>
+</section>
+
+<!-- 10 Tarayıcı -->
+<section>
+  <h2>Tarayıcıda çalışma</h2>
+  <div class="big">
+    <div><div class="num">4,3 ms</div><div class="cap">tek tahmin</div></div>
+    <div><div class="num">2,7 MB</div><div class="cap">model dosyası</div></div>
+    <div><div class="num">%2</div><div class="cap">250 ms'nin payı</div></div>
+  </div>
+  <div class="flow"><span class="s">PyTorch</span><span class="ar">→</span><span class="s">ONNX</span><span class="ar">→</span><span class="s">Tarayıcı</span></div>
+  <p class="mute small" style="margin-top:26px">Hızlı · ücretsiz (sunucu yok) · gizli (çizim cihazdan çıkmaz)</p>
+  <aside class="notes">Çoğu uygulama çizimi sunucuya yollar; bizde model kullanıcının tarayıcısında çalışır. PyTorch ile eğitim; ONNX'e çevirme ("modelin PDF'i"); tarayıcıda ONNX Runtime Web (WebAssembly). PyTorch ve ONNX çıktıları arası en büyük fark < 0,0000006. Tek tahmin (M3-kısmi) 4,3 ms, ön işleme dahil ~5 ms; tahmin 250 ms'de bir ve her çizgi bitince.
+Hoca sorarsa: Telefonda? Ölçülmedi (sınırlılık). 345 sınıfta yavaşladı mı? Hayır, 4,4 ms. Ön işleme neden iki dilde? Eğitim Python, oyun TypeScript; aynı görüntü şart, 304 örnekle test.</aside>
+</section>
+
+<!-- 11 Sınırlılıklar -->
+<section>
+  <h2>Sınırlılıklar</h2>
+  <ul style="font-size:.9em">
+    <li><b>Küçük örnek:</b> 5 kişi, dokunmatikte 1 kişi; genellenemez</li>
+    <li><b>Tek eğitim:</b> her model bir kez eğitildi; 0,3 puanlık fark kesin değil</li>
+    <li><b>Erken kararın bedeli:</b> benzer nesnelerde kolay kandırılır (ceket → kazak %65)</li>
+    <li><b>"Hiçbiri" yok:</b> 50 sınıflı modelde karalamaların %4,5'i kabul</li>
+  </ul>
+  <div class="card" style="margin-top:30px"><h3 style="margin-bottom:.3em">SONRAKİ ADIMLAR</h3><span class="small">"Hiçbiri" sınıfı · RNN/Transformer karşılaştırması · farklı tohumlarla tekrar · telefonda ölçüm ve 8 bit nicemleme</span></div>
+  <aside class="notes">Sorulursa: veri yanlılığı; yalnız Google'ın tanıdığı çizimler var, kötü çizimler yok, test iyimser olabilir ve gerçek kullanıcı düşüşünün bir sebebi olabilir. Telefonda hız ölçülmedi. M1'in 2 puan geriliği ve M3-kısmi'nin erken tanıma farkı tek eğitimden etkilenmeyecek kadar büyük. Zor çiftlerde ortalama kabul %33. 345 sınıflı modelde "karalama" sınıfı var, kabul %0,4.</aside>
+</section>
+
+<!-- 12 Sonuç -->
+<section>
+  <h2>Sonuç</h2>
+  <div class="card" style="font-size:1.15em;border-left:6px solid var(--acc)"><b>Erken tanımada belirleyici olan mimari değil, eğitim verisiydi.</b></div>
+  <ul style="margin-top:24px;font-size:.9em">
+    <li><b>Küçük CNN'ler yeterli:</b> 50 sınıfta %97,4, tarayıcıda ~5 ms</li>
+    <li><b>Yarım çizimle eğitim:</b> ilk çeyrekte doğruluk 2,7 kat</li>
+    <li><b>Model, kullanılacağı kuralla ölçülmeli:</b> oyun puanına göre seçildi</li>
+  </ul>
+  <aside class="notes">Üç çıkarım: 1) Küçük CNN'ler yeterli. 2) Yarım çizimle eğitim ilk çeyrekte doğruluğu 2,7 kat artırdı; mimari değişikliği bunu yapmadı. 3) Model sınıflandırma doğruluğuna göre değil oyun puanına göre seçildi; model kullanılacağı kuralla ölçülmeli.</aside>
+</section>
+
+<!-- 13 Demo -->
+<section class="cover">
+  <h3>CANLI DEMO</h3>
+  <h1 style="font-size:1.8em">[demo adresi]</h1>
+  <ul style="margin:10px 0 40px;font-size:.9em">
+    <li><b>Oyun · 50:</b> tahminin çizerken değişmesi</li>
+    <li><b>Oyun · 258:</b> eşdeğer grup (kupa da kabul)</li>
+    <li><b>Serbest çizim:</b> 28×28 görüntü, ilk 5 tahmin</li>
+  </ul>
+  <p class="acc" style="font-size:1.3em;font-weight:700;margin:0">Teşekkürler · Sorular?</p>
+  <aside class="notes">Demo ~2 dk. 1) Oyun · 50: 1–2 tur, tahminin çizerken değişmesi. 2) Oyun · 258: bardak/pasta çıkarsa eşdeğer grup. 3) Serbest çizim: modelin gördüğü 28×28 görüntü, ilk 5 tahmin. B planı: demo/ içinde npx vite; sunumdan önce dene.</aside>
+</section>
+
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script>
+Reveal.initialize({width:1280,height:720,margin:0.04,hash:true,slideNumber:'c/t',transition:'fade',controls:true,progress:true,plugins:[RevealNotes]});
+</script>
+</body>
+</html>
