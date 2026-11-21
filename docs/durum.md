@@ -110,3 +110,9 @@ Plan: [plan.md](plan.md). Rapor taslağı: [rapor/rapor.md](rapor/rapor.md).
 4. Kolay sekmede karalama %4,5 kabul ediliyor: "hiçbiri" sınıfı (karalama + bilinmeyen nesne) ile 50 sınıflı model denemesi rapora girebilir.
 5. 242/258 kelimeyle ayrı model eğitimi: ölçüm altyapısı hazır (`olcum.py` aday listesine eklenir); kararı yeni sonuçlara göre ver (zor çiftler M3-kısmi'de zaten %33).
 6. Aşama 6: CepKonsol entegrasyonu ("Çizim Düellosu"); seçilen modlar Seri ve Sahtekâr (`plan.md` Aşama 6). Oyun kuralı `oyun.ts` + `esdeger.json` aynen taşınır.
+
+## Sunum (21 Kasım 2026)
+
+- Hoca sunum istedi. Konuşma notları kullanıcıyla birlikte yazıldı: `docs/sunum/konusma-notlari.md` + `.pdf` (13 slayt; söylenecek, hoca sorarsa, kavramlar).
+- Üç taslak: `v1-pptx` (pptxgenjs, öneri), `v2-html` (reveal.js), `v3-marp` (Marp PDF). Kullanıcı henüz seçmedi; seçilen düzeltilecek (v1: veri seti slaytı boş; v2: içerik üstte, erken tanıma vurgusu ters; v3: yazılar küçük).
+- **Açık:** versiyon seçimi; demo adresi (Vercel); oyun ekranı görüntüsü; kapakta ad/no; 345 sınıflı modelle gerçek kullanıcı yeniden testi (sunuma eski %68,6 konmadı).
