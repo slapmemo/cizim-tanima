@@ -17,93 +17,38 @@ def tek(s, a, b):
 bol[29] = tek(bol[29], "Performans değerlendirmesi, 50 sınıflı modeller kullanılarak gerçekleştirildi.",
               "Performans önce 50 sınıflı, sonra 345 sınıflı modellerle değerlendirildi.")
 
-# --- 31'den yeni slayt
-s31 = bol[30]
-
-
-def stil(yol):
-    m = re.search(r'data-node-path="%s" (?:role="[^"]*" aria-level="\d" )?style="([^"]*)"' % re.escape(yol), s31)
-    return m.group(1)
-
-
-def hucre_stili(k):
-    return re.search(r'data-cell="%s" style="([^"]*)"' % re.escape(k), s31).group(1)
-
-
-st_par, st_h3, st_govde, st_etiket = stil("1.0.1"), stil("1.0.2.0"), stil("1.0.2.1"), stil("1.1.0")
-kart_st = ("display: flex; flex-direction: column; align-items: stretch; gap: 8px; min-width: 0px; min-height: 0px; "
-           "background-color: rgb(251, 249, 244); padding: 24px 32px; border-width: 2px; border-style: solid; "
-           "border-color: rgb(214, 205, 184); border-radius: 20px; box-sizing: border-box; flex-shrink: 0;")
-kart_etiket = ("font-family: Rubik, Arial, ui-sans-serif, system-ui, sans-serif; font-size: 24px; font-weight: 800; "
-               "line-height: 1.4; color: rgb(168, 72, 26); margin: 0px; white-space: pre-wrap; overflow-wrap: break-word; "
-               "min-width: 0px; flex-shrink: 0; letter-spacing: 1px;")
-kart_sayi = ("font-family: Rubik, Arial, ui-sans-serif, system-ui, sans-serif; font-size: 52px; font-weight: 700; "
-             "line-height: 1.1; color: rgb(28, 33, 66); margin: 0px; white-space: pre-wrap; min-width: 0px; flex-shrink: 0;")
-
-tablo_st = stil("1.0.0")
-tablo_st = re.sub(r"grid-template-columns: [^;]+;", "grid-template-columns: 31fr 23fr 23fr 23fr;", tablo_st)
-tablo_st = tablo_st.replace("min-width: 640px", "min-width: 1000px").replace("max-width: 640px", "max-width: 1000px")
-satirlar = [("Model", "Veri seti doğruluğu", "Kullanıcı doğruluğu", "Oyunda tanınan"),
-            ("M3", "%77,3", "%69,4", "%80,6"), ("M3-kısmi", "%75,1", "%69,4", "%80,6"), ("M1", "%70,1", "%63,0", "%75,5")]
-hucreler = []
-for r, sat in enumerate(satirlar):
-    for c, v in enumerate(sat):
-        if r == 0:
-            s = hucre_stili("0.1") if c else hucre_stili("0.0")
-        else:
-            s = hucre_stili("1.0") if c == 0 else (hucre_stili("1.2") if c == 2 else hucre_stili("1.1"))
-        hucreler.append(f'<div data-cell="{r}.{c}" style="{s}">{v}</div>')
-tablo = f'<div data-node-path="1.0.0" style="{tablo_st}">' + "".join(hucreler) + "</div>"
-
-
-def d(yol, st, ic, rol=""):
-    return f'<div data-text-path="{yol}" data-node-path="{yol}"{rol} style="{st}">{ic}</div>'
-
-
-sol = ('<div data-node-path="1.0" style="display: flex; flex-direction: column; align-items: stretch; gap: 24px; '
-       'min-width: 1000px; min-height: 0px; max-width: 1000px;">'
-       + tablo
-       + d("1.0.1", st_par, "Aynı 5 katılımcının 229 çiziminden 216'sı değerlendirildi; 13 çizimin nesnesi 258 nesneli oyun "
-                            "listesinde yer almıyor. Kullanıcı doğruluğunda eşdeğer sınıflar doğru kabul edildi "
-                            "(örneğin araba yerine polis arabası). Oyunda tanınan: birinci tahmin hedefle eşleşir ve olasılık en az %30.")
-       + '<div data-node-path="1.0.2" style="display: flex; flex-direction: column; align-items: stretch; gap: 12px; '
-         'min-width: 0px; min-height: 0px; flex-shrink: 0;">'
-       + d("1.0.2.0", st_h3, "Sıralama değişmedi", ' role="heading" aria-level="3"')
-       + d("1.0.2.1", st_govde, "345 sınıfta da M3 ve M3-kısmi önde, M1 geride. Doğruluk düşse de oyunda tanınma oranı "
-                                "%75'in üzerinde kaldı.")
-       + "</div></div>")
-
-
-def kart(i, etiket, sayi):
-    return (f'<div data-node-path="1.1.{i}" style="{kart_st}">' + d(f"1.1.{i}.0", kart_etiket, etiket)
-            + d(f"1.1.{i}.1", kart_sayi, sayi) + "</div>")
-
-
-sag = ('<div data-node-path="1.1" style="display: flex; flex-direction: column; align-items: stretch; gap: 20px; '
-       'min-width: 0px; min-height: 0px; flex-grow: 1; flex-basis: 0%;">'
-       + d("1.1.0", re.sub(r"color: [^;]+;", "color: rgb(28, 33, 66);", st_etiket), "M3-kısmi · 50 sınıftan 345 sınıfa")
-       + kart(1, "KULLANICI DOĞRULUĞU", "%86,9 → %69,4")
-       + kart(2, "OYUNDA TANINAN", "%93,0 → %80,6")
-       + kart(3, "ORTALAMA TUR PUANI", "73,3 → 58,4")
-       + "</div>")
-
-i0 = s31.index('<div data-node-path="1" ')
-govde_ac = re.match(r'<div data-node-path="1" style="[^"]*">', s31[i0:]).group(0)
-kapanis = "</div></div></div></div></div></div></section>"
-ara = s31[len(s31.rstrip()):]
-assert s31.rstrip().endswith(kapanis), s31[-120:]
-ust = s31[:i0]
-ust = tek(ust, ">06 · GERÇEK KULLANICI TESTİ • SONUÇLAR<", ">06 · GERÇEK KULLANICI TESTİ • 345 SINIF<")
-ust = tek(ust, ">Gerçek Kullanıcı Çizimlerinde Model Performansı<", ">Aynı Çizimler, 345 Sınıflı Modellerle<")
-ust = re.sub(r'data-label="[^"]*"', 'data-label="Aynı Çizimler, 345 Sınıflı Modellerle"', ust, count=1)
-notlar = ("Aynı arkadaş çizimlerini 345 sınıflı modellerle de ölçtük. 229 çizimin 216'sı oyunun 258 nesneli listesinde. "
-          "Kullanıcı doğruluğu eşdeğer gruplarla sayıldı; grupsuz M3-kısmi %68,6, fark çok küçük. "
-          "Dikkat: veri seti sütunu 345 sınıfın hepsinde ve grupsuz, kullanıcı sütunu yalnız 258 nesnede ve gruplu; "
-          "birebir karşılaştırılamaz. Oyunda tanınan: oyun kuralıyla, birinci tahmin hedef grubunda ve olasılık en az %30. "
-          "50 sınıftan 345'e geçince M3-kısmi kullanıcı doğruluğu %86,9'dan %69,4'e, oyunda tanınma %93,0'dan %80,6'ya "
-          "düştü; sıralama aynı kaldı.")
-ust = re.sub(r'data-speaker-notes="[^"]*"', 'data-speaker-notes="%s"' % H.escape(notlar, quote=True), ust, count=1)
-yeni = ust + govde_ac + sol + sag + kapanis + ara
+# --- 31'in kopyası: 345 sınıflı modellerle aynı çizimler
+import base64, os
+GORSEL = os.environ["GORSEL"]
+def uri(ad):
+    return "data:image/png;base64," + base64.b64encode(open(os.path.join(GORSEL, ad), "rb").read()).decode()
+yeni = bol[30]
+yeni = tek(yeni, ">06 · GERÇEK KULLANICI TESTİ • SONUÇLAR<", ">06 · GERÇEK KULLANICI TESTİ • 345 SINIF<")
+yeni = tek(yeni, ">Gerçek Kullanıcı Çizimlerinde Model Performansı<", ">345 Sınıflı Modellerde Kullanıcı Performansı<")
+yeni = re.sub(r'data-label="[^"]*"', 'data-label="345 Sınıflı Modellerde Kullanıcı Performansı"', yeni, count=1)
+notlar = ("Aynı arkadaş çizimlerini 345 sınıflı modellerle de ölçtük. 229 çizimin 216'sı oyunun 258 nesneli listesinde; "
+          "kalan 13'ünün nesnesi oyunda sorulmuyor. Kullanıcı doğruluğu eşdeğer gruplarla sayıldı; grupsuz M3-kısmi %68,6, fark çok küçük. "
+          "Dikkat: veri seti sütunu 345 sınıfın hepsinde ve grupsuz, kullanıcı sütunu yalnız 258 nesnede ve gruplu; birebir karşılaştırılamaz. "
+          "Oyun kuralıyla (birinci tahmin hedef grubunda, olasılık en az %30) M3 ve M3-kısmi çizimlerin %80,6'sını tanıdı. "
+          "Sağ altta: 50 sınıflı modelin doğru bildiği bu dört çizim 345 sınıfta yakın bir sınıfa kaydı: kedi kaplana, balık köpek balığına, "
+          "bisiklet motosiklete, örümcek yengece. 50 sınıfta kaplan, köpek balığı, motosiklet, yengeç yoktu.")
+yeni = re.sub(r'data-speaker-notes="[^"]*"', 'data-speaker-notes="%s"' % H.escape(notlar, quote=True), yeni, count=1)
+for a, b in (("%97,4", "%77,3"), ("%88,2", "%69,4"), ("%96,5", "%75,1"), ("%86,9", "%69,4"), ("%95,2", "%70,1"), ("%82,5", "%63,0")):
+    yeni = yeni.replace(">" + a + "<", ">" + b + "<", 1)
+yeni = tek(yeni, ">5 katılımcıdan toplam 229 çizim toplandı. Çizimlerin 179'u fare, 50'si dokunmatik ekran ile oluşturuldu. Doğruluk oranları 9–13 yüzde puan düşmesine rağmen modellerin başarı sıralaması değişmedi.<",
+           ">Aynı 229 çizimden, nesnesi 258 nesneli oyunda yer alan 216'sı değerlendirildi; eşdeğer sınıflar doğru kabul edildi. Oyun kuralıyla (%30 eşik) M3 ve M3-kısmi çizimlerin %80,6'sını tanıdı. Sıralama yine değişmedi.<")
+yeni = tek(yeni, ">Eğitim verisinden farklı çizim biçimleri (rakamlı saat, önden çizilen araba) ve Türkçe nesne adlarının farklı yorumlanması (merdiven) doğruluk kaybına neden olmuş olabilir.<",
+           ">345 sınıfta birbirine çok benzeyen nesneler var. 50 sınıflı modelin doğru tanıdığı çizimlerin bir kısmı kaplan, köpek balığı, motosiklet gibi yakın sınıflara kaydı.<")
+srcs = re.findall(r'src="(data:image/[^"]+)"', yeni)
+assert len(srcs) == 2
+yeni = yeni.replace(srcs[0], uri("k345-dogru.png"), 1).replace(srcs[1], uri("k345-yanlis.png"), 1)
+yeni = re.sub(r'alt="Arkadaşların doğru tanınan[^"]*"', 'alt="345 sınıflı modelin doğru tanıdığı arkadaş çizimleri: elma, salyangoz, kelebek, ağaç"', yeni)
+yeni = re.sub(r'alt="Arkadaşların yanlış tanınan[^"]*"', 'alt="345 sınıflı modelin yakın sınıfa kaydırdığı çizimler: kedi, balık, bisiklet, örümcek"', yeni)
+for a, b in (("<b>bisiklet</b> %100 · A", "<b>elma</b> %100 · A"), ("<b>uçak</b> %100 · C", "<b>salyangoz</b> %100 · B"),
+             ("<b>kedi</b> %86 · A", "<b>kelebek</b> %100 · C"), ("<b>şemsiye</b> %100 · A", "<b>ağaç</b> %100 · E"),
+             ("saat → <b>pizza</b> · B", "kedi → <b>kaplan</b> · A"), ("araba → <b>pizza</b> · D", "balık → <b>köpek balığı</b> · B"),
+             ("örümcek → <b>güneş</b> · C", "bisiklet → <b>motosiklet</b> · E"), ("merdiven → <b>şimşek</b> · B", "örümcek → <b>yengeç</b> · E")):
+    yeni = tek(yeni, ">" + a + "<", ">" + b + "<")
 
 # --- 36: dördüncü madde
 s36 = bol[35]
