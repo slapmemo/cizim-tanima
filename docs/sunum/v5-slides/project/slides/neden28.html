@@ -1,0 +1,13 @@
+<section id="neden28" class="koyu">
+<div class="bas">
+<p class="kas">04 · NEDEN 28×28?</p>
+<h2>Standart, hızlı ve bu iş için yeterli</h2>
+</div>
+<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:28px;">
+<div class="kart giris" style="--i:0;"><p class="orta-sayi">784</p><h3>Alanın standardı</h3><p class="kart-metin">28×28 = 784 piksel. El yazısı rakamlar (MNIST) ve Google’ın hazır çizim verisi de bu boyutta; sonuçlarımız başka çalışmalarla karşılaştırılabiliyor.</p></div>
+<div class="kart giris" style="--i:1;"><p class="orta-sayi">5×</p><h3>Hız</h3><p class="kart-metin">64×64 seçseydik 4 096 piksel, yani 5 kat veri olurdu. Model her 250 ms’de çalıştığı için küçük girdi önemli.</p></div>
+<div class="kart giris" style="--i:2;"><p class="orta-sayi">16 GB</p><h3>Bellek</h3><p class="kart-metin">1,5 milyon eğitim görüntüsünün tamamını ekran kartı belleğine koyduk; 345 sınıfta bu belleğin sınırına zaten geldik.</p></div>
+</div>
+<div class="kart" style="border-color:var(--turuncu);"><h3>28×28’in sınırı</h3><p class="kart-metin">Küçük görüntüde ince ayrıntılar kayboluyor: keman ile gitarı ya da pasta ile doğum günü pastasını ayıran tel, yay veya mum birkaç piksele sığmıyor. 64×64 denemedik; sonraki adımlar arasında.</p></div>
+<aside>Neden 28×28 seçtik? Dürüst cevap: standart olduğu ve bu iş için yeterli olduğu için; başka boyut denemedik. Bir, alanın standardı: el yazısı rakam veri seti MNIST de, Google’ın hazır çizim verisi de 28×28; sonuçlarımız başka çalışmalarla karşılaştırılabiliyor. İki, hız: 28×28 = 784 piksel; 64×64 olsaydı 4 096 piksel, yani 5 kat veri; model her 250 ms’de çalıştığı için bu önemli. Üç, bellek: eğitim görüntülerinin tamamını 16 GB’lık ekran kartı belleğine koyduk; 345 sınıfta 6,9 milyon görüntüyle sınıra geldik. 50 sınıfta %97,4 doğruluk aldığımız için yeterli olduğunu düşünüyoruz. Sınırı: ince ayrıntılar kayboluyor; keman ile gitarı ayıran teller ya da doğum günü pastasının mumları birkaç piksele sığmıyor. 64×64 denemek sonraki adımlarımızdan biri.</aside>
+</section>

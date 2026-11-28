@@ -1,0 +1,28 @@
+<section id="m3" class="krem" style="gap:30px;">
+<div class="bas">
+<p class="kas">05 · M3 · HAFİF RESNET</p>
+<h2>Daha derin ve modern bir mimari ne kazandırır?</h2>
+</div>
+<div class="mimari">
+<div class="katman gri"><p class="k-ad">Girdi</p><p class="k-boyut">28×28</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman"><p class="k-ad">Konvolüsyon</p><p class="k-detay">+ BN</p><p class="k-boyut">32 × 28×28</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman artikb"><p class="k-ad">2 artık blok</p><p class="k-detay">çizgi, kenar</p><p class="k-boyut">32 × 28×28</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman artikb"><p class="k-ad">2 artık blok</p><p class="k-detay">küçültür</p><p class="k-boyut">64 × 14×14</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman artikb"><p class="k-ad">2 artık blok</p><p class="k-detay">küçültür</p><p class="k-boyut">128 × 7×7</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman havuz"><p class="k-ad">Ortalama</p><p class="k-detay">kanal başına 1 sayı</p><p class="k-boyut">128</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman cikis"><p class="k-ad">Çıkış</p><p class="k-boyut">50</p></div>
+</div>
+<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:24px;">
+<div class="kart"><h3>13 konvolüsyon</h3><p class="kart-metin">6 artık blok × 2 + giriş. Kısa yollar sayesinde bu derinlik sorunsuz eğitildi.</p></div>
+<div class="kart"><h3>Akıllı küçültme</h3><p class="kart-metin">Havuzlama yerine filtre 2’şer piksel atlayarak gezer; küçültmeyi de öğrenir.</p></div>
+<div class="kart"><h3>Ortalama alma</h3><p class="kart-metin">Her kanalın 7×7 haritasının ortalaması alınır: tam bağlı katman 401 binden 6 bine iner.</p></div>
+</div>
+<div class="vurgu-kutu"><p>Sonuç: %97,4, M2’den yalnız 0,3 puan iyi ama 2,5 kat yavaş</p></div>
+<aside>M3’ü daha derin ve modern bir mimari ne kadar kazandırır sorusu için denedik. Soldan sağa: giriş konvolüsyonu, sonra üç aşamada ikişer artık blok; her aşamada kanal sayısı ikiye katlanıp görüntü yarıya küçülüyor. Toplam 13 konvolüsyon katmanı var ve kısa yollar sayesinde sorunsuz eğitildi. Küçültmeyi havuzlamayla değil, filtrenin ikişer piksel atlayarak gezmesiyle yapıyoruz; yani küçültmeyi de öğreniyor. Sonda her kanalın 7×7 haritasının ortalaması alınıyor ve 128 sayı kalıyor; bu yüzden son tam bağlı katman yalnız 6 450 parametre, M1’de bu katman 401 bindi. Parametrelerin %99’u konvolüsyonlarda. Sonuç: test %97,43; M2’den yalnız 0,3 puan iyi ama 2,5 kat yavaş. 0,3 puanlık fark tek bir eğitimden, kesin değil. Ana mesaj: M1’den M2’ye büyük sıçrama var, M2’den M3’e neredeyse yok.</aside>
+</section>

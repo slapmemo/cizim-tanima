@@ -1,0 +1,16 @@
+<section id="egitim" class="koyu" style="gap:32px;">
+<div class="bas">
+<p class="kas">05 · EĞİTİM</p>
+<h2>Modelleri nasıl eğittik?</h2>
+</div>
+<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:22px 28px;">
+<div class="kart"><h3>PyTorch</h3><p class="kart-metin">Python’da sinir ağı kurup eğitmeye yarayan kütüphane. Eğitim RTX 5070 Ti ekran kartında yapıldı.</p></div>
+<div class="kart"><h3>Optimizer: AdamW</h3><p class="kart-metin">Ağırlıkları her adımda hatayı azaltacak yönde günceller. Adam’ın büyük ağırlıkları da cezalandıran sürümü: ezberi azaltır.</p></div>
+<div class="kart"><h3>OneCycle</h3><p class="kart-metin">Öğrenme hızı önce artar, sonra azalır: başta hızlı ilerler, sonda ince ayar yapar. Az epoch’ta iyi sonuç verir.</p></div>
+<div class="kart"><h3>Yığın (batch): 512</h3><p class="kart-metin">Modele aynı anda 512 çizim verilir; ağırlıklar her yığından sonra bir kez güncellenir.</p></div>
+<div class="kart"><h3>Epoch: 10–20</h3><p class="kart-metin">Eğitim verisinin tamamının modelden bir kez geçmesi. M1’de bir epoch 5 sn, M3’te 53 sn.</p></div>
+<div class="kart"><h3>Veri artırma</h3><p class="kart-metin">Eğitim çizimleri her seferinde rastgele biraz döndürülür (±15°), büyütülür ya da kaydırılır.</p></div>
+</div>
+<p class="soluk" style="font-size:26px;">Neden AdamW + OneCycle? Bu tür görüntü sınıflandırmada yaygın, ayar gerektirmeyen ve hızlı yakınsayan bir ikili. Başka optimizer’larla karşılaştırma yapmadık.</p>
+<aside>Eğitimde kullandığımız terimleri açıklayalım. PyTorch: Python’da sinir ağı kurup eğitmeye yarayan bir kütüphane; eğitimi RTX 5070 Ti ekran kartında yaptık. Optimizer: eğitimde ağırlıkları her adımda hatayı azaltacak yönde güncelleyen yöntem. Biz AdamW kullandık: her ağırlık için adım büyüklüğünü kendi ayarlayan Adam yönteminin, büyük ağırlıkları da cezalandıran sürümü; bu da ezberi azaltıyor. OneCycle: öğrenme hızını eğitim boyunca değiştiren bir zamanlama; önce yükseltiyor, sonra düşürüyor; başta hızlı ilerleyip sonda ince ayar yapıyor ve az epoch’ta iyi sonuç veriyor. Yığın ya da batch: modele aynı anda verilen çizim sayısı, 512; ağırlıklar her yığından sonra bir kez güncelleniyor. Epoch: eğitim verisinin tamamının modelden bir kez geçmesi; 10–20 epoch eğittik. Veri artırma: eğitim çizimlerini her seferinde rastgele biraz döndürmek, büyütmek, kaydırmak; model aynı çizimin farklı hâllerini görüyor. Neden AdamW ve OneCycle: görüntü sınıflandırmada yaygın, az ayar isteyen ve hızlı sonuç veren bir ikili; başka optimizer’larla karşılaştırma yapmadık. Her epoch sonunda doğrulama setinde ölçüp en iyi ağırlıkları sakladık.</aside>
+</section>

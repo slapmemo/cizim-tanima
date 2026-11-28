@@ -1,0 +1,27 @@
+<section id="m2" class="krem" style="gap:30px;">
+<div class="bas">
+<p class="kas">05 · M2 · DERİN CNN</p>
+<h2>M1’in sorunları ve M2’nin çözümü</h2>
+</div>
+<div class="mimari">
+<div class="katman gri"><p class="k-ad">Girdi</p><p class="k-boyut">28×28</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman"><p class="k-ad">Blok 1</p><p class="k-detay">2 konv. + BN + havuz</p><p class="k-boyut">32 × 14×14</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman"><p class="k-ad">Blok 2</p><p class="k-detay">2 konv. + BN + havuz</p><p class="k-boyut">64 × 7×7</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman"><p class="k-ad">Blok 3</p><p class="k-detay">2 konv. + BN + havuz</p><p class="k-boyut">128 × 3×3</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman tam"><p class="k-ad">Tam bağlı</p><p class="k-detay">+ Dropout %40</p><p class="k-boyut">256</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman cikis"><p class="k-ad">Çıkış</p><p class="k-boyut">50</p></div>
+</div>
+<table class="tablo" style="font-size:26px;">
+<tr><th style="width:33%;">M1’deki sorun</th><th style="width:37%;">M2’deki çözüm</th><th style="width:30%;">Sonuç</th></tr>
+<tr><td>Sığ: yalnız 2 konvolüsyon, parça tanıyamıyor</td><td>6 konvolüsyon, 3 blok: çizgi → köşe → parça</td><td>Daha karmaşık şekiller</td></tr>
+<tr><td>Ezber: eğitim %96,7, doğrulama %95,2</td><td>Dropout ve BatchNorm</td><td>Eğitim %97,6, doğrulama %97,1</td></tr>
+<tr><td>Parametrenin %94’ü tek katmanda</td><td>Yaklaşık yarısı konvolüsyonlarda</td><td>Yalnız %40 daha fazla parametre</td></tr>
+</table>
+<div class="vurgu-kutu"><p>Hata %4,8’den %2,9’a indi: neredeyse yarıya</p></div>
+<aside>M1’in üç sorunu vardı. Bir, sığdı: yalnız iki konvolüsyon katmanı kenar ve çizgiyi yakalıyor ama bunları tekerlek, kanat gibi parçalara birleştiremiyor. M2’de 6 konvolüsyon var, 3 blok hâlinde: ilk blok çizgi, ikincisi köşe ve kavis, üçüncüsü parçalar. İki, ezber vardı: eğitimde %96,7, doğrulamada %95,2. M2’de Dropout ve BatchNorm ekledik; fark %0,5’e indi. Üç, parametrelerin %94’ü tek bir tam bağlı katmandaydı; M2’de yarısı konvolüsyonlarda, yani gerçekten desen öğrenen yerde. Toplam parametre yalnız %40 arttı. Sonuç: hata %4,8’den %2,9’a, neredeyse yarıya indi. M2’yi ayrıca veri artırmayla ve artırmasız olarak iki kez eğittik; farkını sonuçlarda göstereceğiz.</aside>
+</section>

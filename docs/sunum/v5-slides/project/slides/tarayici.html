@@ -1,0 +1,20 @@
+<section id="tarayici" class="koyu">
+<div class="bas">
+<p class="kas">07 · TARAYICIDA ÇALIŞMA</p>
+<h2>Model kullanıcının tarayıcısında çalışıyor</h2>
+</div>
+<div style="display:flex; gap:48px;">
+<div class="ust-cizgi giris" style="--i:0; flex:1;"><p class="buyuk-sayi">4,3 ms</p><p class="sayi-alt">tek tahmin (M3-kısmi)</p></div>
+<div class="ust-cizgi giris" style="--i:1; flex:1;"><p class="buyuk-sayi">2,7 MB</p><p class="sayi-alt">model dosyası</p></div>
+<div class="ust-cizgi giris" style="--i:2; flex:1;"><p class="buyuk-sayi">%2</p><p class="sayi-alt">250 ms’lik tahmin aralığının</p></div>
+</div>
+<div style="display:flex; gap:16px; align-items:stretch; margin-top:auto;">
+<div class="akis-kutu"><p class="akis-ad">PyTorch</p><p class="akis-alt">eğitim</p></div>
+<x-shape kind="arrow-right" class="ok"></x-shape>
+<div class="akis-kutu"><p class="akis-ad">ONNX</p><p class="akis-alt">ortak model dosyası, “modelin PDF’i”</p></div>
+<x-shape kind="arrow-right" class="ok"></x-shape>
+<div class="akis-kutu" style="border-color:var(--turuncu);"><p class="akis-ad">ONNX Runtime Web</p><p class="akis-alt">WebAssembly, tarayıcıda</p></div>
+<div class="kolon" style="width:300px; justify-content:center; gap:4px;"><p class="el">hızlı</p><p class="el">ücretsiz</p><p class="el">gizli</p></div>
+</div>
+<aside>Çoğu uygulama çizimi bir sunucuya gönderir. Bizde model kullanıcının tarayıcısında çalışıyor. Üç faydası var: hızlı, çünkü ağ gecikmesi yok; ücretsiz, çünkü sunucu yok; gizli, çünkü çizim cihazdan çıkmıyor. Eğitilmiş PyTorch modelini ONNX’e çevirdik; ONNX modeller için ortak bir dosya biçimi, modelin PDF’i gibi düşünülebilir. Tarayıcıda onu ONNX Runtime Web ile, WebAssembly üzerinden çalıştırıyoruz. Çevirmeden sonra iki çıktıyı karşılaştırdık; en büyük fark 0,0000006’dan küçük. Tek tahmin 4,3 ms, ön işlemeyle yaklaşık 5 ms. Oyunda her 250 ms’de bir ve her çizgi bitince tahmin yapıyoruz; bu sürenin yalnız %2’si. Hoca sorarsa: telefonda ölçülmedi; 345 sınıfta yavaşlamadı, 4,4 ms.</aside>
+</section>

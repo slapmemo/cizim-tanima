@@ -1,0 +1,14 @@
+<section id="amac2" class="krem">
+<div class="bas">
+<p class="kas">01 · AMAÇ · TEKNİK TANIM</p>
+<h2>Problemi teknik olarak nasıl tanımladık?</h2>
+</div>
+<div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:24px 32px;">
+<div class="kart"><p class="kart-no">GİRDİ</p><h3>Kalem hareketleri → 28×28 görüntü</h3><p class="kart-metin">Oyuncunun çizdiği çizgilerin koordinatları gri tonlu 28×28 bir görüntüye çevrilir (784 sayı).</p></div>
+<div class="kart"><p class="kart-no">ÇIKTI</p><h3>Her sınıf için bir olasılık</h3><p class="kart-metin">50 (sonra 345) sınıfın her biri için 0–1 arası bir sayı; toplamları 1. En yüksek olan tahmindir.</p></div>
+<div class="kart"><p class="kart-no">NE ZAMAN?</p><h3>Çizim sürerken, 250 ms’de bir</h3><p class="kart-metin">Her 250 ms’de ve her çizgi bitince model yeniden çalışır; tahmin çizim ilerledikçe değişir.</p></div>
+<div class="kart"><p class="kart-no">TANINMA KURALI</p><h3>Birinci tahmin = hedef ve olasılık ≥ eşik</h3><p class="kart-metin">50 sınıfta eşik %50, 345 sınıfta %30. Kural sağlanınca tur biter, kalan süre puan olur.</p></div>
+</div>
+<div class="vurgu-kutu"><p>Kısıt: model telefon ve bilgisayarda, tarayıcının içinde, tahmin başına birkaç milisaniyede çalışmalı.</p></div>
+<aside>Problemi teknik olarak şöyle tanımladık. Girdi: oyuncunun çizdiği çizgilerin koordinatları; bunları 28×28 gri tonlu bir görüntüye, yani 784 sayıya çeviriyoruz. Çıktı: her sınıf için bir olasılık; 50 sınıfla başladık, sonra 345’e çıktık; olasılıkların toplamı 1, en yüksek olan modelin tahmini. Model çizim sürerken çalışıyor: her 250 milisaniyede bir ve her çizgi bitince yeniden tahmin ediyor. Tanınma kuralı: birinci tahmin hedef kelimeyse ve olasılığı eşiği geçiyorsa çizim tanınmış sayılıyor; eşik 50 sınıfta %50, 345 sınıfta %30. Kısıtımız: model tarayıcının içinde, telefonda da bilgisayarda da tahmin başına birkaç milisaniyede çalışmalı. Bu yüzden küçük modeller seçtik.</aside>
+</section>

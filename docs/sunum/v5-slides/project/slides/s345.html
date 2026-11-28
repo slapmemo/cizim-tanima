@@ -1,0 +1,26 @@
+<section id="s345">
+<div class="bas">
+<p class="kas">06 · 345 SINIFA GEÇİŞ</p>
+<h2>345 sınıfta doğruluk neden düştü?</h2>
+</div>
+<div class="satir" style="flex:1; gap:56px;">
+<div class="kolon" style="flex:1; gap:20px;">
+<p style="font-size:28px; line-height:1.4;">50 sınıflı oyun çok kolay gelince modeli veri setindeki <b>345 sınıfın hepsiyle</b> eğittik. M3’ün doğruluğu <b>%97,4 → %77,3</b>’e düştü.</p>
+<p class="soluk" style="font-size:26px;">Sebep: aynı nesnenin farklı adları ayrı sınıf. Her satır, o sınıfın 2 500 test çiziminden kaçının yanlış sınıfa gittiğini gösteriyor:</p>
+<table class="tablo" style="font-size:27px;">
+<tr><th style="width:38%;">Çizilen</th><th style="width:30%;">Model ne sandı</th><th style="width:32%; text-align:right;">2 500 çizimden</th></tr>
+<tr><td>doğum günü pastası</td><td>pasta</td><td style="text-align:right;">936 (%37)</td></tr>
+<tr><td>kasırga</td><td>hortum</td><td style="text-align:right;">871 (%35)</td></tr>
+<tr><td>keman</td><td>gitar</td><td style="text-align:right;">710 (%28)</td></tr>
+<tr><td>okul otobüsü</td><td>otobüs</td><td style="text-align:right;">663 (%27)</td></tr>
+</table>
+</div>
+<div class="kolon" style="width:600px; gap:18px;">
+<h3>Oyunda üç çözüm</h3>
+<div class="kart"><p class="kart-no">1 · Eşdeğer gruplar</p><p class="kart-metin">“Bardak” sorulunca kupa ve kahve fincanı da kabul (12 grup).</p></div>
+<div class="kart"><p class="kart-no">2 · Eşik %50 → %30</p><p class="kart-metin">Olasılık benzer sınıflara bölündüğü için doğru cevap birinci olsa da %40 civarında kalıyordu.</p></div>
+<div class="kart"><p class="kart-no">3 · Seçilmiş kelimeler</p><p class="kart-metin">Model 345’i tanır; oyunda iyi tanınan 258 kelime sorulur.</p></div>
+</div>
+</div>
+<aside>50 sınıflı oyun çok kolay gelince modeli veri setindeki 345 sınıfın hepsiyle eğittik; sınıf başına 20 bin eğitim çizimi, toplam 6,9 milyon. M3’ün doğruluğu %97,4’ten %77,3’e düştü. Ama sebep yeni sınıfların zor olması değil: eski 50 sınıfın çizimleri bile 345 sınıflı modelde %84’e düştü. Asıl sebep aynı nesnenin farklı adlarla ayrı sınıf olması. Tablodaki her satır, o sınıfın 2 500 test çiziminden kaçının başka bir sınıf sanıldığını gösteriyor: örneğin doğum günü pastası çizimlerinin 936’sı, yani %37’si, pasta sanıldı. Oyunda üç çözüm uyguladık: eşdeğer gruplar, bardak sorulunca kupa da kabul; eşik %50’den %30’a, çünkü olasılık benzer sınıflara bölünüyordu; ve oyunda yalnız iyi tanınan 258 kelime soruluyor. Eşik doğrulama setiyle seçildi. Kandırılabilir mi: rastgele bir hedefle kabul %0,36, şans düzeyi %0,39; karalamaların %0,4’ü kabul ediliyor.</aside>
+</section>

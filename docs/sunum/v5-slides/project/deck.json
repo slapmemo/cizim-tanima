@@ -1,0 +1,23 @@
+{
+  "v": 5,
+  "createdOnFiles": {"v": 1, "at": "2026-11-27T22:40:00+03:00"},
+  "lists": "css",
+  "format": {"v": 1, "shared": ["project/deck.css"]},
+  "title": "CNN ile Gerçek Zamanlı Çizim Tanıma Oyunu",
+  "cover": "kapak",
+  "order": ["kapak", "amac", "amac2", "hedefler", "akis", "veriseti", "ndjson", "jsoncizim", "adim1", "rdp", "adim3", "piksel", "onisleme", "neden28", "modeller", "konvolusyon", "havuzlama", "m1", "bn", "dropout", "m2", "artik", "m3", "m3kismi", "egitim", "sonuc50", "erken", "ikimodel", "oyunfark", "toplama", "gercek", "s345", "tarayici", "oyun", "sinir", "sonuc", "demo"],
+  "sections": {
+    "s1": {"description": "Projenin amacı, hedefleri ve uçtan uca akış.", "start": "kapak"},
+    "s2": {"description": "Quick, Draw! verisi ve vuruştan 28×28 görüntüye ön işleme.", "start": "veriseti"},
+    "s3": {"description": "Dört model, temel kavramlar ve eğitim.", "start": "modeller"},
+    "s4": {"description": "50 sınıf sonuçları, erken tanıma, gerçek kullanıcı ve 345 sınıf.", "start": "sonuc50"},
+    "s5": {"description": "Modelin tarayıcıda çalışması ve oyun.", "start": "tarayici"},
+    "s6": {"description": "Sınırlılıklar, sonuç ve canlı demo.", "start": "sinir"}
+  },
+  "faces": {
+    "rubik": {"family": "Rubik", "href": "https://fonts.googleapis.com/css2?family=Rubik:wght@400..800&family=Nunito+Sans:wght@400;600;700;800&family=Caveat:wght@600;700&display=swap"},
+    "nunito-sans": {"family": "Nunito Sans", "href": "https://fonts.googleapis.com/css2?family=Rubik:wght@400..800&family=Nunito+Sans:wght@400;600;700;800&family=Caveat:wght@600;700&display=swap"},
+    "caveat": {"family": "Caveat", "href": "https://fonts.googleapis.com/css2?family=Rubik:wght@400..800&family=Nunito+Sans:wght@400;600;700;800&family=Caveat:wght@600;700&display=swap"}
+  },
+  "designSystems": []
+}

@@ -1,0 +1,28 @@
+<section id="amac">
+<div class="bas">
+<p class="kas">01 · AMAÇ</p>
+<h2>Oyuncu çizerken nesneyi tanımak</h2>
+</div>
+<div class="satir" style="flex:1; gap:64px;">
+<div class="kolon" style="flex:1; gap:28px;">
+<div class="kart giris" style="--i:0; flex-direction:row; gap:28px; align-items:flex-start;">
+<p class="orta-sayi" style="width:60px;">1</p>
+<div class="kolon" style="gap:6px;"><h3>Kelime gelir</h3><p class="kart-metin">“kedi”, “bisiklet”, “makas”…</p></div>
+</div>
+<div class="kart giris" style="--i:1; flex-direction:row; gap:28px; align-items:flex-start;">
+<p class="orta-sayi" style="width:60px;">2</p>
+<div class="kolon" style="gap:6px;"><h3>20 saniyede çiz</h3><p class="kart-metin">Model her 250 ms’de bir ve her çizgi bitince tahmin eder.</p></div>
+</div>
+<div class="kart giris" style="--i:2; flex-direction:row; gap:28px; align-items:flex-start;">
+<p class="orta-sayi" style="width:60px;">3</p>
+<div class="kolon" style="gap:6px;"><h3>Tanınınca tur biter</h3><p class="kart-metin">Puan = 100 × kalan süre / 20 sn</p></div>
+</div>
+<div class="vurgu-kutu giris" style="--i:3;"><p>Erken tanıma = puan. Model yarım çizimi de tanımalı.</p></div>
+</div>
+<div class="kolon" style="width:560px; align-items:center; gap:12px;">
+<img src="/_blob/a996f6ccb35608540e2ff77ceecf3e4e" alt="Oyun ekranı: MAKAS kelimesi, iki çizgiyle 2,1 saniyede tanındı, +90 puan" style="width:520px; height:616px; object-fit:contain; border-radius:24px;">
+<p class="kucuk">Gerçek oyun: makas, mürekkebin yalnız %35’iyle 2,1 sn’de tanındı</p>
+</div>
+</div>
+<aside>Bu projede oyuncunun ekrana çizdiği nesneyi çizim bitmeden tanıyan, CNN tabanlı bir oyun geliştirdik. Oyunda bir kelime geliyor, oyuncunun 20 saniyesi var; model çizimi tanıdığı anda tur bitiyor. Puan kalan süreyle orantılı: 100 × kalan süre / 20 sn. Yani model ne kadar erken tanırsa oyuncu o kadar çok puan alıyor. Bu yüzden modelin yalnız bitmiş çizimi değil, yarım çizimi de tanıması gerekiyordu. Projenin asıl araştırma sorusu bu oldu. Sağdaki ekran oyunun kendisinden: makas, çizimin yalnız iki çizgisiyle 2,1 saniyede tanındı.</aside>
+</section>

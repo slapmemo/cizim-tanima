@@ -1,0 +1,22 @@
+<section id="sonuc50">
+<div class="bas">
+<p class="kas">06 · 50 SINIF SONUÇLARI</p>
+<h2>Hata oranı: M1’den M2’ye neredeyse yarıya</h2>
+</div>
+<div class="satir" style="gap:64px; align-items:center; flex:1;">
+<div class="kolon" style="flex:1; gap:26px;">
+<div class="cubuk-iz giris" style="--i:0;"><p class="cubuk-ad">M1</p><div class="cubuk-dolgu" style="width:520px; background:#8C93AE;"></div><p class="cubuk-deger">%4,78</p></div>
+<div class="cubuk-iz giris" style="--i:1;"><p class="cubuk-ad">M2 artırmasız</p><div class="cubuk-dolgu" style="width:312px;"></div><p class="cubuk-deger">%2,87</p></div>
+<div class="cubuk-iz giris" style="--i:2;"><p class="cubuk-ad">M2 artırmalı</p><div class="cubuk-dolgu" style="width:333px;"></div><p class="cubuk-deger">%3,06</p></div>
+<div class="cubuk-iz giris" style="--i:3;"><p class="cubuk-ad">M3</p><div class="cubuk-dolgu" style="width:280px;"></div><p class="cubuk-deger">%2,57 · en düşük</p></div>
+<div class="cubuk-iz giris" style="--i:4;"><p class="cubuk-ad">M3-kısmi</p><div class="cubuk-dolgu" style="width:381px; background:var(--turuncu);"></div><p class="cubuk-deger">%3,50</p></div>
+<p class="kaynak" style="margin-top:12px;">Test seti: 250 000 çizim · doğruluk: M1 %95,22 · M2 %97,13 / %96,94 · M3 %97,43 · M3-kısmi %96,50</p>
+</div>
+<div class="kolon" style="width:520px; gap:22px;">
+<div class="kart"><h3>M1 → M2</h3><p class="kart-metin">Derinlik, BatchNorm, Dropout işe yarıyor.</p></div>
+<div class="kart"><h3>M2 → M3</h3><p class="kart-metin">Yalnız 0,3 puan, ama 2,5 kat yavaş.</p></div>
+<div class="kart"><h3>Artırmasız / artırmalı?</h3><p class="kart-metin">Aynı M2, bir kez veri artırmayla eğitildi: kazanç yok (−0,19).</p></div>
+</div>
+</div>
+<aside>Test seti 250 000 çizim. M1’den M2’ye hata %4,8’den %2,9’a indi, neredeyse yarıya; derinlik, BatchNorm ve Dropout işe yarıyor. M2’den M3’e kazanç yalnız 0,3 puan, ama M3 2,5 kat yavaş; daha karmaşık model her zaman çok daha iyi değil. M2 artırmasız ve artırmalı aynı model: biri normal eğitildi, diğeri eğitim çizimleri her seferinde rastgele döndürülüp büyütülüp kaydırılarak eğitildi. Veri artırma test setinde işe yaramadı, hatta 0,2 puan düşürdü; sınıf başına 30 bin çizim zaten yeterince çeşitli. Dürüst olmak gerekirse her model bir kez eğitildi; 0,3 puanlık farklar kesin değil. M3-kısmi tam çizimde 0,9 puan geride; neden onu seçtiğimizi şimdi anlatacağız. Hoca sorarsa en çok karışanlar: ay ile muz, örümcek ile güneş, mantar ile şemsiye; şekil benzerliği. İlk 3 tahminde doğruluk %98,8–99,5.</aside>
+</section>

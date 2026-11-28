@@ -1,0 +1,18 @@
+<section id="modeller" class="krem">
+<div class="bas">
+<p class="kas">05 · MODELLER</p>
+<h2>Dört model, her biri bir öncekinden gelişmiş</h2>
+</div>
+<table class="tablo" style="font-size:30px;">
+<tr><th style="width:24%;">Model</th><th style="width:52%;">Yapı</th><th style="width:24%; text-align:right;">Parametre</th></tr>
+<tr><td>M1 · Basit CNN</td><td>2 konvolüsyon + havuzlama + tam bağlı</td><td style="text-align:right;">427 bin</td></tr>
+<tr><td>M2 · Derin CNN</td><td>3 blok (2’şer konvolüsyon), BatchNorm, Dropout</td><td style="text-align:right;">595 bin</td></tr>
+<tr><td>M3 · Hafif ResNet</td><td>Artık (residual) bağlantılı 6 blok</td><td style="text-align:right;">701 bin</td></tr>
+<tr><td style="color:var(--turuncu-k);">M3-kısmi</td><td style="color:var(--turuncu-k);">M3’ün aynısı + eğitimde yarım çizimler</td><td style="text-align:right; color:var(--turuncu-k);">701 bin</td></tr>
+</table>
+<div class="satir" style="gap:28px;">
+<div class="kart" style="flex:1.4;"><h3>Parametre ne demek?</h3><p class="kart-metin">Modelin eğitimde öğrendiği sayılar (ağırlıklar). Örneğin bir 3×3 filtre 9 ağırlık + 1 sabit = 10 parametredir. Parametre arttıkça model büyür, dosya ağırlaşır, tahmin yavaşlar.</p></div>
+<div class="kart" style="flex:1;"><h3>Neden küçük tuttuk?</h3><p class="kart-metin">Model tarayıcıda her 250 ms’de çalışacak. 400–700 bin parametre ≈ 2–3 MB’lık dosya.</p></div>
+</div>
+<aside>Mimarinin ne kadar fark yarattığını görmek için her biri bir öncekinden gelişmiş üç model kurduk; dördüncüsü M3’ün yarım çizimlerle eğitilmiş hâli. Parametre ne demek: modelin eğitim sırasında öğrendiği sayılar, yani ağırlıklar. Örneğin 3×3’lük bir filtrenin 9 ağırlığı ve 1 sabit terimi var, toplam 10 parametre. M1’in 427 bin parametresi var demek, model eğitimde 427 bin sayıyı ayarladı demek. Parametre arttıkça model daha çok şey öğrenebilir ama dosya büyür ve tahmin yavaşlar. Bizim modellerimiz bilinçli olarak küçük, 2–3 MB, çünkü tarayıcıda saniyede birkaç kez çalışacaklar. Şimdi önce kavramları, sonra her modeli tek tek anlatacağız.</aside>
+</section>

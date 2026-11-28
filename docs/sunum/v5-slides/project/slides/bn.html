@@ -1,0 +1,13 @@
+<section id="bn" class="krem">
+<div class="bas">
+<p class="kas">05 · KAVRAM</p>
+<h2>BatchNorm: her kanalı aynı ölçeğe getirmek</h2>
+</div>
+<img src="/_blob/9f3c04b37d4abf5a56caa5e4694553d4" alt="M2’nin ilk konvolüsyonundan 8 kanal: BatchNorm’dan önce değer aralıkları küçük ve farklı yerlerde, sonra hepsi sıfır çevresinde ve aynı genişlikte" style="width:1664px; height:440px; object-fit:contain;">
+<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:24px;">
+<div class="kart"><h3>Ne yapar?</h3><p class="kart-metin">Her kanalın değerlerinden ortalamayı çıkarır, sapmaya böler: hepsi 0 çevresinde, benzer aralıkta.</p></div>
+<div class="kart"><h3>Neden?</h3><p class="kart-metin">Sonraki katman hep benzer büyüklükte sayılar alır; eğitim daha hızlı ve kararlı olur.</p></div>
+<div class="kart"><h3>Görseldeki veri</h3><p class="kart-metin">Eğitilmiş M2’nin ilk katmanı, 512 gerçek test çizimi.</p></div>
+</div>
+<aside>BatchNorm, yani yığın normalleştirme. Görselde M2’nin ilk konvolüsyon katmanından 8 kanal var; her çubuk bir kanalın değerlerinin aralığı, nokta ortalaması. Solda BatchNorm’dan önce: kanallar birbirinden farklı yerlerde ve hepsi çok dar aralıkta. Sağda sonra: hepsi sıfır çevresinde ve aşağı yukarı aynı genişlikte. BatchNorm her kanalın değerlerinden ortalamayı çıkarıp sapmaya bölüyor; ardından öğrenilen bir ölçek ve kaydırma uyguluyor. Faydası: sonraki katman hep benzer büyüklükte sayılar alıyor, eğitim daha hızlı ve kararlı ilerliyor. Bu veriler eğitilmiş M2 modelinden, 512 gerçek test çizimiyle ölçüldü.</aside>
+</section>

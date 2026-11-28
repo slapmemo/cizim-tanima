@@ -116,3 +116,16 @@ Plan: [plan.md](plan.md). Rapor taslağı: [rapor/rapor.md](rapor/rapor.md).
 - Hoca sunum istedi. Konuşma notları kullanıcıyla birlikte yazıldı: `docs/sunum/konusma-notlari.md` + `.pdf` (13 slayt; söylenecek, hoca sorarsa, kavramlar).
 - Üç taslak: `v1-pptx` (pptxgenjs, öneri), `v2-html` (reveal.js), `v3-marp` (Marp PDF). Kullanıcı henüz seçmedi; seçilen düzeltilecek (v1: veri seti slaytı boş; v2: içerik üstte, erken tanıma vurgusu ters; v3: yazılar küçük).
 - **Açık:** versiyon seçimi; demo adresi (Vercel); oyun ekranı görüntüsü; kapakta ad/no; 345 sınıflı modelle gerçek kullanıcı yeniden testi (sunuma eski %68,6 konmadı).
+
+## Sunum v5 (27–28 Kasım 2026)
+
+- Slides destesi (37 slayt): https://claude.ai/artifact/LRkddHw8yFkUsyiS8wdwGm · yerel kopya `docs/sunum/v5-slides/` (slayt HTML, görseller, üretim betikleri). Kullanıcı geri bildirimiyle bir kez revize edildi; anlatım metinleri konuşmacı notlarında. Kaynak metin `docs/sunum/sunum-detayli - Kopya.md`.
+- Görseller `docs/sunum/gorseller/` (ön işleme adımları, RDP, kavramlar, mimari) ve siteden ekran görüntüleri (puppeteer, `v5-slides/cek.cjs`, `topla.cjs`).
+- Ölçülen not: 50 sınıfta `recognized:false` %6; çıkarınca sınıf başına en az 103 bin çizim kaldı.
+- `.venv`'e `pymupdf` ve `segno` kuruldu (PDF okuma, QR).
+
+## Sıradaki iş (kullanıcı onayladı, sonra yapılacak)
+
+- **Serbest pratik modu:** sitede yeni sekme; rastgele kelime sorar ("pizza çiz"), çizerken ilk 5 tahmin oranlarıyla canlı görünür, süre/puan yok, "Sonraki kelime" ile istenince geçilir. Mevcut oyun ve serbest çizim parçalarıyla yapılacak. Önce yerelde gösterilecek; onaydan sonra GitHub'a push (Vercel yayını). Bitince sunumun demo slaytına (37) eklenecek.
+- Sunumda bekleyen küçük öneriler: 7. slayt "recognized" kartı ("etiketi güvenilmez, %6"), 11. slayt 2 piksel pay gerekçesi, 12. slayt "neden piksele çevirdik" kartı; isteğe bağlı birkaç `recognized:false` örnek çizimi.
+- **345 sınıflı modelle arkadaş çizimleri → sunuma ekle:** yeniden ölçüm gerekmiyor; gruplu ve %30 eşikli ölçüm 29 Ekim’de yapıldı (`deneyler/olcum.md`, zor sekme, 216/229 çizim): ilk-1 (grup) M1 %63,0 · M3 %69,4 · M3-kısmi %69,4; oyunda tanınan M1 %75,5 · M3 %80,6 · M3-kısmi %80,6; tur puanı 49,0 / 53,4 / 58,4. 50 nesneden yalnız “araba” bir eşdeğer grupta, gruplar sonucu neredeyse değiştirmiyor (grupsuz %68,6). İş: bu tabloyu sunumun gerçek kullanıcı slaytına eklemek.

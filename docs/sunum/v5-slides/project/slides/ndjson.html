@@ -1,0 +1,15 @@
+<section id="ndjson">
+<div class="bas">
+<p class="kas">03 · VERİ HAZIRLAMA</p>
+<h2>Ham veri: her satır bir çizim</h2>
+</div>
+<div class="cerceve" style="background:#1E1E1E; border-color:#1E1E1E; padding:16px;">
+<img src="/_blob/cfc58a7d746d5b16b887a71a60d2a9e6" alt="bird.ndjson dosyası: her satırda word, countrycode, timestamp, recognized, key_id ve drawing alanları olan bir JSON" style="width:1620px; height:396px; object-fit:contain;">
+</div>
+<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:28px;">
+<div class="kart giris" style="--i:0;"><h3>NDJSON</h3><p class="kart-metin">Her sınıf ayrı dosya, her satır bir çizim. 50 sınıf ≈ 3 GB.</p></div>
+<div class="kart giris" style="--i:1;"><h3>Yalnız recognized: true</h3><p class="kart-metin">Google’ın oyununda tanınan çizimler. Tanınmayanlar %6’ydı; çıkardık.</p></div>
+<div class="kart giris" style="--i:2;"><h3>Tekrarlanabilir bölme</h3><p class="kart-metin">Karıştırma sabit bir sayıyla (tohum) yapıldı: her çalıştırmada aynı çizim aynı bölüme düşer.</p></div>
+</div>
+<aside>Veriyi Google’ın deposundan NDJSON biçiminde indirdik; her sınıf ayrı bir dosya, her satır bir JSON nesnesi, yani bir çizim. Ekrandaki bird.ndjson dosyası. drawing alanı vuruşların listesi. simplified sürümünü kullandık; Google koordinatları 0–255 aralığına ölçekleyip sadeleştirmiş. 50 sınıf yaklaşık 3 GB tuttu. recognized alanı Google’ın kendi modelinin o çizimi tanıyıp tanımadığını gösteriyor; biz yalnız tanınanları aldık. Sonra her sınıfı sabit bir rastgelelik tohumuyla karıştırıp 30 bin eğitim, 5 bin doğrulama, 5 bin test olarak ayırdık. Eğitim: model öğrenir. Doğrulama: ayar ve model seçimi. Test: en sonda bir kez, gerçek başarıyı ölçmek için. Sabit tohum ne demek: veriyi karıştırırken rastgele sayı üretecine sabit bir başlangıç sayısı verdik, 1234. Böylece karıştırma her çalıştırmada aynı çıkıyor; aynı çizim hep aynı bölüme, eğitime ya da teste düşüyor. Sonuçlar tekrarlanabilir ve test çizimleri eğitime hiç karışmıyor. Hoca recognized false olanları neden almadınız diye sorarsa: bir, bu çizimlerin bir kısmı yarım bırakılmış, karalama ya da başka bir şey; etiket çizimle uyuşmayabilir, yani gürültülü veri. İki, oranı küçük, 50 sınıfta yalnız %6; çıkardıktan sonra en az veri olan sınıfta bile 103 bin çizim kaldı, bize 40 bin yetiyordu. Üç, bedelini biliyoruz: kötü çizimler veride olmadığı için test sonucu biraz iyimser; gerçek kullanıcı testindeki düşüşün bir sebebi bu olabilir. Hoca test setini neden en sonda kullandınız diye sorarsa: seçimi testle yaparsak sonuç iyimser görünür.</aside>
+</section>

@@ -1,0 +1,15 @@
+<section id="rdp" class="krem">
+<div class="bas">
+<p class="kas">04 · ÖN İŞLEME · ADIM 2 / 4</p>
+<h2>Titrek çizgiyi sadeleştirmek (RDP)</h2>
+</div>
+<div class="cerceve" style="padding:12px;">
+<img src="/_blob/b8e34d137ec652b52164becda80efabf" alt="Aynı salyangoz çizimi: ham 376 nokta, RDP ε=2 ile 58 nokta, ε=20 ile 16 nokta ve köşeli şekil" style="width:1600px; height:410px; object-fit:contain;">
+</div>
+<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:28px;">
+<div class="kart"><h3>Nasıl çalışır?</h3><p class="kart-metin">İlk ve son noktayı birleştir; en uzak nokta ε’dan yakınsa aradakileri sil, değilse ikiye böl ve tekrarla.</p></div>
+<div class="kart"><h3>ε = 2 nedir?</h3><p class="kart-metin">Silinmek için izin verilen sapma (0–255 ölçeği, ≈%1). Google’ın veri setinde kullandığı değer.</p></div>
+<div class="kart"><h3>Neden?</h3><p class="kart-metin">Oyundaki titrek fare çizgisi eğitim verisiyle aynı biçime gelir; tahmin de hızlanır.</p></div>
+</div>
+<aside>RDP, bir çizgiyi şeklini bozmadan daha az noktayla ifade eden bir sadeleştirme algoritması. İlk ve son noktayı birleştiren doğruya en uzak noktaya bakar; ε’dan yakınsa aradaki bütün noktaları siler, uzaksa o noktayı tutar ve iki parçada tekrarlar. Fareyle çizdiğimizde tarayıcı yüzlerce titrek nokta kaydediyor. ε = 2 ile 58 noktaya iniyor, şekil bozulmuyor. ε’yu 20 yaparsak sağdaki gibi şekil köşeli hâle geliyor. Neden kullandık: Google simplified veri setini hazırlarken tam olarak bunu uygulamış, RDP ε = 2. Model eğitimde hep sadeleştirilmiş çizgiler gördü; oyuncunun ham çizimini işlemeden verseydik eğitimde görmediği titrek çizgilerle karşılaşırdı. İkinci fayda hız: nokta azalınca piksel hesabı da azalıyor. Hoca sorarsa: ε büyürse şekil köşeli olur, küçülürse titreme kalır; 2 değeri Google’la uyum için seçildi, ayrıca denenmedi. Not: soldaki ham çizim temsilî, sadeleştirme projedeki gerçek fonksiyonla yapıldı.</aside>
+</section>

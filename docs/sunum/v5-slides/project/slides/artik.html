@@ -1,0 +1,39 @@
+<section id="artik" style="gap:32px;">
+<div class="bas">
+<p class="kas">05 · KAVRAM</p>
+<h2>Artık bağlantı: girişi çıkışa eklemek</h2>
+</div>
+<div class="kolon" style="gap:14px;">
+<p style="font-size:26px; font-weight:800; color:var(--soluk);">NORMAL BLOK</p>
+<div style="display:flex; gap:12px; align-items:center;">
+<div class="katman gri" style="flex:none; width:150px;"><p class="k-ad">x</p><p class="k-detay">giriş</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman" style="flex:none; width:300px;"><p class="k-ad">Konvolüsyon</p><p class="k-detay">+ BN + ReLU</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman" style="flex:none; width:300px;"><p class="k-ad">Konvolüsyon</p><p class="k-detay">+ BN</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman cikis" style="flex:none; width:320px;"><p class="k-ad">çıkış = F(x)</p><p class="k-detay">yalnız blokta öğrenilen</p></div>
+</div>
+</div>
+<div class="kolon" style="gap:14px;">
+<p style="font-size:26px; font-weight:800; color:#2E8B57;">ARTIK BLOK (M3’te)</p>
+<div style="display:flex; gap:12px; align-items:center;">
+<div class="katman gri" style="flex:none; width:150px;"><p class="k-ad">x</p><p class="k-detay">giriş</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman" style="flex:none; width:300px;"><p class="k-ad">Konvolüsyon</p><p class="k-detay">+ BN + ReLU</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman" style="flex:none; width:300px;"><p class="k-ad">Konvolüsyon</p><p class="k-detay">+ BN</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman artikb" style="flex:none; width:100px; align-items:center;"><p class="k-ad" style="font-size:40px;">+</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman artikb" style="flex:none; width:360px;"><p class="k-ad">çıkış = F(x) + x</p><p class="k-detay">+ ReLU</p></div>
+</div>
+<div style="width:1011px; height:44px; margin-left:75px; border:5px solid #2E8B57; border-top:none; border-radius:0 0 16px 16px;"></div>
+<p style="font-size:26px; font-weight:700; color:#2E8B57; margin-left:75px;">kısa yol: x hiçbir işlemden geçmeden + noktasına taşınır</p>
+</div>
+<div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:24px;">
+<div class="kart"><h3>Neden gerekli?</h3><p class="kart-metin">Katman sayısı arttıkça öğrenme sinyali geriye doğru zayıflar; derin ağ zor eğitilir.</p></div>
+<div class="kart"><h3>Kısa yol ne sağlar?</h3><p class="kart-metin">Blok bir şey öğrenemese bile (F(x) ≈ 0) giriş kaybolmaz; blok yalnız “düzeltmeyi” öğrenir.</p></div>
+</div>
+<aside>Üstte normal bir blok: giriş x iki konvolüsyondan geçiyor ve çıkış yalnız bloğun hesapladığı F(x). Altta artık blok, M3’te kullandığımız: aynı iki konvolüsyon var ama girişin bir kopyası, yeşil kısa yoldan hiçbir işlemden geçmeden artı noktasına taşınıyor ve bloğun çıktısına ekleniyor; çıkış F(x) + x. Neden gerekli: katman sayısı arttıkça eğitimde öğrenme sinyali geriye doğru zayıflıyor ve derin ağ zor eğitiliyor. Kısa yol sinyale engelsiz bir yol açıyor. Blok bir şey öğrenemese bile F(x) sıfıra yakın olur ve giriş kaybolmaz; blok yalnız girişte neyin düzeltilmesi gerektiğini öğrenir. ResNet’in temel fikri bu; M3’teki 13 konvolüsyon katmanını bu sayede sorunsuz eğittik.</aside>
+</section>

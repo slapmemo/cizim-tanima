@@ -1,0 +1,110 @@
+:root {
+  --lacivert: #1C2142;
+  --lacivert2: #262C55;
+  --krem: #EDE6D6;
+  --krem2: #F6F2EA;
+  --kart: #FBF9F4;
+  --turuncu: #E8964A;
+  --turuncu-k: #A8481A;
+  --mavi: #2D57C9;
+  --metin: #1C2142;
+  --soluk: #565C74;
+  --acik: #EDE6D6;
+  --acik-soluk: #B4B9D2;
+  --cizgi: #D6CDB8;
+}
+
+body { font-family: 'Nunito Sans', Verdana, sans-serif; color: var(--metin); }
+
+section {
+  background: var(--krem2);
+  padding: 104px 128px 112px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  counter-increment: sayfa;
+}
+section.krem { background: var(--krem); }
+section.koyu { background: var(--lacivert); color: var(--acik); }
+
+.bas { display: flex; flex-direction: column; gap: 14px; }
+.kas { font-family: 'Rubik', Arial, sans-serif; font-size: 24px; font-weight: 700; letter-spacing: 3px; color: var(--turuncu-k); }
+section.koyu .kas { color: var(--turuncu); }
+h1 { font-family: 'Rubik', Arial, sans-serif; font-size: 120px; font-weight: 800; line-height: 1.02; color: var(--acik); }
+h2 { font-family: 'Rubik', Arial, sans-serif; font-size: 60px; font-weight: 700; line-height: 1.1; color: var(--metin); }
+section.koyu h2 { color: var(--acik); }
+h3 { font-family: 'Rubik', Arial, sans-serif; font-size: 36px; font-weight: 700; line-height: 1.2; color: var(--metin); }
+section.koyu h3 { color: var(--acik); }
+p { font-size: 30px; line-height: 1.4; }
+.soluk { color: var(--soluk); }
+section.koyu .soluk { color: var(--acik-soluk); }
+.kucuk { font-size: 24px; line-height: 1.4; color: var(--soluk); }
+section.koyu .kucuk { color: var(--acik-soluk); }
+
+ul.liste, ol.liste { font-size: 30px; line-height: 1.4; display: flex; flex-direction: column; gap: 14px; padding-left: 36px; }
+ul.liste li, ol.liste li { margin-top: 0; }
+
+.satir { display: flex; gap: 40px; }
+.esit { flex: 1; }
+.kolon { display: flex; flex-direction: column; gap: 20px; }
+
+.kart { background: var(--kart); border: 2px solid var(--cizgi); border-radius: 20px; padding: 32px 36px; display: flex; flex-direction: column; gap: 12px; }
+section.koyu .kart { background: var(--lacivert2); border-color: #3A4175; }
+.kart .kart-no { font-family: 'Rubik', Arial, sans-serif; font-size: 28px; font-weight: 800; color: var(--turuncu-k); }
+section.koyu .kart .kart-no { color: var(--turuncu); }
+.kart .kart-metin { font-size: 26px; line-height: 1.4; color: var(--soluk); }
+section.koyu .kart .kart-metin { color: var(--acik-soluk); }
+
+.cerceve { background: var(--kart); border: 2px solid var(--cizgi); border-radius: 24px; padding: 20px; display: flex; justify-content: center; align-items: center; }
+section.koyu .cerceve { background: #10142E; border-color: #3A4175; }
+
+.buyuk-sayi { font-family: 'Rubik', Arial, sans-serif; font-size: 120px; font-weight: 800; line-height: 1; color: var(--mavi); }
+section.koyu .buyuk-sayi { color: var(--turuncu); }
+.orta-sayi { font-family: 'Rubik', Arial, sans-serif; font-size: 72px; font-weight: 800; line-height: 1; color: var(--mavi); }
+section.koyu .orta-sayi { color: var(--turuncu); }
+.sayi-alt { font-size: 26px; line-height: 1.35; color: var(--soluk); }
+section.koyu .sayi-alt { color: var(--acik-soluk); }
+.ust-cizgi { border-top: 6px solid var(--metin); padding-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+section.koyu .ust-cizgi { border-top-color: var(--acik); }
+
+.el { font-family: 'Caveat', 'Brush Script MT', cursive; font-size: 40px; font-weight: 700; color: var(--turuncu); }
+
+.vurgu-kutu { background: var(--lacivert); color: var(--acik); border-radius: 20px; padding: 28px 36px; }
+.vurgu-kutu p { font-size: 32px; font-weight: 700; color: var(--acik); }
+
+table.tablo { font-size: 28px; color: var(--metin); width: 100%; }
+table.tablo th { text-align: left; }
+section.koyu table.tablo { color: var(--acik); }
+
+.akis-kutu { background: var(--kart); border: 2px solid var(--cizgi); border-radius: 18px; padding: 24px 22px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.akis-kutu .akis-ad { font-family: 'Rubik', Arial, sans-serif; font-size: 28px; font-weight: 700; color: var(--metin); }
+.akis-kutu .akis-alt { font-size: 24px; line-height: 1.35; color: var(--soluk); }
+section.koyu .akis-kutu { background: var(--lacivert2); border-color: #3A4175; }
+section.koyu .akis-kutu .akis-ad { color: var(--acik); }
+section.koyu .akis-kutu .akis-alt { color: var(--acik-soluk); }
+x-shape.ok { width: 44px; height: 26px; background: var(--turuncu); align-self: center; flex: none; }
+
+.cubuk-iz { display: flex; align-items: center; gap: 20px; }
+.cubuk-ad { width: 260px; font-size: 28px; font-weight: 700; color: var(--metin); }
+.cubuk-dolgu { height: 52px; border-radius: 10px; background: var(--mavi); }
+.cubuk-deger { font-family: 'Rubik', Arial, sans-serif; font-size: 30px; font-weight: 700; color: var(--metin); }
+
+.kaynak { font-size: 24px; color: var(--soluk); }
+
+.mimari { display: flex; gap: 8px; align-items: stretch; }
+.katman { flex: 1; background: var(--kart); border: 2px solid var(--cizgi); border-top: 10px solid var(--mavi); border-radius: 16px; padding: 20px 18px; display: flex; flex-direction: column; gap: 8px; }
+.katman.havuz { border-top-color: #0891B2; }
+.katman.tam { border-top-color: var(--turuncu); }
+.katman.cikis { border-top-color: #C23B3B; }
+.katman.gri { border-top-color: #8C93AE; }
+.katman.artikb { border-top-color: #2E8B57; }
+.katman .k-ad { font-family: 'Rubik', Arial, sans-serif; font-size: 26px; font-weight: 700; line-height: 1.2; color: var(--metin); }
+.katman .k-detay { font-size: 24px; line-height: 1.35; color: var(--soluk); }
+.katman .k-boyut { font-family: 'Rubik', Arial, sans-serif; font-size: 24px; font-weight: 600; color: var(--mavi); margin-top: auto; }
+x-shape.okk { width: 28px; height: 22px; background: #8C93AE; align-self: center; flex: none; }
+.adim { display: flex; gap: 14px; align-items: flex-start; }
+.adim .adim-no { font-family: 'Rubik', Arial, sans-serif; font-size: 26px; font-weight: 800; color: var(--turuncu-k); width: 36px; flex: none; }
+.adim p { font-size: 26px; line-height: 1.38; }
+
+@keyframes belir { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.giris { animation: belir 500ms ease-out both; animation-delay: calc(var(--i, 0) * 110ms); }

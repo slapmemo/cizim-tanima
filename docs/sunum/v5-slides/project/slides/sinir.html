@@ -1,0 +1,14 @@
+<section id="sinir" class="krem">
+<div class="bas">
+<p class="kas">08 · SINIRLILIKLAR</p>
+<h2>Sonuçlarımızın eksik kaldığı yerler</h2>
+</div>
+<div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:24px 32px;">
+<div class="kart"><h3>Az sayıda kullanıcı</h3><p class="kart-metin">Gerçek kullanıcı testi yalnız 5 kişiyle yapıldı; dokunmatik ekranda çizen tek kişi vardı. Bu sonuçları herkese genelleyemeyiz.</p></div>
+<div class="kart"><h3>Her model bir kez eğitildi</h3><p class="kart-metin">Aynı model ikinci kez eğitilse sonuç birkaç onda bir değişebilir. Bu yüzden M2 ile M3 arasındaki 0,3 puanlık fark kesin değil.</p></div>
+<div class="kart"><h3>Erken karar, benzer nesnelerde hata</h3><p class="kart-metin">M3-kısmi ayrıntı çizilmeden karar verdiği için benzer nesneleri karıştırabiliyor: ceket çizilip “kazak” sorulduğunda %65 kabul edildi (345 sınıf).</p></div>
+<div class="kart"><h3>“Hiçbiri” seçeneği yok</h3><p class="kart-metin">50 sınıflı model her çizimi bir sınıfa koymak zorunda: rastgele karalamaların %4,5’i bir nesne olarak kabul edildi.</p></div>
+</div>
+<p class="soluk" style="font-size:26px;"><b style="color:var(--metin);">Sonraki adımlar:</b> “hiçbiri” sınıfı · daha büyük girdi (64×64) · modelleri birkaç kez eğitip ortalama almak · daha çok kişiyle ve telefonda test</p>
+<aside>Sonuçlarımızın eksik kaldığı yerleri açıkça söylemek istiyoruz. Bir: gerçek kullanıcı testi yalnız 5 kişiyle yapıldı ve dokunmatik ekranda çizen tek kişi vardı; bu sonuçları herkese genelleyemeyiz. İki: her modeli bir kez eğittik. Aynı model ikinci kez eğitilse rastgelelik yüzünden sonuç birkaç onda bir değişebilir; bu yüzden M2 ile M3 arasındaki 0,3 puanlık fark kesin değil. Ama M1’in geriliği ve yarım çizimdeki fark bundan etkilenmeyecek kadar büyük. Üç: M3-kısmi ayrıntı çizilmeden erken karar verdiği için benzer nesneleri karıştırabiliyor; 345 sınıflı oyunda ceket çizilip kazak sorulduğunda çizim %65 oranında kabul edildi. Dört: 50 sınıflı modelde “hiçbiri” seçeneği yok; model her çizimi bir sınıfa koymak zorunda, bu yüzden rastgele karalamaların %4,5’i bir nesne olarak kabul edildi. 345 sınıflı modelde karalama sınıfı olduğu için bu oran %0,4. Sonraki adımlar: hiçbiri sınıfı, 64×64 girdi, modelleri birkaç kez eğitip ortalama almak, daha çok kişiyle ve telefonda test.</aside>
+</section>

@@ -1,0 +1,27 @@
+<section id="m1" style="gap:32px;">
+<div class="bas">
+<p class="kas">05 · M1 · BASİT CNN</p>
+<h2>Taban model: en basit CNN ne kadar başarılı?</h2>
+</div>
+<div class="mimari">
+<div class="katman gri"><p class="k-ad">Girdi</p><p class="k-detay">çizim</p><p class="k-boyut">28×28</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman"><p class="k-ad">Konvolüsyon + havuzlama</p><p class="k-detay">32 filtre</p><p class="k-boyut">32 × 14×14</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman"><p class="k-ad">Konvolüsyon + havuzlama</p><p class="k-detay">64 filtre</p><p class="k-boyut">64 × 7×7</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman gri"><p class="k-ad">Düzleştir</p><p class="k-detay">tek liste</p><p class="k-boyut">3 136 sayı</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman tam"><p class="k-ad">Tam bağlı</p><p class="k-detay">128 nöron</p><p class="k-boyut">128</p></div>
+<x-shape kind="arrow-right" class="okk"></x-shape>
+<div class="katman cikis"><p class="k-ad">Çıkış</p><p class="k-detay">sınıf puanları</p><p class="k-boyut">50</p></div>
+</div>
+<div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:18px 48px;">
+<div class="adim"><p class="adim-no">1</p><p>İlk konvolüsyon 32 filtreyle kenar ve çizgi arar; havuzlama görüntüyü 28’den 14’e küçültür.</p></div>
+<div class="adim"><p class="adim-no">2</p><p>İkinci konvolüsyon bunları birleştirir (köşe, kavis); görüntü 7×7’ye iner.</p></div>
+<div class="adim"><p class="adim-no">3</p><p>64 harita × 7×7 = 3 136 sayı tek bir listeye dizilir.</p></div>
+<div class="adim"><p class="adim-no">4</p><p>Tam bağlı katman hepsini birleştirir; çıkış her sınıfa bir puan verir, en yüksek puan tahmindir.</p></div>
+</div>
+<div class="vurgu-kutu"><p>Sonuç: test %95,2 · toplam 427 bin parametre, bunun %94’ü tek bir tam bağlı katmanda</p></div>
+<aside>M1 bizim taban modelimiz: en basit CNN ne kadar başarılı, diğer modellerin kazancını buna göre ölçtük. Soldan sağa okuyalım. Girdi 28×28 çizim. İlk konvolüsyon katmanında 32 filtre var; her biri kenar, çizgi gibi basit bir desen arıyor ve 32 desen haritası çıkıyor. Havuzlama bu haritaları yarıya, 14×14’e küçültüyor. İkinci konvolüsyon 64 filtreyle bu desenleri birleştiriyor, köşe ve kavis gibi; tekrar havuzlamayla 7×7’ye iniyor. Sonra 64 haritanın 7×7’lik değerleri, toplam 3 136 sayı, tek bir listeye diziliyor. Tam bağlı katmandaki 128 nöron bu sayıların hepsini birleştiriyor ve çıkış katmanı 50 sınıfın her birine bir puan veriyor. Test doğruluğu %95,2. Parametrelerin %94’ü, 401 bini, tek bir tam bağlı katmanda: 3 136 sayının her biri 128 nörona ayrı bir ağırlıkla bağlı. Bir sonraki slaytlarda bu modelin sorunlarını ve M2’de nasıl çözdüğümüzü göreceğiz. Not: M1 10 epoch, diğerleri 20 epoch eğitildi.</aside>
+</section>

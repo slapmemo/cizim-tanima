@@ -1,0 +1,25 @@
+<section id="akis" class="koyu">
+<div class="bas">
+<p class="kas">02 · AKIŞ ŞEMASI</p>
+<h2>Veriden oyuna altı adım</h2>
+</div>
+<div style="display:flex; gap:14px; align-items:stretch; margin-top:24px;">
+<div class="akis-kutu giris" style="--i:0;"><p class="akis-ad">Quick, Draw!</p><p class="akis-alt">ham çizimler (NDJSON)</p><p class="el" style="font-size:32px;">→ bölüm 03</p></div>
+<x-shape kind="arrow-right" class="ok"></x-shape>
+<div class="akis-kutu giris" style="--i:1;"><p class="akis-ad">Ayıklama</p><p class="akis-alt">eğitim / doğrulama / test</p><p class="el" style="font-size:32px;">→ bölüm 03</p></div>
+<x-shape kind="arrow-right" class="ok"></x-shape>
+<div class="akis-kutu giris" style="--i:2;"><p class="akis-ad">Ön işleme</p><p class="akis-alt">çizgi → 28×28 görüntü</p><p class="el" style="font-size:32px;">→ bölüm 04</p></div>
+<x-shape kind="arrow-right" class="ok"></x-shape>
+<div class="akis-kutu giris" style="--i:3;"><p class="akis-ad">Eğitim</p><p class="akis-alt">PyTorch, ekran kartında</p><p class="el" style="font-size:32px;">→ bölüm 05</p></div>
+<x-shape kind="arrow-right" class="ok"></x-shape>
+<div class="akis-kutu giris" style="--i:4;"><p class="akis-ad">ONNX</p><p class="akis-alt">modeli tarayıcıya taşıma</p><p class="el" style="font-size:32px;">→ bölüm 07</p></div>
+<x-shape kind="arrow-right" class="ok"></x-shape>
+<div class="akis-kutu giris" style="--i:5; border-color:var(--turuncu);"><p class="akis-ad">Oyun</p><p class="akis-alt">tarayıcıda canlı tahmin</p><p class="el" style="font-size:32px;">→ bölüm 07</p></div>
+</div>
+<div style="display:flex; gap:40px; margin-top:16px;">
+<div class="ust-cizgi" style="flex:2;"><h3>Python’da</h3><p class="soluk">Veri hazırlama, ön işleme, eğitim, ölçüm</p></div>
+<div class="ust-cizgi" style="flex:1;"><h3>Tarayıcıda</h3><p class="soluk">Oyun ve canlı tahmin</p></div>
+</div>
+<p class="soluk" style="font-size:28px;">Her kutu sunumun ilerleyen bölümlerinde ayrıntılı anlatılıyor.</p>
+<aside>Bu akış şeması projenin tamamını özetliyor; her kutuyu ilerleyen bölümlerde tek tek anlatacağız. Veriyi Quick, Draw!’dan NDJSON olarak aldık, eğitim, doğrulama ve test diye ayırdık, her çizimi 28×28 görüntüye çevirdik, PyTorch ile ekran kartında eğittik, modeli ONNX dosyasına çevirdik ve tarayıcıdaki oyunda çalıştırdık. İlk dört adım Python’da, son ikisi tarayıcıda.</aside>
+</section>

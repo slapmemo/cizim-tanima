@@ -1,0 +1,19 @@
+<section id="piksel" class="krem">
+<div class="bas">
+<p class="kas">04 · ÖN İŞLEME · ADIM 4 / 4</p>
+<h2>Çizgiyi piksellere çevirmek</h2>
+</div>
+<div class="satir" style="flex:1; gap:40px; align-items:center;">
+<div class="cerceve" style="padding:12px;">
+<img src="/_blob/992c2272bb099ad31d6be9cdd43d26d5" alt="Solda 28×28 kuş ve gerçek çizgi, ortada bacak bölgesinin piksel değerleri, sağda uzaklık-değer kuralı grafiği" style="width:1120px; height:540px; object-fit:contain;">
+</div>
+<div class="kolon" style="flex:1; gap:18px;">
+<p style="font-size:26px; line-height:1.4;">Her pikselin ortasından en yakın çizgiye olan uzaklığı ölçtük:</p>
+<div class="adim"><p class="adim-no">●</p><p><b>0,5 pikselden yakın</b> → 255, siyah</p></div>
+<div class="adim"><p class="adim-no">●</p><p><b>0,5–1,5 piksel</b> → gri, uzaklaştıkça açılır</p></div>
+<div class="adim"><p class="adim-no">●</p><p><b>1,5 pikselden uzak</b> → 0, beyaz</p></div>
+<p class="soluk" style="font-size:26px; line-height:1.4;">Sonuç: 2–3 piksel kalınlığında, kenarı yumuşak bir çizgi.</p>
+</div>
+</div>
+<aside>Son adım: elimizde çizgiler var ama model piksel istiyor. Her pikselin ortasından en yakın çizgi parçasına olan uzaklığı ölçüyoruz. Yarım pikselden yakınsa piksel tam siyah, 255. Yarım ile bir buçuk piksel arasındaysa gri, uzaklaştıkça açılıyor. Bir buçuk pikselden uzaksa beyaz, 0. Ortadaki yakın çekimde bacak çizgisinin tam üstündeki pikseller 255, hemen yanındakiler 230 civarı, bir piksel ötedekiler 20–40. Neden böyle: gri tonlar sayesinde çizgi yarım piksel kaysa da görüntü birden değişmiyor; kalınlık aygıta bağlı değil; ve bu formül saf matematik olduğu için eğitimdeki Python kodu ile oyundaki kod birebir aynı pikselleri üretiyor.</aside>
+</section>

@@ -1,0 +1,11 @@
+<section id="konvolusyon">
+<div class="bas">
+<p class="kas">05 · KAVRAM</p>
+<h2>Konvolüsyon: görüntüde gezen küçük filtre</h2>
+</div>
+<div class="cerceve" style="padding:12px;">
+<img src="/_blob/65f0e70a7b1eb1bb809acbc018a7d3ec" alt="Eğitilmiş M1’in ilk katmanından altı gerçek 3×3 filtre ve kuş çiziminden çıkardıkları desen haritaları" style="width:1400px; height:540px; object-fit:contain;">
+</div>
+<p class="soluk" style="font-size:28px;">3×3 filtre her konumda 9 pikseli kendi 9 ağırlığıyla çarpıp toplar. Ağırlıkları model eğitimde kendisi öğrenir; her filtre bir desen arar.</p>
+<aside>Konvolüsyon: 3×3’lük küçük bir filtre görüntünün üstünde gezer. Her konumda altındaki 9 pikseli kendi 9 ağırlığıyla çarpıp toplar ve tek bir sayı üretir. Sonuç yine bir görüntüdür, buna desen haritası denir. Filtre bir deseni arar, örneğin belli yönde bir kenar; desen nerede varsa haritada orası parlar. Buradaki filtreler eğitilmiş M1 modelinin gerçek ilk katmanından: biri yatay kenarları, biri çapraz kenarları, biri çizginin tamamını yakalıyor. Bu ağırlıkları biz vermedik, model kendisi öğrendi. Konvolüsyondan sonra ReLU gelir: negatif değerleri sıfırlar, ağın doğrusal olmayan ilişkileri öğrenmesini sağlar. Parametre hesabı: 3 × 3 × giriş kanalı × çıkış kanalı + çıkış kanalı; M1’in ilk katmanında 3·3·1·32 + 32 = 320.</aside>
+</section>

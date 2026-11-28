@@ -1,0 +1,13 @@
+<section id="oyunfark" class="koyu">
+<div class="bas">
+<p class="kas">06 · OYUN İÇİN HANGİ MODEL?</p>
+<h2>Oyunda M3-kısmi’yi seçtik: çizimi daha erken tanıyor</h2>
+</div>
+<div style="display:flex; gap:48px; margin-top:16px;">
+<div class="ust-cizgi giris" style="--i:0; flex:1;"><p class="sayi-alt">Tanınan çizim oranı</p><p class="orta-sayi" style="color:var(--acik);">%98,9 → %98,4</p><p class="sayi-alt">İkisi de neredeyse her çizimi tanıyor.</p></div>
+<div class="ust-cizgi giris" style="--i:1; flex:1;"><p class="sayi-alt">Ortalama tur puanı</p><p class="orta-sayi">67,4 → 74,7</p><p class="sayi-alt">M3-kısmi daha erken tanıdığı için 7 puan fazla.</p></div>
+<div class="ust-cizgi giris" style="--i:2; flex:1;"><p class="sayi-alt">60 saniyede tanınan nesne</p><p class="orta-sayi">8,1 → 10,3</p><p class="sayi-alt">Seri modunda 2 nesne daha fazla.</p></div>
+</div>
+<p class="soluk" style="font-size:28px; margin-top:auto;">Nasıl ölçtük? Oyunun kuralını Python’da birebir yazdık; test çizimlerini sanki biri çiziyormuş gibi parça parça modele verdik ve kaçıncı saniyede tanındığını kaydettik. Sol: M3, sağ: M3-kısmi (50 sınıf).</p>
+<aside>Oyun için hangi modeli kullanacağımıza tam çizim doğruluğuna bakarak değil, çizimi ne kadar erken tanıdığına bakarak karar verdik. Nasıl ölçtük: oyunun kuralını Python’da birebir yazdık ve test çizimlerini sanki biri çiziyormuş gibi parça parça modele verdik; her çizimin kaçıncı saniyede tanındığını kaydettik. Sonuç: iki model de çizimlerin neredeyse hepsini tanıyor; M3 biraz daha fazla ama daha geç. M3-kısmi daha erken tanıdığı için tur başına ortalama 7 puan daha fazla kazandırıyor ve 60 saniyelik seri modunda 2 nesne daha fazla tanınıyor. Bu yüzden oyunda M3-kısmi’yi kullanıyoruz.</aside>
+</section>

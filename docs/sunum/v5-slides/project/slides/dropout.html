@@ -1,0 +1,20 @@
+<section id="dropout">
+<div class="bas">
+<p class="kas">05 · KAVRAM</p>
+<h2>Dropout: eğitimde rastgele nöron kapatmak</h2>
+</div>
+<div class="kolon" style="gap:12px; align-items:center;">
+<img src="/_blob/b765a44ee877396aabdf50c562b885e0" alt="Üç ağ: eğitim adımı 1 ve 2’de farklı nöronlar kapalı (çarpı işaretli), tahmin sırasında bütün nöronlar açık" style="width:1600px; height:380px; object-fit:contain;">
+<div style="display:grid; grid-template-columns:480px 480px 480px; column-gap:80px;">
+<p style="text-align:center; font-size:28px; font-weight:700;">Eğitim, adım 1</p>
+<p style="text-align:center; font-size:28px; font-weight:700;">Eğitim, adım 2</p>
+<p style="text-align:center; font-size:28px; font-weight:700; color:var(--mavi);">Tahmin: hepsi açık</p>
+</div>
+</div>
+<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:24px;">
+<div class="kart"><h3>Ne yapar?</h3><p class="kart-metin">Her eğitim adımında nöronların bir kısmı (✕) rastgele kapatılır; her adımda başkaları.</p></div>
+<div class="kart"><h3>Neden?</h3><p class="kart-metin">Ağ tek bir nörona güvenemez, bilgiyi yayar: ezberlemesi zorlaşır.</p></div>
+<div class="kart"><h3>Bizde</h3><p class="kart-metin">M2: konvolüsyonlarda %10, tam bağlı katmanda %40. M3: %20.</p></div>
+</div>
+<aside>Dropout: eğitim sırasında her adımda nöronların bir kısmı rastgele kapatılıyor. Soldaki iki ağ iki farklı eğitim adımı: çarpı işaretli nöronlar o adımda kapalı ve her adımda başka nöronlar kapanıyor. Sağdaki ağ tahmin anı: tüm nöronlar açık. Neden işe yarıyor: ağ hiçbir zaman tek bir nörona güvenemediği için bilgiyi birçok nörona yaymak zorunda kalıyor; bu da ezberlemeyi, yani aşırı öğrenmeyi azaltıyor. Ezber: modelin eğitim verisinde çok iyi, yeni veride daha kötü olması. M2’de konvolüsyon bloklarında %10, tam bağlı katmanda %40; M3’te çıkıştan önce %20 dropout kullandık.</aside>
+</section>

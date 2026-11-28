@@ -1,0 +1,13 @@
+<section id="sonuc" class="koyu">
+<div class="bas">
+<p class="kas">09 · SONUÇ</p>
+<h2>Bu projeden ne öğrendik?</h2>
+</div>
+<div class="vurgu-kutu" style="background:var(--lacivert2); border:2px solid var(--turuncu);"><p style="font-size:40px; line-height:1.3;">Modelin yarım çizimi tanıması için mimariyi büyütmek yetmedi; modeli yarım çizimlerle eğitmek gerekti.</p></div>
+<div style="display:flex; gap:40px; margin-top:auto;">
+<div class="ust-cizgi giris" style="--i:0; flex:1;"><p class="buyuk-sayi">%97,4</p><p class="sayi-alt">Küçük bir CNN 50 sınıfı bu doğrulukla tanıyor ve tarayıcıda ~5 ms’de çalışıyor.</p></div>
+<div class="ust-cizgi giris" style="--i:1; flex:1;"><p class="buyuk-sayi">%15 → %40</p><p class="sayi-alt">Çizimin ilk çeyreğinde doğruluk, yalnız eğitim verisini değiştirerek.</p></div>
+<div class="ust-cizgi giris" style="--i:2; flex:1;"><p class="buyuk-sayi">+7 puan</p><p class="sayi-alt">Oyun için modeli erken tanımasına göre seçince tur başına kazanç.</p></div>
+</div>
+<aside>Bu projeden üç şey öğrendik. Birincisi ve en önemlisi: modelin yarım çizimi tanıması için mimariyi büyütmek yetmedi; M1’den M3’e kadar hepsi çizimin ilk çeyreğinde %15 civarında kaldı. Modeli yarım çizimlerle eğitince bu oran %40’a çıktı. İkincisi: küçük bir CNN 50 sınıfı %97,4 doğrulukla tanıyor ve tarayıcıda yaklaşık 5 milisaniyede çalışıyor; büyük modellere gerek yok. Üçüncüsü: model, kullanılacağı yere göre ölçülmeli; oyun için en doğru modeli değil, en erken tanıyan modeli seçtik ve tur başına 7 puan kazandık.</aside>
+</section>
