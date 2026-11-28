@@ -126,7 +126,6 @@ Plan: [plan.md](plan.md). Rapor taslağı: [rapor/rapor.md](rapor/rapor.md).
 
 ## Sıradaki iş (kullanıcı onayladı, sonra yapılacak)
 
-- Sunum v6 demo slaytına (36) Pratik maddesi eklemek (yöntem kullanıcıya sorulacak).
 - Sunumda bekleyen küçük öneriler: 7. slayt "recognized" kartı ("etiketi güvenilmez, %6"), 11. slayt 2 piksel pay gerekçesi, 12. slayt "neden piksele çevirdik" kartı; isteğe bağlı birkaç `recognized:false` örnek çizimi.
 - **345 sınıflı modelle arkadaş çizimleri → sunuma ekle:** yeniden ölçüm gerekmiyor; gruplu ve %30 eşikli ölçüm 29 Ekim’de yapıldı (`deneyler/olcum.md`, zor sekme, 216/229 çizim): ilk-1 (grup) M1 %63,0 · M3 %69,4 · M3-kısmi %69,4; oyunda tanınan M1 %75,5 · M3 %80,6 · M3-kısmi %80,6; tur puanı 49,0 / 53,4 / 58,4. 50 nesneden yalnız “araba” bir eşdeğer grupta, gruplar sonucu neredeyse değiştirmiyor (grupsuz %68,6). İş: bu tabloyu sunumun gerçek kullanıcı slaytına eklemek.
 
@@ -136,4 +135,4 @@ Plan: [plan.md](plan.md). Rapor taslağı: [rapor/rapor.md](rapor/rapor.md).
 - **Örnek çiz:** `demo/public/model/ornekler.json` (419 KB), her kelimeye test setinden 5 çizim; oyun modeli s345_m3_kismi ile grup birinci ve grup olasılığı ≥ %70 olanlar (daire/kare gibi olasılığı dağılanlarda ≥ %50). Başka model seçiliyken tanınmayabilir.
 - **Daire/kare:** önce yanlışlıkla %50 eşiğe göre oyundan çıkarıldı, geri alındı. Test setinde (s345_m3_kismi, tam çizim) %30 eşikle tanınma: daire %48, kare %57 (kedi %68); %50 eşikle %9 / %22.
 - **Doğrulama:** `npm run build`, `npm test` temiz; Puppeteer ile yerelde 40 örnek çizimin 40'ı, daire ve karenin 5/5 örneği tanındı; Geri al vuruş vuruş siliyor, örnek canlandırmasını durduruyor; model değiştirme; 390 px'te taşma yok, konsol hatası yok. Gerçek telefonda denenmedi.
-- **Sunum v6:** kullanıcının yeni sunumu `docs/sunum/v6 - memo/` (pptx, html, pdf; 36 slayt). 7/11/12 açıklama kartları orada var. Kalan: demo slaytına (36) Pratik maddesi; nasıl düzenleneceği kullanıcıya sorulacak.
+- **Sunum v6 → 37 slayt (28 Kasım):** `docs/sunum/v6 - memo/` PDF ve HTML güncellendi: 30. slayt son cümlesi (50 ve 345 sınıf), yeni 32. slayt "Aynı Çizimler, 345 Sınıflı Modellerle" (`deneyler/olcum.md` zor sekme gerçek kullanıcı tablosu + `deneyler/sonuclar345.md` test ilk-1; konuşmacı notunda karşılaştırılabilirlik uyarısı), demo slaytına (37) 4. madde Pratik. Yöntem: HTML düzenlenip Chrome ile basıldı, yalnız değişen 3 sayfa kullanıcının PDF'ine yerleştirildi (HTML'den basınca 3. slayttaki "Performans gereksinimi" bandı çıkmıyor, o yüzden diğer sayfalar kullanıcının PDF'inden). Betikler `araclar/`. PPTX güncellenmedi.
