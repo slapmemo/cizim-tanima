@@ -126,13 +126,14 @@ Plan: [plan.md](plan.md). Rapor taslağı: [rapor/rapor.md](rapor/rapor.md).
 
 ## Sıradaki iş (kullanıcı onayladı, sonra yapılacak)
 
-- Sunumun demo slaytına (37) Pratik sekmesini eklemek (sekme yapıldı, aşağıya bkz.).
+- Sunum v6 demo slaytına (36) Pratik maddesi eklemek (yöntem kullanıcıya sorulacak).
 - Sunumda bekleyen küçük öneriler: 7. slayt "recognized" kartı ("etiketi güvenilmez, %6"), 11. slayt 2 piksel pay gerekçesi, 12. slayt "neden piksele çevirdik" kartı; isteğe bağlı birkaç `recognized:false` örnek çizimi.
 - **345 sınıflı modelle arkadaş çizimleri → sunuma ekle:** yeniden ölçüm gerekmiyor; gruplu ve %30 eşikli ölçüm 29 Ekim’de yapıldı (`deneyler/olcum.md`, zor sekme, 216/229 çizim): ilk-1 (grup) M1 %63,0 · M3 %69,4 · M3-kısmi %69,4; oyunda tanınan M1 %75,5 · M3 %80,6 · M3-kısmi %80,6; tur puanı 49,0 / 53,4 / 58,4. 50 nesneden yalnız “araba” bir eşdeğer grupta, gruplar sonucu neredeyse değiştirmiyor (grupsuz %68,6). İş: bu tabloyu sunumun gerçek kullanıcı slaytına eklemek.
 
 ## Pratik sekmesi (28 Kasım 2026)
 
-- **Ne:** sitede `Pratik` sekmesi (`demo/index.html`, `demo/src/main.ts`): rastgele kelime ("ARABA ÇİZ"), çizerken ilk 5 tahmin canlı, hedef ve eşdeğer grubu vurgulu, oyun kuralıyla "Tanındı!" (otomatik geçmez), süre/puan yok; Temizle, Örnek çiz, Sonraki kelime; 28×28 model girdisi (168 px); model seçimi (8 model; 50 sınıflıda havuz 50 sınıf, 345'likte oyun listesi).
-- **Örnek çiz:** `demo/public/model/ornekler.json` (418 KB), her kelimeye test setinden 5 çizim; oyun modeli s345_m3_kismi ile grup olasılığı ≥ %70 ve grup birinci olanlar seçildi (betik scratchpad'deydi, kalıcı değil). Başka model seçiliyken tanınmayabilir.
-- **Kelime listesi:** daire ve kare `egitim/oyun_kelimeleri.py` CIKARILAN'a eklendi (doğru birinci %80 ama ortalama olasılık %29/%33, %50 eşiğini neredeyse hiç geçmiyor) → oyun 256 kelime.
-- **Doğrulama:** `npm run build`, `npm test` temiz; Puppeteer ile yerelde 40 örnek çizimin 40'ı tanındı, model değiştirme (aynı kelime korunur / 50'de yoksa yeni kelime), 390 px'te taşma yok, konsol hatası yok. Gerçek telefonda denenmedi.
+- **Ne:** sitede `Pratik` sekmesi (`demo/index.html`, `demo/src/main.ts`): rastgele kelime ("ARABA ÇİZ"), çizerken ilk 5 tahmin canlı, hedef ve eşdeğer grubu vurgulu, oyun kuralıyla "Tanındı!" (otomatik geçmez; eşik 345 sınıflı modelde %30, 50 sınıflıda %50, oyunla aynı), süre/puan yok; Geri al, Temizle, Örnek çiz, Sonraki kelime; 28×28 model girdisi (168 px); model seçimi (8 model; 50 sınıflıda havuz 50 sınıf, 345'likte oyun listesi 258).
+- **Örnek çiz:** `demo/public/model/ornekler.json` (419 KB), her kelimeye test setinden 5 çizim; oyun modeli s345_m3_kismi ile grup birinci ve grup olasılığı ≥ %70 olanlar (daire/kare gibi olasılığı dağılanlarda ≥ %50). Başka model seçiliyken tanınmayabilir.
+- **Daire/kare:** önce yanlışlıkla %50 eşiğe göre oyundan çıkarıldı, geri alındı. Test setinde (s345_m3_kismi, tam çizim) %30 eşikle tanınma: daire %48, kare %57 (kedi %68); %50 eşikle %9 / %22.
+- **Doğrulama:** `npm run build`, `npm test` temiz; Puppeteer ile yerelde 40 örnek çizimin 40'ı, daire ve karenin 5/5 örneği tanındı; Geri al vuruş vuruş siliyor, örnek canlandırmasını durduruyor; model değiştirme; 390 px'te taşma yok, konsol hatası yok. Gerçek telefonda denenmedi.
+- **Sunum v6:** kullanıcının yeni sunumu `docs/sunum/v6 - memo/` (pptx, html, pdf; 36 slayt). 7/11/12 açıklama kartları orada var. Kalan: demo slaytına (36) Pratik maddesi; nasıl düzenleneceği kullanıcıya sorulacak.

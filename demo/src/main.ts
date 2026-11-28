@@ -165,13 +165,19 @@ function animasyonuDurdur() { animasyonKimligi++; }
 const tuval3 = new Tuval($<HTMLCanvasElement>("tuval3"), (bitti) => pratikTahmin(bitti));
 const pratikTahmin = tahminSirasi(async () => {
   onizlemeCiz(pratikOnizleme, tuval3.vuruslar);
-  if (!pratikVeri || pratikVeri.model !== pratikModel || pratikHedef < 0 || !tuval3.vuruslar.length) return;
+  if (!tuval3.vuruslar.length) {
+    $("pratikTahminler").innerHTML = "";
+    $("pratikBildirim").hidden = true;
+    return;
+  }
+  if (!pratikVeri || pratikVeri.model !== pratikModel || pratikHedef < 0) return;
   const silme = tuval3.silme, hedef = pratikHedef, veri = pratikVeri, model = pratikModel, kimlik = pratikYuklemeKimligi;
   try {
     const t = await tahminEt(model, tuval3.vuruslar);
     if (silme !== tuval3.silme || hedef !== pratikHedef || model !== pratikModel || kimlik !== pratikYuklemeKimligi) return;
     tahminleriGoster("pratikTahminler", t, veri.s, hedef, veri.g);
-    $("pratikBildirim").hidden = !tanindiMi(t.sira, t.olasilik, hedef, TANIMA_ESIGI, veri.g);
+    const esik = model.startsWith("s345_") ? TANIMA_ESIGI_345 : TANIMA_ESIGI;
+    $("pratikBildirim").hidden = !tanindiMi(t.sira, t.olasilik, hedef, esik, veri.g);
   } catch {
     if (model === pratikModel && kimlik === pratikYuklemeKimligi) $("pratikKelime").textContent = "Model yüklenemedi.";
   }
@@ -278,6 +284,7 @@ ornekDugme.addEventListener("click", async () => {
   }
 });
 $("temizle3").addEventListener("click", pratikTemizle);
+$("geri3").addEventListener("click", () => { animasyonuDurdur(); tuval3.geriAl(); pratikTahmin(true); });
 $("sonraki").addEventListener("click", pratikSonraki);
 
 // ---- oyun
