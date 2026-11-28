@@ -31,6 +31,8 @@ CIKARILAN = {
     "line": "anlamsız (tek çizgi)",
     "squiggle": "anlamsız (karalama)",
     "yoga": "soyut",
+    "circle": "doğru çizilse de olasılık benzer şekillere dağılır, %50 eşiğini geçmez (ort. %29)",
+    "square": "doğru çizilse de olasılık benzer şekillere dağılır, %50 eşiğini geçmez (ort. %33)",
 }
 
 

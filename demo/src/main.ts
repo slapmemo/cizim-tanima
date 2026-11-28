@@ -1,5 +1,5 @@
-import { ciz } from "./onisleme.ts";
-import { KOLAY_OYUN_MODELI, MODELLER, OYUN_MODELI, esdegerGruplar, hizOlc, oturum, oyunKelimeleri, siniflar, tahminEt, type Sinif } from "./model.ts";
+import { ciz, type Vurus } from "./onisleme.ts";
+import { KOLAY_OYUN_MODELI, MODELLER, OYUN_MODELI, esdegerGruplar, hizOlc, oturum, oyunKelimeleri, siniflar, tahminEt, type Sinif, type Tahmin } from "./model.ts";
 import { SERI_PAS_CEZASI, SERI_PAS_HAKKI, SERI_SURESI_MS, TAHMIN_ARALIGI_MS, TANIMA_ESIGI, TANIMA_ESIGI_345, TUR_SAYISI, TUR_SURESI_MS, grupOlasiligi, kelimeSec, puan, tanindiMi } from "./oyun.ts";
 import { Tuval } from "./tuval.ts";
 
@@ -40,6 +40,7 @@ for (const b of document.querySelectorAll<HTMLButtonElement>(".sekmeler button")
   b.addEventListener("click", () => {
     for (const d of document.querySelectorAll<HTMLButtonElement>(".sekmeler button")) d.classList.toggle("secili", d === b);
     for (const s of document.querySelectorAll<HTMLElement>(".sekme")) s.hidden = s.id !== b.dataset.sekme;
+    if (b.dataset.sekme === "pratik") void pratikBaslat();
     if (b.dataset.mod && b.dataset.mod !== mod) modDegistir(b.dataset.mod as Mod);
   });
 }
@@ -75,22 +76,29 @@ function tahminSirasi(calistir: () => Promise<void>) {
   };
 }
 
+function tahminleriGoster(id: string, t: Tahmin, liste: Sinif[], hedef?: number, gruplar?: number[]) {
+  $(id).innerHTML = t.sira.slice(0, 5).map ( (i) =>
+    `<li${hedef !== undefined && gruplar && gruplar[i] === gruplar[hedef] ? ' class="hedef"' : ""}><span>${liste[i].tr}</span><span>${yuzde(t.olasilik[i])}</span>` +
+    `<span class="cubuk"><i style="width:${(t.olasilik[i] * 100).toFixed(1)}%"></i></span></li>`).join("");
+}
+
 // ---- serbest çizim
 let seciliModel = OYUN_MODELI;
 const onizleme = $<HTMLCanvasElement>("onizleme").getContext("2d")!;
 
 const tuval1 = new Tuval($<HTMLCanvasElement>("tuval1"), (bitti) => serbestTahmin(bitti));
-const serbestTahmin = tahminSirasi(async () => {
-  const resim = onizleme.createImageData(28, 28);
-  const p = ciz(tuval1.vuruslar);
+function onizlemeCiz(ctx: CanvasRenderingContext2D, vuruslar: Vurus[]) {
+  const resim = ctx.createImageData(28, 28);
+  const p = ciz(vuruslar);
   p.forEach((v, i) => { resim.data.set([v, v, v, 255], i * 4); });
-  onizleme.putImageData(resim, 0, 0);
+  ctx.putImageData(resim, 0, 0);
+}
+const serbestTahmin = tahminSirasi(async () => {
+  onizlemeCiz(onizleme, tuval1.vuruslar);
   if (!tuval1.vuruslar.length) { $("tahminler").innerHTML = ""; return; }
   const model = seciliModel;
   const [t, liste] = await Promise.all([tahminEt(model, tuval1.vuruslar), siniflar(model)]);
-  $("tahminler").innerHTML = t.sira.slice(0, 5).map((i) =>
-    `<li><span>${liste[i].tr}</span><span>${yuzde(t.olasilik[i])}</span>` +
-    `<span class="cubuk"><i style="width:${(t.olasilik[i] * 100).toFixed(1)}%"></i></span></li>`).join("");
+  tahminleriGoster("tahminler", t, liste);
   $("sure1").textContent = `Ön işleme + tahmin: ${t.ms.toFixed(1)} ms`;
 });
 const serbestTemizle = () => {
@@ -133,6 +141,144 @@ $("kaydet").addEventListener("click", async () => {
     $("kayitDurum").textContent = "Kaydedilemedi: sayfa `npm run dev` ile açılmalı.";
   }
 });
+
+// ---- pratik: zor modun verileri oyun modundan bağımsız tutulur.
+let pratikModel = OYUN_MODELI;
+let pratikVeri: (Awaited<ReturnType<typeof modYukle>> & { model: string }) | undefined;
+let pratikYuklemeKimligi = 0;
+const pratikModelSec = $<HTMLSelectElement>("pratikModel");
+pratikModelSec.innerHTML = MODELLER.map((m) => `<option ${m === pratikModel ? "selected" : ""}>${m}</option>`).join("");
+let pratikHazir: Promise<void> | undefined;
+let pratikHedef = -1;
+const pratikOnizleme = $<HTMLCanvasElement>("pratikOnizleme").getContext("2d")!;
+const ornekDugme = $<HTMLButtonElement>("ornekCiz");
+let ornekler: Record<string, Vurus[][]> | undefined;
+let ornekYukleme: Promise<Record<string, Vurus[][]>> | undefined;
+let animasyonKimligi = 0;
+const sonOrnekler = new Map<string, number>();
+function ornekDugmesiniGuncelle() {
+  const ad = pratikVeri?.s[pratikHedef]?.en;
+  ornekDugme.disabled = !ad || (!!ornekler && !ornekler[ad]?.length);
+}
+function animasyonuDurdur() { animasyonKimligi++; }
+
+const tuval3 = new Tuval($<HTMLCanvasElement>("tuval3"), (bitti) => pratikTahmin(bitti));
+const pratikTahmin = tahminSirasi(async () => {
+  onizlemeCiz(pratikOnizleme, tuval3.vuruslar);
+  if (!pratikVeri || pratikVeri.model !== pratikModel || pratikHedef < 0 || !tuval3.vuruslar.length) return;
+  const silme = tuval3.silme, hedef = pratikHedef, veri = pratikVeri, model = pratikModel, kimlik = pratikYuklemeKimligi;
+  try {
+    const t = await tahminEt(model, tuval3.vuruslar);
+    if (silme !== tuval3.silme || hedef !== pratikHedef || model !== pratikModel || kimlik !== pratikYuklemeKimligi) return;
+    tahminleriGoster("pratikTahminler", t, veri.s, hedef, veri.g);
+    $("pratikBildirim").hidden = !tanindiMi(t.sira, t.olasilik, hedef, TANIMA_ESIGI, veri.g);
+  } catch {
+    if (model === pratikModel && kimlik === pratikYuklemeKimligi) $("pratikKelime").textContent = "Model yüklenemedi.";
+  }
+});
+function pratikTemizle() {
+  animasyonuDurdur();
+  tuval3.temizle();
+  onizlemeCiz(pratikOnizleme, []);
+  $("pratikTahminler").innerHTML = "";
+  $("pratikBildirim").hidden = true;
+}
+function pratikSonraki() {
+  if (!pratikVeri) return;
+  pratikTemizle();
+  const adaylar = pratikVeri.k.filter((i) => i !== pratikHedef);
+  const havuz = adaylar.length ? adaylar : pratikVeri.k;
+  pratikHedef = havuz[kelimeSec(havuz.length, 1)[0]];
+  $("pratikKelime").textContent = `${buyukHarf(pratikVeri.s[pratikHedef].tr)} ÇİZ`;
+  ornekDugmesiniGuncelle();
+}
+function pratikBaslat(): Promise<void> {
+  if (!pratikHazir) pratikHazir = pratikModelYukle();
+  return pratikHazir;
+}
+async function pratikModelYukle(): Promise<void> {
+  const model = pratikModel, kimlik = ++pratikYuklemeKimligi;
+  const eskiAd = pratikVeri?.s[pratikHedef]?.en;
+  $("pratikTahminler").innerHTML = "";
+  $("pratikBildirim").hidden = true;
+  try {
+    const [s, g] = await Promise.all([siniflar(model), esdegerGruplar(model)]);
+    const k = model.startsWith("s345_") ? await oyunKelimeleri() : s.map((_, i) => i);
+    if (kimlik !== pratikYuklemeKimligi) return;
+    pratikVeri = { s, k, g, model };
+    const hedef = k.find((i) => s[i].en === eskiAd);
+    if (hedef === undefined) {
+      pratikHedef = -1;
+      pratikSonraki();
+    } else {
+      pratikHedef = hedef;
+      $("pratikKelime").textContent = `${buyukHarf(s[hedef].tr)} ÇİZ`;
+      ornekDugmesiniGuncelle();
+      pratikTahmin(true);
+    }
+    void oturum(model).catch(() => {});
+  } catch {
+    if (kimlik === pratikYuklemeKimligi) {
+      $("pratikKelime").textContent = "Kelimeler yüklenemedi.";
+      pratikHazir = undefined;
+    }
+  }
+}
+pratikModelSec.addEventListener("change", () => {
+  pratikModel = pratikModelSec.value;
+  pratikHazir = pratikModelYukle();
+});
+$<HTMLCanvasElement>("tuval3").addEventListener("pointerdown", animasyonuDurdur);
+ornekDugme.addEventListener("click", async () => {
+  pratikTemizle();
+  const kimlik = animasyonKimligi, hedef = pratikHedef;
+  const ad = pratikVeri?.s[hedef]?.en;
+  if (!ad) return;
+  try {
+    ornekYukleme ??= fetch(`${import.meta.env.BASE_URL}model/ornekler.json`).then((r) => {
+      if (!r.ok) throw new Error("Örnekler yüklenemedi");
+      return r.json() as Promise<Record<string, Vurus[][]>>;
+    });
+    ornekler = await ornekYukleme;
+    ornekDugmesiniGuncelle();
+    if (kimlik !== animasyonKimligi || hedef !== pratikHedef) return;
+    const liste = ornekler[ad];
+    if (!liste?.length) return;
+    const onceki = sonOrnekler.get(ad);
+    const adaylar = liste.map((_, i) => i).filter((i) => liste.length === 1 || i !== onceki);
+    const secim = adaylar[Math.floor(Math.random() * adaylar.length)];
+    sonOrnekler.set(ad, secim);
+    const kaynak = liste[secim].filter(([xs, ys]) => xs.length && xs.length === ys.length);
+    const xs = kaynak.flatMap((v) => v[0]), ys = kaynak.flatMap((v) => v[1]);
+    if (!xs.length) return;
+    const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
+    const r = $<HTMLCanvasElement>("tuval3").getBoundingClientRect();
+    const olcek = Math.min(r.width * .8 / (maxX - minX || 1), r.height * .8 / (maxY - minY || 1));
+    const ox = (r.width - (maxX - minX) * olcek) / 2, oy = (r.height - (maxY - minY) * olcek) / 2;
+    const noktalar = kaynak.flatMap(([vx, vy], v) => vx.map((x, i) => ({ v, x: ox + (x - minX) * olcek, y: oy + (vy[i] - minY) * olcek })));
+    let eklenen = 0;
+    const baslangic = performance.now();
+    const kare = (simdi: number) => {
+      if (kimlik !== animasyonKimligi) return;
+      const sayi = Math.min(noktalar.length, Math.max  (1, Math.ceil(noktalar.length * (simdi - baslangic) / 1250)));
+      while (eklenen < sayi) {
+        const n = noktalar[eklenen++];
+        if (!tuval3.vuruslar[n.v]) tuval3.vuruslar.push([[], []]);
+        const v = tuval3.vuruslar[n.v];
+        v[0].push(n.x); v[1].push(n.y);
+      }
+      tuval3.yeniden();
+      pratikTahmin(sayi === noktalar.length);
+      if (sayi < noktalar.length) requestAnimationFrame(kare);
+    };
+    requestAnimationFrame(kare);
+  } catch {
+    ornekYukleme = undefined;
+    if (kimlik === animasyonKimligi) ornekDugme.title = "Örnekler yüklenemedi; yeniden deneyin.";
+  }
+});
+$("temizle3").addEventListener("click", pratikTemizle);
+$("sonraki").addEventListener("click", pratikSonraki);
 
 // ---- oyun
 // "tur": 5 tur × 20 sn, erken tanınan çok puan; "seri": 60 sn'de art arda kaç kelime, 3 ücretsiz pas, sonrası puan düşürür

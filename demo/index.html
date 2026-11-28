@@ -14,6 +14,7 @@
     <nav class="sekmeler">
       <button data-sekme="oyun" data-mod="zor" class="secili">Oyun · 242</button>
       <button data-sekme="oyun" data-mod="kolay">Oyun · 50</button>
+      <button data-sekme="pratik">Pratik</button>
       <button data-sekme="serbest">Serbest çizim</button>
     </nav>
   </header>
@@ -57,6 +58,20 @@
         <div id="sonPuan" class="son-puan"></div>
         <ol id="sonListe" class="son-liste"></ol>
         <button id="tekrar" class="ana buyuk">Tekrar oyna</button>
+      </div>
+    </section>
+
+    <section id="pratik" class="sekme" hidden>
+      <div class="kart tur-ust pratik-ust"><span id="pratikKelime" class="kelime">Yükleniyor…</span><span id="pratikBildirim" class="hap pratik-bildirim" role="status" hidden>Tanındı!</span></div>
+      <div class="izgara">
+        <div class="kart tuval-kart">
+          <canvas id="tuval3" class="tuval"></canvas>
+          <div class="dugmeler"><button id="temizle3">Temizle</button><button id="ornekCiz" disabled>Örnek çiz</button><button id="sonraki" class="ana">Sonraki kelime</button></div>
+        </div>
+        <div class="kart yan"><h2>Yapay zekâ ne görüyor?</h2><ol id="pratikTahminler" class="tahminler"></ol>
+          <div class="satir"><canvas id="pratikOnizleme" width="28" height="28" title="Modelin gördüğü 28×28 görüntü"></canvas><div class="kucuk">Modelin gördüğü (28×28)</div></div>
+          <div class="satir"><label>Model <select id="pratikModel"></select></label></div>
+        </div>
       </div>
     </section>
 
